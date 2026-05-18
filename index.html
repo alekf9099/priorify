@@ -491,6 +491,25 @@
   }
   .empty-icon { font-size: 24px; margin-bottom: 8px; opacity: 0.4; }
 
+  /* ── TOAST ── */
+  #save-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--text-primary);
+    color: #fff;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    padding: 8px 16px;
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 999;
+  }
+  #save-toast.show { opacity: 1; transform: translateY(0); }
+
   /* Drop placeholder */
   .drop-placeholder {
     height: 4px;
@@ -521,6 +540,8 @@
 <div id="board-wrap">
   <div id="board"></div>
 </div>
+
+<div id="save-toast">저장됨 ✓</div>
 
 <!-- Add Column Modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
@@ -557,7 +578,7 @@ const COLORS = [
   { dot: '#9CA3AF', tag: '#F3F4F6', tagText: '#4B5563', colBg: '#F9FAFB', colBorder: '#E5E7EB' },
 ];
 
-let columns = [
+const DEFAULT_COLUMNS = [
   { id: 'critical', name: '중요 & 급함', desc: '즉시 처리 필요', colorIdx: 0, cards: [
     { id: 'c1', text: '오늘 마감 보고서 제출', date: today() },
     { id: 'c2', text: '클라이언트 미팅 준비', date: today() },
@@ -572,6 +593,23 @@ let columns = [
     { id: 'c5', text: '읽을 아티클 정리', date: today() },
   ]},
 ];
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem('priorify_columns');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return DEFAULT_COLUMNS;
+}
+
+function saveData() {
+  try {
+    localStorage.setItem('priorify_columns', JSON.stringify(columns));
+    showSavedToast();
+  } catch(e) {}
+}
+
+let columns = loadData();
 
 let nextId = 10;
 let dragCardId = null, dragFromColId = null;
@@ -592,6 +630,15 @@ document.getElementById('today-badge').textContent = (() => {
   const days = ['일','월','화','수','목','금','토'];
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${days[d.getDay()]}요일`;
 })();
+
+let toastTimer = null;
+function showSavedToast() {
+  const t = document.getElementById('save-toast');
+  if (!t) return;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
 
 // ── RENDER
 function render() {
@@ -717,6 +764,7 @@ function onCardDrop(e, targetColId) {
   if (idx === -1) return;
   const [card] = fromCol.cards.splice(idx, 1);
   toCol.cards.push(card);
+  saveData();
   render();
 }
 
@@ -725,6 +773,7 @@ function deleteCard(e, cardId) {
   e.preventDefault();
   e.stopPropagation();
   columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
+  saveData();
   render();
 }
 
@@ -769,21 +818,23 @@ function addCardFromInput(colId, textarea) {
   col.cards.push({ id: genId(), text, date: today() });
   textarea.value = '';
   textarea.style.height = 'auto';
+  saveData();
   render();
 }
 
 // ── COLUMN ACTIONS
 function renameCol(colId, name) {
   const col = columns.find(c => c.id === colId);
-  if (col) col.name = name;
+  if (col) { col.name = name; saveData(); }
 }
 function editColDesc(colId, desc) {
   const col = columns.find(c => c.id === colId);
-  if (col) col.desc = desc;
+  if (col) { col.desc = desc; saveData(); }
 }
 function deleteCol(colId) {
   if (!confirm('이 컬럼을 삭제할까요? 카드도 모두 삭제됩니다.')) return;
   columns = columns.filter(c => c.id !== colId);
+  saveData();
   render();
 }
 
@@ -838,6 +889,7 @@ function confirmModal() {
     columns.push({ id: genId(), name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect();
+  saveData();
   render();
 }
 
