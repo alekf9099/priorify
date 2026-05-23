@@ -449,5 +449,724 @@ header {
   width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
   border: 2px solid transparent; transition: transform 0.1s, border-color 0.1s;
 }
-.color-swatch:hover { transform: scale(1.15); }.color-swatch.selected { border-
-(Content truncated due to size limit. Use line ranges to read remaining content)
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.selected { border-color: var(--text-primary); }
+.modal-actions { display: flex; gap: 7px; justify-content: flex-end; margin-top: 18px; }
+
+/* ───────── TOAST ───────── */
+#save-toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--text-primary); color: #fff;
+  font-size: 11.5px; font-family: 'DM Mono', monospace;
+  padding: 7px 15px; border-radius: 20px; opacity: 0;
+  transform: translateY(6px); transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none; z-index: 9999;
+}
+#save-toast.show { opacity: 1; transform: translateY(0); }
+
+/* ───────── LOGIN BTN ───────── */
+.btn-login {
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #c0626a;
+  background: #fde8ea;
+  border: 1px solid #f5c0c4;
+  border-radius: 20px;
+  padding: 6px 18px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  letter-spacing: 0.1px;
+}
+.btn-login:hover { background: #fbd0d4; border-color: #f0a8ae; }
+
+.btn-logout {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-logout:hover { background: var(--bg); color: var(--text-primary); }
+
+#user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fde8ea;
+  border: 1px solid #f5c0c4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #c0626a;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+#user-name {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ───────── LNB TOGGLE ───────── */
+.lnb-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4.5px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.lnb-toggle:hover { background: var(--bg); }
+.lnb-toggle span {
+  display: block;
+  height: 1.5px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s, width 0.25s;
+  transform-origin: left center;
+}
+.lnb-toggle span:nth-child(2) { width: 75%; }
+
+body.lnb-collapsed .lnb-toggle span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+body.lnb-collapsed .lnb-toggle span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+body.lnb-collapsed .lnb-toggle span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+.lnb {
+  width: var(--lnb-w);
+  transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+body.lnb-collapsed .lnb {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ───────── DARK MODE ───────── */
+body.dark {
+  --bg: #18181B;
+  --surface: #1F1F23;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.14);
+  --text-primary: #F4F4F5;
+  --text-secondary: #A1A1AA;
+  --text-tertiary: #52525B;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <button class="lnb-toggle" onclick="toggleLnb()" id="lnb-toggle-btn" title="사이드바 열기/닫기">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="logo" href="https://priorify-eight.vercel.app/">priorify<span>.</span></a>
+    <div class="today-badge" id="today-badge"></div>
+  </div>
+  <div class="header-right">
+    <div id="user-info" style="display:none;align-items:center;gap:10px;">
+      <div id="user-avatar"></div>
+      <span id="user-name"></span>
+      <button class="btn-logout" onclick="handleLogout()">로그아웃</button>
+    </div>
+    <button id="btn-login" class="btn-login" onclick="handleLogin()">로그인</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ── LNB ── -->
+  <nav class="lnb">
+    <span class="lnb-section-label">메뉴</span>
+
+    <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
+      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="6" height="10" rx="1.5"/>
+        <rect x="10" y="2" width="6" height="6" rx="1.5"/>
+        <rect x="10" y="10" width="6" height="6" rx="1.5"/>
+      </svg>
+      보드
+    </button>
+
+    <button class="lnb-item" data-page="dashboard" onclick="switchPage('dashboard', this)">
+      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 13 L6 8 L9 11 L13 5 L16 8"/>
+        <path d="M2 16 L16 16"/>
+      </svg>
+      대시보드
+    </button>
+
+    <button class="lnb-item" data-page="done" onclick="switchPage('done', this)">
+      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="9" r="7"/>
+        <path d="M6 9 L8 11 L12 7"/>
+      </svg>
+      완료 목록
+    </button>
+
+    <div class="lnb-divider"></div>
+    <span class="lnb-section-label">컬럼</span>
+
+    <button class="lnb-new-col" onclick="openAddColModal()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/>
+      </svg>
+      새 컬럼 추가
+    </button>
+
+    <div id="lnb-col-list"></div>
+
+    <div class="lnb-divider" style="margin-top:auto"></div>
+
+    <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
+      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="9" r="2.5"/>
+        <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01 13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
+      </svg>
+      설정
+    </button>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- BOARD -->
+    <div id="page-board" class="page active">
+      <div id="board-wrap">
+        <div id="board"></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page">
+      <div style="padding:28px 32px;overflow-y:auto;flex:1">
+        <div class="dash-title">대시보드</div>
+        <div class="dash-sub">전체 할 일 현황을 한눈에 확인하세요</div>
+        <div class="dash-grid" id="dash-grid"></div>
+        <div class="dash-cols" id="dash-cols"></div>
+      </div>
+    </div>
+
+    <!-- DONE -->
+    <div id="page-done" class="page">
+      <div style="padding:28px 32px;overflow-y:auto;flex:1">
+        <div class="done-title">완료 목록</div>
+        <div class="done-sub">완료 처리한 항목들이 여기 모입니다</div>
+        <div id="done-list-wrap"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="page-settings" class="page">
+      <div style="padding:28px 32px;overflow-y:auto;flex:1">
+        <div class="settings-title">설정</div>
+        <div class="settings-sub">앱 환경을 취향에 맞게 조정하세요</div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">테마</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">다크 모드</div>
+              <div class="settings-row-desc">어두운 배경으로 전환합니다</div>
+            </div>
+            <div class="theme-btns">
+              <button class="theme-btn active" id="btn-light" onclick="setTheme('light')">라이트</button>
+              <button class="theme-btn" id="btn-dark" onclick="setTheme('dark')">다크</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">데이터</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">데이터 초기화</div>
+              <div class="settings-row-desc">모든 컬럼과 카드가 삭제됩니다</div>
+            </div>
+            <button class="danger-btn" onclick="resetData()">초기화</button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">완료 목록 비우기</div>
+              <div class="settings-row-desc">완료된 항목을 모두 삭제합니다</div>
+            </div>
+            <button class="danger-btn" onclick="clearDone()">비우기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="save-toast">저장됨 ✓</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">새 컬럼 추가</div>
+    <div class="modal-field">
+      <label class="modal-label">컬럼 이름</label>
+      <input class="modal-input" id="modal-col-name" placeholder="예: 중요 & 급함" maxlength="30">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">설명 (선택)</label>
+      <input class="modal-input" id="modal-col-desc" placeholder="짧은 설명" maxlength="50">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">색상</label>
+      <div class="color-picker" id="color-picker"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModalDirect()">취소</button>
+      <button class="btn-save" id="modal-confirm-btn" onclick="confirmModal()">추가</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── LNB TOGGLE
+function toggleLnb() {
+  document.body.classList.toggle('lnb-collapsed');
+  const isCollapsed = document.body.classList.contains('lnb-collapsed');
+  localStorage.setItem('priorify_lnb', isCollapsed ? 'collapsed' : 'open');
+}
+
+const COLORS = [
+  { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
+  { dot:'#F59E0B', tag:'#FEF3C7', tagText:'#92400E', colBg:'#FFFBEB', colBorder:'#FDE68A' },
+  { dot:'#10B981', tag:'#D1FAE5', tagText:'#065F46', colBg:'#F0FDF9', colBorder:'#A7F3D0' },
+  { dot:'#0EA5E9', tag:'#E0F2FE', tagText:'#0369A1', colBg:'#F0F9FF', colBorder:'#BAE6FD' },
+  { dot:'#8B5CF6', tag:'#EDE9FE', tagText:'#5B21B6', colBg:'#FAF5FF', colBorder:'#DDD6FE' },
+  { dot:'#EC4899', tag:'#FCE7F3', tagText:'#9D174D', colBg:'#FFF1F8', colBorder:'#FBCFE8' },
+  { dot:'#6366F1', tag:'#E0E7FF', tagText:'#3730A3', colBg:'#F8F8FF', colBorder:'#C7D2FE' },
+  { dot:'#9CA3AF', tag:'#F3F4F6', tagText:'#4B5563', colBg:'#F9FAFB', colBorder:'#E5E7EB' },
+];
+
+const DEFAULT_COLUMNS = [
+  { id:'critical', name:'중요 & 급함', desc:'즉시 처리 필요', colorIdx:0, cards:[
+    { id:'c1', text:'오늘 마감 보고서 제출', date:today() },
+    { id:'c2', text:'클라이언트 미팅 준비', date:today() },
+  ]},
+  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:3, cards:[
+    { id:'c3', text:'장기 목표 로드맵 작성', date:today() },
+  ]},
+  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:1, cards:[
+    { id:'c4', text:'이메일 답장 처리', date:today() },
+  ]},
+  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:7, cards:[
+    { id:'c5', text:'읽을 아티클 정리', date:today() },
+  ]},
+];
+
+function loadData() {
+  try { const s = localStorage.getItem('priorify_columns'); if (s) return JSON.parse(s); } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_COLUMNS));
+}
+function loadDone() {
+  try { const s = localStorage.getItem('priorify_done'); if (s) return JSON.parse(s); } catch(e) {}
+  return [];
+}
+function saveData() {
+  try { localStorage.setItem('priorify_columns', JSON.stringify(columns)); showToast(); } catch(e) {}
+}
+function saveDone() {
+  try { localStorage.setItem('priorify_done', JSON.stringify(doneItems)); } catch(e) {}
+}
+
+let columns = loadData();
+let doneItems = loadDone();
+let nextId = 100;
+let dragCardId = null, dragFromColId = null;
+let editingColId = null, selectedColorIdx = 0;
+let currentPage = 'board';
+
+function today() {
+  const d = new Date();
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+function genId() { return 'id' + (nextId++); }
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── DATE
+document.getElementById('today-badge').textContent = (() => {
+  const d = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${days[d.getDay()]}요일`;
+})();
+
+// ── THEME
+function setTheme(t) {
+  document.body.classList.toggle('dark', t === 'dark');
+  document.getElementById('btn-light').classList.toggle('active', t === 'light');
+  document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+  localStorage.setItem('priorify_theme', t);
+}
+const savedTheme = localStorage.getItem('priorify_theme');
+if (savedTheme) setTheme(savedTheme);
+
+// ── TOAST
+let toastTimer = null;
+function showToast() {
+  const t = document.getElementById('save-toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+// ── PAGE SWITCH
+function switchPage(page, btn) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.lnb-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'done') renderDone();
+}
+
+// ── LNB COL LIST
+function renderLnbCols() {
+  const wrap = document.getElementById('lnb-col-list');
+  wrap.innerHTML = '';
+  columns.forEach(col => {
+    const color = COLORS[col.colorIdx];
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:12.5px;color:var(--text-secondary);border-radius:6px;';
+    item.innerHTML = `<span style="width:7px;height:7px;border-radius:50%;background:${color.dot};flex-shrink:0;display:inline-block"></span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(col.name)}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-tertiary)">${col.cards.length}</span>`;
+    wrap.appendChild(item);
+  });
+}
+
+// ── RENDER BOARD
+function render() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  columns.forEach(col => {
+    const color = COLORS[col.colorIdx];
+    const colEl = document.createElement('div');
+    colEl.className = 'column';
+    colEl.dataset.colId = col.id;
+    colEl.style.borderColor = color.colBorder;
+
+    colEl.innerHTML = `
+      <div class="col-header" style="background:${color.colBg}">
+        <div class="col-header-top">
+          <div class="col-dot" style="background:${color.dot}"></div>
+          <input class="col-title-input" value="${esc(col.name)}" placeholder="컬럼 이름"
+            onchange="renameCol('${col.id}',this.value)" onclick="event.stopPropagation()">
+          <span class="col-count">${col.cards.length}</span>
+          <div class="col-header-actions">
+            <button class="col-icon-btn" onclick="openEditColModal('${col.id}')">✎</button>
+            <button class="col-icon-btn danger" onclick="deleteCol('${col.id}')">✕</button>
+          </div>
+        </div>
+        <input class="col-desc-input" value="${esc(col.desc)}" placeholder="짧은 설명…"
+          onchange="editColDesc('${col.id}',this.value)" onclick="event.stopPropagation()">
+      </div>
+      <div class="cards-list" data-col-id="${col.id}">
+        ${col.cards.length === 0 ? '<div class="empty-state"><div class="empty-icon">◦</div>할 일 없음</div>' : ''}
+        ${col.cards.map(c => renderCard(c, color, col.name)).join('')}
+      </div>
+      <div class="add-card-area">
+        <textarea class="add-card-input" placeholder="+ 할 일 추가…" rows="1"
+          onkeydown="handleCardInput(event,'${col.id}',this)"
+          onfocus="this.parentElement.querySelector('.add-card-footer').style.display='flex'"
+          onblur="blurCardInput(event,'${col.id}',this)"></textarea>
+        <div class="add-card-footer" style="display:none">
+          <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
+          <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
+        </div>
+      </div>`;
+
+    board.appendChild(colEl);
+
+    const list = colEl.querySelector('.cards-list');
+    list.addEventListener('dragover', e => onCardDragOver(e, col.id));
+    list.addEventListener('drop', e => onCardDrop(e, col.id));
+    list.addEventListener('dragleave', e => { if (!list.contains(e.relatedTarget)) colEl.classList.remove('drag-target'); });
+    colEl.querySelectorAll('.card').forEach(cardEl => {
+      cardEl.addEventListener('dragstart', e => onCardDragStart(e, cardEl.dataset.cardId, col.id));
+      cardEl.addEventListener('dragend', onCardDragEnd);
+    });
+  });
+
+  const ghost = document.createElement('div');
+  ghost.className = 'add-col-ghost';
+  ghost.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg> 컬럼 추가`;
+  ghost.onclick = openAddColModal;
+  board.appendChild(ghost);
+
+  renderLnbCols();
+}
+
+function renderCard(card, color, colName) {
+  return `<div class="card" draggable="true" data-card-id="${card.id}">
+    <div class="card-tag" style="background:${color.tag};color:${color.tagText}">${esc(colName)}</div>
+    <div class="card-text">${esc(card.text)}</div>
+    <div class="card-meta">
+      <span class="card-date">${card.date}</span>
+      <div class="card-actions">
+        <button class="card-btn done-btn" title="완료" onmousedown="markDone(event,'${card.id}')">✓</button>
+        <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">✕</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── DASHBOARD
+function renderDashboard() {
+  const total = columns.reduce((s, c) => s + c.cards.length, 0);
+  const grid = document.getElementById('dash-grid');
+  grid.innerHTML = `
+    <div class="dash-card">
+      <div class="dash-card-label">전체 할 일</div>
+      <div class="dash-card-num">${total}</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">컬럼 수</div>
+      <div class="dash-card-num">${columns.length}</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">완료됨</div>
+      <div class="dash-card-num">${doneItems.length}</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-label">완료율</div>
+      <div class="dash-card-num">${total + doneItems.length === 0 ? '0' : Math.round(doneItems.length / (total + doneItems.length) * 100)}%</div>
+    </div>`;
+
+  const cols = document.getElementById('dash-cols');
+  cols.innerHTML = columns.map(col => {
+    const color = COLORS[col.colorIdx];
+    const pct = total === 0 ? 0 : Math.round(col.cards.length / total * 100);
+    return `<div class="dash-col-card">
+      <div class="dash-col-name"><span class="dash-card-dot" style="background:${color.dot}"></span>${esc(col.name)}</div>
+      <div class="dash-col-bar-wrap"><div class="dash-col-bar" style="width:${pct}%;background:${color.dot}"></div></div>
+      <div class="dash-col-count">${col.cards.length}개 · 전체의 ${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+// ── DONE
+function markDone(e, cardId) {
+  e.preventDefault(); e.stopPropagation();
+  let found = null, fromColName = '';
+  columns.forEach(col => {
+    const idx = col.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
+  });
+  if (found) {
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    saveDone(); saveData(); const savedLnb = localStorage.getItem('priorify_lnb');
+if (savedLnb === 'collapsed') document.body.classList.add('lnb-collapsed');
+
+render();
+  }
+}
+
+function renderDone() {
+  const wrap = document.getElementById('done-list-wrap');
+  if (doneItems.length === 0) {
+    wrap.innerHTML = '<div class="done-empty">완료된 항목이 없어요 ✓</div>';
+    return;
+  }
+  wrap.innerHTML = '<div class="done-list">' + doneItems.map((item, i) => {
+    const col = columns.find(c => c.name === item.colName);
+    const color = col ? COLORS[col.colorIdx] : COLORS[7];
+    return `<div class="done-item">
+      <div class="done-item-dot" style="background:${color.dot}"></div>
+      <div class="done-item-text">${esc(item.text)}</div>
+      <span class="done-item-col">${esc(item.colName)}</span>
+      <span class="done-item-meta">${item.doneAt}</span>
+      <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function restoreDone(i) {
+  const item = doneItems.splice(i, 1)[0];
+  const col = columns.find(c => c.name === item.colName) || columns[0];
+  if (col) { const { colName, doneAt, ...card } = item; col.cards.push(card); }
+  saveDone(); saveData(); renderDone();
+}
+
+function clearDone() {
+  if (!confirm('완료 목록을 모두 비울까요?')) return;
+  doneItems = []; saveDone();
+  if (currentPage === 'done') renderDone();
+}
+
+// ── DRAG
+function onCardDragStart(e, cardId, colId) {
+  dragCardId = cardId; dragFromColId = colId;
+  setTimeout(() => { const el = document.querySelector(`[data-card-id="${cardId}"]`); if (el) el.classList.add('dragging'); }, 0);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onCardDragEnd() {
+  dragCardId = null; dragFromColId = null;
+  document.querySelectorAll('.card.dragging').forEach(el => el.classList.remove('dragging'));
+  document.querySelectorAll('.column.drag-target').forEach(el => el.classList.remove('drag-target'));
+}
+function onCardDragOver(e, colId) {
+  if (!dragCardId) return; e.preventDefault();
+  const colEl = document.querySelector(`[data-col-id="${colId}"]`);
+  if (colEl) colEl.classList.add('drag-target');
+}
+function onCardDrop(e, targetColId) {
+  e.preventDefault(); if (!dragCardId) return;
+  if (dragFromColId === targetColId) { onCardDragEnd(); return; }
+  const fromCol = columns.find(c => c.id === dragFromColId);
+  const toCol = columns.find(c => c.id === targetColId);
+  if (!fromCol || !toCol) return;
+  const idx = fromCol.cards.findIndex(c => c.id === dragCardId);
+  if (idx === -1) return;
+  const [card] = fromCol.cards.splice(idx, 1);
+  toCol.cards.push(card);
+  saveData(); render();
+}
+
+// ── CARD ACTIONS
+function deleteCard(e, cardId) {
+  e.preventDefault(); e.stopPropagation();
+  columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
+  saveData(); render();
+}
+function handleCardInput(e, colId, textarea) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addCardFromInput(colId, textarea); }
+  if (e.key === 'Escape') { textarea.value = ''; textarea.blur(); }
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 88) + 'px';
+}
+function blurCardInput(e, colId, textarea) {
+  setTimeout(() => { const f = textarea.parentElement.querySelector('.add-card-footer'); if (f) f.style.display = 'none'; }, 150);
+}
+function saveCardInput(e, colId) {
+  const area = e.target.closest('.add-card-area');
+  addCardFromInput(colId, area.querySelector('.add-card-input'));
+}
+function cancelCardInput(e) {
+  const area = e.target.closest('.add-card-area');
+  const ta = area.querySelector('.add-card-input'); ta.value = ''; ta.blur();
+}
+function addCardFromInput(colId, textarea) {
+  const text = textarea.value.trim(); if (!text) return;
+  const col = columns.find(c => c.id === colId); if (!col) return;
+  col.cards.push({ id: genId(), text, date: today() });
+  textarea.value = ''; textarea.style.height = 'auto';
+  saveData(); render();
+}
+
+// ── COLUMN ACTIONS
+function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
+function editColDesc(colId, desc) { const c = columns.find(c => c.id === colId); if (c) { c.desc = desc; saveData(); } }
+function deleteCol(colId) {
+  if (!confirm('이 컬럼을 삭제할까요?')) return;
+  columns = columns.filter(c => c.id !== colId);
+  saveData(); render();
+}
+function resetData() {
+  if (!confirm('모든 데이터를 초기화할까요?')) return;
+  columns = JSON.parse(JSON.stringify(DEFAULT_COLUMNS));
+  saveData(); render();
+}
+
+// ── MODAL
+function openAddColModal() {
+  editingColId = null;
+  document.getElementById('modal-title').textContent = '새 컬럼 추가';
+  document.getElementById('modal-confirm-btn').textContent = '추가';
+  document.getElementById('modal-col-name').value = '';
+  document.getElementById('modal-col-desc').value = '';
+  selectedColorIdx = 0; renderColorPicker();
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-col-name').focus(), 50);
+}
+function openEditColModal(colId) {
+  editingColId = colId;
+  const col = columns.find(c => c.id === colId); if (!col) return;
+  document.getElementById('modal-title').textContent = '컬럼 편집';
+  document.getElementById('modal-confirm-btn').textContent = '저장';
+  document.getElementById('modal-col-name').value = col.name;
+  document.getElementById('modal-col-desc').value = col.desc;
+  selectedColorIdx = col.colorIdx; renderColorPicker();
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-col-name').focus(), 50);
+}
+function renderColorPicker() {
+  const picker = document.getElementById('color-picker'); picker.innerHTML = '';
+  COLORS.forEach((c, i) => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (i === selectedColorIdx ? ' selected' : '');
+    sw.style.background = c.dot;
+    sw.onclick = () => { selectedColorIdx = i; renderColorPicker(); };
+    picker.appendChild(sw);
+  });
+}
+function confirmModal() {
+  const name = document.getElementById('modal-col-name').value.trim();
+  if (!name) { document.getElementById('modal-col-name').focus(); return; }
+  const desc = document.getElementById('modal-col-desc').value.trim();
+  if (editingColId) {
+    const col = columns.find(c => c.id === editingColId);
+    if (col) { col.name = name; col.desc = desc; col.colorIdx = selectedColorIdx; }
+  } else {
+    columns.push({ id: genId(), name, desc, colorIdx: selectedColorIdx, cards: [] });
+  }
+  closeModalDirect(); saveData(); render();
+}
+function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); editingColId = null; }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+  if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmModal();
+});
+
+render();
+
+// ── LOGIN (Google Firebase — 연동 전 임시 UI)
+function handleLogin() {
+  // Firebase 연동 후 실제 로그인으로 교체 예정
+  const mockName = '사용자';
+  showUserInfo(mockName);
+}
+
+function handleLogout() {
+  document.getElementById('user-info').style.display = 'none';
+  document.getElementById('btn-login').style.display = 'block';
+}
+
+function showUserInfo(name) {
+  document.getElementById('btn-login').style.display = 'none';
+  const info = document.getElementById('user-info');
+  info.style.display = 'flex';
+  document.getElementById('user-name').textContent = name;
+  document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+}
+</script>
+</body>
+</html>
