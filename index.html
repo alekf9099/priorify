@@ -684,6 +684,13 @@ body.dark {
 </div>
 
 <script>
+// ── LNB TOGGLE
+function toggleLnb() {
+  document.body.classList.toggle('lnb-collapsed');
+  const isCollapsed = document.body.classList.contains('lnb-collapsed');
+  localStorage.setItem('priorify_lnb', isCollapsed ? 'collapsed' : 'open');
+}
+
 const COLORS = [
   { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
   { dot:'#F59E0B', tag:'#FEF3C7', tagText:'#92400E', colBg:'#FFFBEB', colBorder:'#FDE68A' },
@@ -913,13 +920,7 @@ function markDone(e, cardId) {
   });
   if (found) {
     doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); // ── LNB TOGGLE
-function toggleLnb() {
-  document.body.classList.toggle('lnb-collapsed');
-  const isCollapsed = document.body.classList.contains('lnb-collapsed');
-  localStorage.setItem('priorify_lnb', isCollapsed ? 'collapsed' : 'open');
-}
-const savedLnb = localStorage.getItem('priorify_lnb');
+    saveDone(); saveData(); const savedLnb = localStorage.getItem('priorify_lnb');
 if (savedLnb === 'collapsed') document.body.classList.add('lnb-collapsed');
 
 render();
