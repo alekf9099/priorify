@@ -491,16 +491,17 @@ header {
 }
 .lnb-toggle span:nth-child(2) { width: 75%; }
 
-.lnb-collapsed .lnb-toggle span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
-.lnb-collapsed .lnb-toggle span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.lnb-collapsed .lnb-toggle span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+body.lnb-collapsed .lnb-toggle span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+body.lnb-collapsed .lnb-toggle span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+body.lnb-collapsed .lnb-toggle span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
 
 .lnb {
   width: var(--lnb-w);
   transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
   overflow: hidden;
+  flex-shrink: 0;
 }
-.lnb-collapsed .lnb {
+body.lnb-collapsed .lnb {
   width: 0;
   padding: 0;
   opacity: 0;
@@ -914,12 +915,12 @@ function markDone(e, cardId) {
     doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
     saveDone(); saveData(); // ── LNB TOGGLE
 function toggleLnb() {
-  document.querySelector('.layout').classList.toggle('lnb-collapsed');
-  const isCollapsed = document.querySelector('.layout').classList.contains('lnb-collapsed');
+  document.body.classList.toggle('lnb-collapsed');
+  const isCollapsed = document.body.classList.contains('lnb-collapsed');
   localStorage.setItem('priorify_lnb', isCollapsed ? 'collapsed' : 'open');
 }
 const savedLnb = localStorage.getItem('priorify_lnb');
-if (savedLnb === 'collapsed') document.querySelector('.layout').classList.add('lnb-collapsed');
+if (savedLnb === 'collapsed') document.body.classList.add('lnb-collapsed');
 
 render();
   }
