@@ -464,6 +464,49 @@ header {
 }
 #save-toast.show { opacity: 1; transform: translateY(0); }
 
+/* ───────── LNB TOGGLE ───────── */
+.lnb-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4.5px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.lnb-toggle:hover { background: var(--bg); }
+.lnb-toggle span {
+  display: block;
+  height: 1.5px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s, width 0.25s;
+  transform-origin: left center;
+}
+.lnb-toggle span:nth-child(2) { width: 75%; }
+
+.lnb-collapsed .lnb-toggle span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+.lnb-collapsed .lnb-toggle span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.lnb-collapsed .lnb-toggle span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+.lnb {
+  width: var(--lnb-w);
+  transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+.lnb-collapsed .lnb {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ───────── DARK MODE ───────── */
 body.dark {
   --bg: #18181B;
@@ -480,6 +523,9 @@ body.dark {
 
 <header>
   <div class="header-left">
+    <button class="lnb-toggle" onclick="toggleLnb()" id="lnb-toggle-btn" title="사이드바 열기/닫기">
+      <span></span><span></span><span></span>
+    </button>
     <a class="logo" href="https://priorify-eight.vercel.app/">priorify<span>.</span></a>
     <div class="today-badge" id="today-badge"></div>
   </div>
@@ -866,7 +912,16 @@ function markDone(e, cardId) {
   });
   if (found) {
     doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); render();
+    saveDone(); saveData(); // ── LNB TOGGLE
+function toggleLnb() {
+  document.querySelector('.layout').classList.toggle('lnb-collapsed');
+  const isCollapsed = document.querySelector('.layout').classList.contains('lnb-collapsed');
+  localStorage.setItem('priorify_lnb', isCollapsed ? 'collapsed' : 'open');
+}
+const savedLnb = localStorage.getItem('priorify_lnb');
+if (savedLnb === 'collapsed') document.querySelector('.layout').classList.add('lnb-collapsed');
+
+render();
   }
 }
 
