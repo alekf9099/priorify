@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Priorify — 일정 관리 (편집 기능 추가)</title>
+<title>Priorify — 일정 관리 & 감정 쓰레기통</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
   --radius: 12px;
   --radius-sm: 8px;
   --lnb-w: 220px;
+  --accent: #6366F1;
 }
 
 html, body { height: 100%; overflow: hidden; }
@@ -212,7 +213,6 @@ header {
 }
 .dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
 .dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; }
-.dash-card-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: middle; }
 
 .dash-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .dash-col-card {
@@ -226,35 +226,130 @@ header {
 .dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 
-/* ── DONE PAGE ── */
-#page-done {
-  padding: 28px 32px;
-  overflow-y: auto;
-}
-.done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
-.done-empty { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
-.done-list { display: flex; flex-direction: column; gap: 8px; }
-.done-item {
+/* ── EMOTION TRASH PAGE ── */
+#page-trash {
+  padding: 0;
   display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+}
+.trash-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
 }
-.done-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.done-item-text { flex: 1; font-size: 13.5px; }
-.done-item-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); }
-.done-item-col { font-size: 11px; color: var(--text-secondary); background: var(--bg); border-radius: 20px; padding: 2px 10px; }
-.done-restore {
-  background: none; border: 1px solid var(--border-strong);
-  border-radius: 6px; padding: 4px 10px; font-size: 11px;
-  color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif;
-  transition: background 0.1s;
+
+/* 쓰레기통 캐릭터 */
+.trash-character-wrap {
+  position: relative;
+  width: 180px;
+  height: 220px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.done-restore:hover { background: var(--bg); color: var(--text-primary); }
+.trash-character-wrap:hover { transform: scale(1.05); }
+.trash-character-wrap.shaking { animation: shake 0.5s infinite; }
+
+.trash-body {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 140px; height: 160px; background: #94A3B8;
+  border-radius: 10px 10px 40px 40px; border: 4px solid #475569;
+  z-index: 2; overflow: hidden;
+}
+.trash-body::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(0,0,0,0.05) 15px, rgba(0,0,0,0.05) 30px);
+}
+.trash-fill {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+  background: #6366F1; opacity: 0.3; transition: height 0.5s ease;
+}
+.trash-lid {
+  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+  width: 160px; height: 20px; background: #64748B;
+  border: 4px solid #475569; border-radius: 20px;
+  z-index: 3; transition: transform 0.3s ease, top 0.3s ease;
+}
+.trash-character-wrap.open .trash-lid { transform: translateX(-50%) translateY(-40px) rotate(-15deg); }
+
+.trash-eye {
+  position: absolute; top: 100px; width: 12px; height: 12px;
+  background: #1e293b; border-radius: 50%; z-index: 4;
+}
+.trash-eye.left { left: 60px; }
+.trash-eye.right { right: 60px; }
+.trash-mouth {
+  position: absolute; top: 125px; left: 50%; transform: translateX(-50%);
+  width: 30px; height: 15px; border-bottom: 3px solid #1e293b;
+  border-radius: 0 0 15px 15px; z-index: 4;
+}
+.trash-character-wrap.open .trash-mouth { height: 25px; background: #1e293b; border-radius: 50%; top: 120px; }
+
+/* 채팅 인터페이스 */
+.trash-chat-wrap {
+  width: 100%; max-width: 500px; z-index: 10;
+}
+.trash-input-box {
+  display: flex; gap: 10px; background: var(--surface);
+  padding: 12px 16px; border-radius: 30px;
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+.trash-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: inherit; font-size: 14px; color: var(--text-primary);
+}
+.trash-send-btn {
+  background: var(--text-primary); color: white; border: none;
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s;
+}
+.trash-send-btn:hover { transform: scale(1.1); }
+
+/* 애니메이션 오브젝트 */
+.emotion-ball {
+  position: absolute; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--accent); color: white; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 5px; text-align: center; pointer-events: none;
+  z-index: 5; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  word-break: break-all; overflow: hidden;
+}
+
+/* 비우기 버튼 및 리포트 */
+.trash-actions { margin-top: 20px; display: flex; gap: 10px; }
+.btn-empty {
+  padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border-strong);
+  background: var(--surface); color: var(--text-secondary); cursor: pointer;
+  font-size: 13px; transition: all 0.2s;
+}
+.btn-empty:hover { background: #FEE2E2; color: #B91C1C; border-color: #FECACA; }
+
+@keyframes shake {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.02) rotate(-2deg); }
+  75% { transform: scale(1.02) rotate(2deg); }
+}
+
+@keyframes throwToTrash {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50% { transform: translate(var(--tx), -100px) scale(1.2); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+}
+
+/* 리포트 모달 스타일 */
+.report-content { line-height: 1.6; color: var(--text-secondary); font-size: 14px; }
+.report-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
+.report-title { font-weight: 600; color: var(--text-primary); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.report-badge { font-size: 11px; padding: 2px 8px; background: var(--bg); border-radius: 10px; color: var(--accent); }
 
 /* ── SETTINGS PAGE ── */
 #page-settings {
@@ -449,7 +544,7 @@ header {
 }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
 .modal {
-  background: var(--surface); width: 100%; max-width: 360px;
+  background: var(--surface); width: 100%; max-width: 380px;
   border-radius: var(--radius); padding: 24px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   transform: scale(0.95); transition: transform 0.2s;
@@ -515,6 +610,13 @@ header {
       대시보드
     </button>
 
+    <button class="lnb-item" data-page="trash" onclick="switchPage('trash', this)">
+      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h12M5 6v10a2 2 0 002 2h4a2 2 0 002-2V6M8 6V4a2 2 0 012-2h0a2 2 0 012 2v2"/>
+      </svg>
+      감정 쓰레기통
+    </button>
+
     <button class="lnb-item" data-page="done" onclick="switchPage('done', this)">
       <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="9" r="7"/>
@@ -563,6 +665,39 @@ header {
         <div class="dash-sub">전체 할 일 현황을 한눈에 확인하세요</div>
         <div class="dash-grid" id="dash-grid"></div>
         <div class="dash-cols" id="dash-cols"></div>
+      </div>
+    </div>
+
+    <!-- EMOTION TRASH -->
+    <div id="page-trash" class="page">
+      <div class="trash-container">
+        <div class="dash-title" style="margin-bottom: 8px;">감정 쓰레기통</div>
+        <div class="dash-sub" style="margin-bottom: 40px;">부정적인 생각, 스트레스, 고민들을 모두 여기에 던져버리세요.</div>
+        
+        <div class="trash-character-wrap" id="trash-character">
+          <div class="trash-lid"></div>
+          <div class="trash-body">
+            <div class="trash-fill" id="trash-fill"></div>
+          </div>
+          <div class="trash-eye left"></div>
+          <div class="trash-eye right"></div>
+          <div class="trash-mouth"></div>
+        </div>
+
+        <div class="trash-chat-wrap">
+          <div class="trash-input-box">
+            <input type="text" class="trash-input" id="trash-input" placeholder="지금 어떤 감정을 버리고 싶나요?" onkeydown="if(event.key==='Enter') throwEmotion()">
+            <button class="trash-send-btn" onclick="throwEmotion()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="11"/><polyline points="9 8 12 11 15 8"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="trash-actions">
+          <button class="btn-empty" id="btn-empty-trash" onclick="evaluateTrash()">쓰레기통 비우기 & 종합 평가</button>
+        </div>
       </div>
     </div>
 
@@ -658,6 +793,17 @@ header {
   </div>
 </div>
 
+<!-- Trash Report Modal -->
+<div class="modal-overlay" id="report-modal-overlay" onclick="closeReportModal(event)">
+  <div class="modal" style="max-width: 450px;">
+    <div class="modal-title" id="report-title">마음 리포트</div>
+    <div class="report-content" id="report-content"></div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="closeReportModalDirect()">확인</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const COLORS = [
   { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
@@ -694,16 +840,24 @@ function loadDone() {
   try { const s = localStorage.getItem('priorify_done'); if (s) return JSON.parse(s); } catch(e) {}
   return [];
 }
+function loadTrash() {
+  try { const s = localStorage.getItem('priorify_trash'); if (s) return JSON.parse(s); } catch(e) {}
+  return [];
+}
 function saveData() {
   try { localStorage.setItem('priorify_columns', JSON.stringify(columns)); showToast(); } catch(e) {}
 }
 function saveDone() {
   try { localStorage.setItem('priorify_done', JSON.stringify(doneItems)); } catch(e) {}
 }
+function saveTrash() {
+  try { localStorage.setItem('priorify_trash', JSON.stringify(trashItems)); updateTrashFill(); } catch(e) {}
+}
 
 let columns = loadData();
 let doneItems = loadDone();
-let nextId = 1000; // ID 충돌 방지를 위해 크게 시작
+let trashItems = loadTrash();
+let nextId = 2000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
@@ -738,6 +892,7 @@ if (savedTheme) setTheme(savedTheme);
 let toastTimer = null;
 function showToast() {
   const t = document.getElementById('save-toast');
+  if(!t) return;
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
@@ -752,6 +907,7 @@ function switchPage(page, btn) {
   if (btn) btn.classList.add('active');
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
+  if (page === 'trash') updateTrashFill();
 }
 
 // ── LNB COL LIST
@@ -818,7 +974,6 @@ function render() {
     colEl.querySelectorAll('.card').forEach(cardEl => {
       cardEl.addEventListener('dragstart', e => onCardDragStart(e, cardEl.dataset.cardId, col.id));
       cardEl.addEventListener('dragend', onCardDragEnd);
-      // 더블클릭 시 편집 모달 오픈 이벤트 추가
       cardEl.addEventListener('dblclick', e => openEditCardModal(e, cardEl.dataset.cardId));
     });
   });
@@ -847,6 +1002,121 @@ function renderCard(card, color, colName) {
   </div>`;
 }
 
+// ── EMOTION TRASH LOGIC
+function updateTrashFill() {
+  const fill = document.getElementById('trash-fill');
+  if(!fill) return;
+  const level = Math.min(trashItems.length * 10, 100);
+  fill.style.height = level + '%';
+  
+  const char = document.getElementById('trash-character');
+  if (level >= 80) char.classList.add('shaking');
+  else char.classList.remove('shaking');
+}
+
+function throwEmotion() {
+  const input = document.getElementById('trash-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const char = document.getElementById('trash-character');
+  const container = document.querySelector('.trash-container');
+  
+  // 애니메이션: 쓰레기통 열기
+  char.classList.add('open');
+  
+  // 감정 공 생성
+  const ball = document.createElement('div');
+  ball.className = 'emotion-ball';
+  ball.textContent = text.length > 10 ? text.substring(0, 10) + '...' : text;
+  
+  // 시작 위치 (입력창 근처)
+  const inputRect = document.getElementById('trash-input').getBoundingClientRect();
+  const charRect = char.getBoundingClientRect();
+  
+  ball.style.left = (inputRect.left + inputRect.width / 2 - 20) + 'px';
+  ball.style.top = (inputRect.top - 20) + 'px';
+  
+  // 이동 거리 계산
+  const tx = (charRect.left + charRect.width / 2) - (inputRect.left + inputRect.width / 2);
+  const ty = (charRect.top + charRect.height / 2) - inputRect.top;
+  
+  ball.style.setProperty('--tx', tx + 'px');
+  ball.style.setProperty('--ty', ty + 'px');
+  ball.style.animation = 'throwToTrash 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards';
+  
+  document.body.appendChild(ball);
+  
+  // 데이터 저장
+  trashItems.push({ text, date: new Date().toISOString() });
+  saveTrash();
+  
+  input.value = '';
+  
+  setTimeout(() => {
+    char.classList.remove('open');
+    ball.remove();
+  }, 800);
+}
+
+function evaluateTrash() {
+  if (trashItems.length === 0) {
+    alert('쓰레기통이 비어있습니다. 버릴 감정을 먼저 입력해주세요!');
+    return;
+  }
+
+  const reportContent = document.getElementById('report-content');
+  const keywords = analyzeKeywords(trashItems);
+  
+  let html = `
+    <div class="report-section">
+      <div class="report-title">📊 감정 데이터 분석 <span class="report-badge">${trashItems.length}개의 기록</span></div>
+      <p>최근 당신의 마음에는 <strong>${keywords.join(', ')}</strong>와(과) 관련된 감정들이 머물렀네요.</p>
+    </div>
+    <div class="report-section">
+      <div class="report-title">💡 종합 평가 및 위로</div>
+      <p>${generateEvaluation(keywords)}</p>
+    </div>
+    <div class="report-section" style="border-bottom:none">
+      <div class="report-title">✨ 마음 청소 완료</div>
+      <p>모든 감정 쓰레기를 깨끗이 비웠습니다. 새로운 마음으로 다시 시작할 준비가 되셨나요?</p>
+    </div>
+  `;
+  
+  reportContent.innerHTML = html;
+  document.getElementById('report-modal-overlay').classList.add('open');
+  
+  // 데이터 초기화
+  trashItems = [];
+  saveTrash();
+}
+
+function analyzeKeywords(items) {
+  const commonKeywords = ['업무', '인간관계', '미래', '불안', '짜증', '피곤', '슬픔', '후회', '스트레스'];
+  const found = [];
+  const allText = items.map(i => i.text).join(' ');
+  
+  commonKeywords.forEach(k => {
+    if (allText.includes(k)) found.push(k);
+  });
+  
+  if (found.length === 0) found.push('일상적인 고민');
+  return found.slice(0, 3);
+}
+
+function generateEvaluation(keywords) {
+  const evals = [
+    "무거운 마음을 여기까지 가져오느라 고생 많으셨어요. 버려진 감정들은 이제 당신을 괴롭히지 못할 거예요.",
+    "힘든 순간들을 잘 견뎌내고 계시네요. 감정을 쏟아내는 것만으로도 마음의 짐이 훨씬 가벼워질 수 있습니다.",
+    "당신은 생각보다 훨씬 강한 사람이에요. 오늘 버린 이 고민들이 내일의 당신을 더 성장하게 만들 거예요.",
+    "가끔은 쉬어가도 괜찮아요. 모든 것을 완벽하게 해내려 하지 마세요. 당신은 존재만으로도 충분합니다."
+  ];
+  return evals[Math.floor(Math.random() * evals.length)];
+}
+
+function closeReportModal(e) { if (e.target === document.getElementById('report-modal-overlay')) closeReportModalDirect(); }
+function closeReportModalDirect() { document.getElementById('report-modal-overlay').classList.remove('open'); }
+
 // ── DASHBOARD
 function renderDashboard() {
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
@@ -874,7 +1144,7 @@ function renderDashboard() {
     const color = COLORS[col.colorIdx];
     const pct = total === 0 ? 0 : Math.round(col.cards.length / total * 100);
     return `<div class="dash-col-card">
-      <div class="dash-col-name"><span class="dash-card-dot" style="background:${color.dot}"></span>${esc(col.name)}</div>
+      <div class="dash-col-name"><span class="dash-card-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle;background:${color.dot}"></span>${esc(col.name)}</div>
       <div class="dash-col-bar-wrap"><div class="dash-col-bar" style="width:${pct}%;background:${color.dot}"></div></div>
       <div class="dash-col-count">${col.cards.length}개 · 전체의 ${pct}%</div>
     </div>`;
@@ -905,10 +1175,10 @@ function renderDone() {
     const col = columns.find(c => c.name === item.colName);
     const color = col ? COLORS[col.colorIdx] : COLORS[7];
     return `<div class="done-item">
-      <div class="done-item-dot" style="background:${color.dot}"></div>
+      <div class="done-item-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${color.dot}"></div>
       <div class="done-item-text">${esc(item.text)}</div>
-      <span class="done-item-col">${esc(item.colName)}</span>
-      <span class="done-item-meta">${item.doneAt}</span>
+      <span class="done-item-col" style="font-size:11px;color:var(--text-secondary);background:var(--bg);border-radius:20px;padding:2px 10px;">${esc(item.colName)}</span>
+      <span class="done-item-meta" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-tertiary);">${item.doneAt}</span>
       <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
     </div>`;
   }).join('') + '</div>';
@@ -1085,9 +1355,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModalDirect();
     closeCardModalDirect();
+    closeReportModalDirect();
   }
-  if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmModal();
-  if (e.key === 'Enter' && document.getElementById('card-modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmCardEdit();
+  if (e.key === 'Enter') {
+    if (document.getElementById('modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmModal();
+    if (document.getElementById('card-modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmCardEdit();
+  }
 });
 
 render();
