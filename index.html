@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Priorify — 일정 관리 & 감정 쓰레기통</title>
+<title>Priorify — 일정 관리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -245,52 +245,81 @@ header {
   overflow: hidden;
 }
 
-/* 쓰레기통 캐릭터 */
-.trash-character-wrap {
+/* 종량제 봉투 디자인 */
+.trash-bag-wrap {
   position: relative;
-  width: 180px;
-  height: 220px;
+  width: 200px;
+  height: 280px;
   margin-bottom: 40px;
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.trash-character-wrap:hover { transform: scale(1.05); }
-.trash-character-wrap.shaking { animation: shake 0.5s infinite; }
+.trash-bag-wrap:hover { transform: scale(1.02); }
 
-.trash-body {
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 140px; height: 160px; background: #94A3B8;
-  border-radius: 10px 10px 40px 40px; border: 4px solid #475569;
-  z-index: 2; overflow: hidden;
+.trash-bag {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 240px;
+  background: linear-gradient(135deg, #2D5016 0%, #3D6B1F 50%, #2D5016 100%);
+  border-radius: 0 0 20px 20px;
+  border: 2px solid #1a3009;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: inset -5px 0 10px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
 }
-.trash-body::after {
-  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(0,0,0,0.05) 15px, rgba(0,0,0,0.05) 30px);
+
+/* 봉투 상단 (접힌 부분) */
+.trash-bag-top {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 30px;
+  background: linear-gradient(to bottom, #3D6B1F, #2D5016);
+  border: 2px solid #1a3009;
+  border-radius: 50% 50% 0 0;
+  z-index: 3;
 }
+
+/* 봉투 내용물 (채워지는 부분) */
 .trash-fill {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
-  background: #6366F1; opacity: 0.3; transition: height 0.5s ease;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to top, #8B4513, #A0522D);
+  opacity: 0.6;
+  transition: height 0.5s ease;
+  border-radius: 0 0 18px 18px;
 }
-.trash-lid {
-  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
-  width: 160px; height: 20px; background: #64748B;
-  border: 4px solid #475569; border-radius: 20px;
-  z-index: 3; transition: transform 0.3s ease, top 0.3s ease;
-}
-.trash-character-wrap.open .trash-lid { transform: translateX(-50%) translateY(-40px) rotate(-15deg); }
 
-.trash-eye {
-  position: absolute; top: 100px; width: 12px; height: 12px;
-  background: #1e293b; border-radius: 50%; z-index: 4;
+/* 봉투 팽창 효과 */
+.trash-bag.expanding {
+  animation: bagExpand 0.5s ease-out forwards;
 }
-.trash-eye.left { left: 60px; }
-.trash-eye.right { right: 60px; }
-.trash-mouth {
-  position: absolute; top: 125px; left: 50%; transform: translateX(-50%);
-  width: 30px; height: 15px; border-bottom: 3px solid #1e293b;
-  border-radius: 0 0 15px 15px; z-index: 4;
+
+@keyframes bagExpand {
+  0% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.05) scaleX(1.08); }
+  100% { transform: scaleY(1) scaleX(1.1); }
 }
-.trash-character-wrap.open .trash-mouth { height: 25px; background: #1e293b; border-radius: 50%; top: 120px; }
+
+/* 봉투 넘침 경고 */
+.trash-bag.overflow {
+  animation: bagOverflow 0.6s ease-in-out infinite;
+}
+
+@keyframes bagOverflow {
+  0%, 100% { transform: scaleY(1) scaleX(1.1) rotate(0deg); }
+  25% { transform: scaleY(1.02) scaleX(1.12) rotate(-1deg); }
+  75% { transform: scaleY(1.02) scaleX(1.12) rotate(1deg); }
+}
 
 /* 채팅 인터페이스 */
 .trash-chat-wrap {
@@ -324,7 +353,7 @@ header {
   word-break: break-all; overflow: hidden;
 }
 
-/* 비우기 버튼 및 리포트 */
+/* 비우기 버튼 */
 .trash-actions { margin-top: 20px; display: flex; gap: 10px; }
 .btn-empty {
   padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border-strong);
@@ -332,11 +361,10 @@ header {
   font-size: 13px; transition: all 0.2s;
 }
 .btn-empty:hover { background: #FEE2E2; color: #B91C1C; border-color: #FECACA; }
+.btn-empty:disabled { opacity: 0.5; cursor: not-allowed; }
 
-@keyframes shake {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.02) rotate(-2deg); }
-  75% { transform: scale(1.02) rotate(2deg); }
+.trash-count {
+  font-size: 12px; color: var(--text-secondary); margin-top: 12px;
 }
 
 @keyframes throwToTrash {
@@ -345,11 +373,35 @@ header {
   100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
 }
 
-/* 리포트 모달 스타일 */
-.report-content { line-height: 1.6; color: var(--text-secondary); font-size: 14px; }
-.report-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
-.report-title { font-weight: 600; color: var(--text-primary); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
-.report-badge { font-size: 11px; padding: 2px 8px; background: var(--bg); border-radius: 10px; color: var(--accent); }
+/* ── DONE PAGE ── */
+#page-done {
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+.done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+.done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+.done-empty { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
+.done-list { display: flex; flex-direction: column; gap: 8px; }
+.done-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+.done-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.done-item-text { flex: 1; font-size: 13.5px; }
+.done-item-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); }
+.done-item-col { font-size: 11px; color: var(--text-secondary); background: var(--bg); border-radius: 20px; padding: 2px 10px; }
+.done-restore {
+  background: none; border: 1px solid var(--border-strong);
+  border-radius: 6px; padding: 4px 10px; font-size: 11px;
+  color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.1s;
+}
+.done-restore:hover { background: var(--bg); color: var(--text-primary); }
 
 /* ── SETTINGS PAGE ── */
 #page-settings {
@@ -548,6 +600,8 @@ header {
   border-radius: var(--radius); padding: 24px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   transform: scale(0.95); transition: transform 0.2s;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 .modal-overlay.open .modal { transform: scale(1); }
 
@@ -578,6 +632,27 @@ header {
 .color-swatch.selected { border-color: var(--text-primary); transform: scale(1.1); }
 
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+
+/* 쓰레기 내용 리스트 */
+.trash-items-list {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.trash-item-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.trash-item-preview:last-child { margin-bottom: 0; }
 
 </style>
 </head>
@@ -674,14 +749,11 @@ header {
         <div class="dash-title" style="margin-bottom: 8px;">감정 쓰레기통</div>
         <div class="dash-sub" style="margin-bottom: 40px;">부정적인 생각, 스트레스, 고민들을 모두 여기에 던져버리세요.</div>
         
-        <div class="trash-character-wrap" id="trash-character">
-          <div class="trash-lid"></div>
-          <div class="trash-body">
+        <div class="trash-bag-wrap" id="trash-bag-wrap">
+          <div class="trash-bag-top"></div>
+          <div class="trash-bag" id="trash-bag">
             <div class="trash-fill" id="trash-fill"></div>
           </div>
-          <div class="trash-eye left"></div>
-          <div class="trash-eye right"></div>
-          <div class="trash-mouth"></div>
         </div>
 
         <div class="trash-chat-wrap">
@@ -695,8 +767,10 @@ header {
           </div>
         </div>
 
+        <div class="trash-count" id="trash-count">버린 감정: 0개</div>
+
         <div class="trash-actions">
-          <button class="btn-empty" id="btn-empty-trash" onclick="evaluateTrash()">쓰레기통 비우기 & 종합 평가</button>
+          <button class="btn-empty" id="btn-empty-trash" onclick="openTrashReviewModal()" disabled>쓰레기통 비우기</button>
         </div>
       </div>
     </div>
@@ -793,13 +867,15 @@ header {
   </div>
 </div>
 
-<!-- Trash Report Modal -->
-<div class="modal-overlay" id="report-modal-overlay" onclick="closeReportModal(event)">
-  <div class="modal" style="max-width: 450px;">
-    <div class="modal-title" id="report-title">마음 리포트</div>
-    <div class="report-content" id="report-content"></div>
+<!-- Trash Review Modal (비우기 전 확인) -->
+<div class="modal-overlay" id="trash-review-modal" onclick="closeTrashReviewModal(event)">
+  <div class="modal">
+    <div class="modal-title">쓰레기통 비우기</div>
+    <div class="modal-label" style="margin-bottom: 12px;">버린 감정들 (총 <span id="trash-review-count">0</span>개)</div>
+    <div class="trash-items-list" id="trash-items-list"></div>
     <div class="modal-actions">
-      <button class="btn-save" onclick="closeReportModalDirect()">확인</button>
+      <button class="btn-cancel" onclick="closeTrashReviewModal()">취소</button>
+      <button class="btn-save" onclick="emptyTrash()">비우기</button>
     </div>
   </div>
 </div>
@@ -857,7 +933,7 @@ function saveTrash() {
 let columns = loadData();
 let doneItems = loadDone();
 let trashItems = loadTrash();
-let nextId = 2000;
+let nextId = 3000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
@@ -1005,13 +1081,31 @@ function renderCard(card, color, colName) {
 // ── EMOTION TRASH LOGIC
 function updateTrashFill() {
   const fill = document.getElementById('trash-fill');
-  if(!fill) return;
-  const level = Math.min(trashItems.length * 10, 100);
+  const bag = document.getElementById('trash-bag');
+  const count = trashItems.length;
+  
+  if(!fill || !bag) return;
+  
+  const level = Math.min(count * 10, 100);
   fill.style.height = level + '%';
   
-  const char = document.getElementById('trash-character');
-  if (level >= 80) char.classList.add('shaking');
-  else char.classList.remove('shaking');
+  // 카운트 업데이트
+  const countEl = document.getElementById('trash-count');
+  if(countEl) countEl.textContent = `버린 감정: ${count}개`;
+  
+  // 버튼 활성화/비활성화
+  const btn = document.getElementById('btn-empty-trash');
+  if(btn) btn.disabled = count === 0;
+  
+  // 10개 초과 시 경고
+  if (count >= 10) {
+    bag.classList.add('overflow');
+    if (count === 10) {
+      alert('⚠️ 감정 쓰레기통이 가득 찼습니다!\n\n10개 이상의 감정이 쌓여있습니다. 마음을 비우고 새로 시작해 보세요.');
+    }
+  } else {
+    bag.classList.remove('overflow');
+  }
 }
 
 function throwEmotion() {
@@ -1019,11 +1113,12 @@ function throwEmotion() {
   const text = input.value.trim();
   if (!text) return;
 
-  const char = document.getElementById('trash-character');
+  const bag = document.getElementById('trash-bag');
   const container = document.querySelector('.trash-container');
   
-  // 애니메이션: 쓰레기통 열기
-  char.classList.add('open');
+  // 봉투 팽창 애니메이션
+  bag.classList.add('expanding');
+  setTimeout(() => bag.classList.remove('expanding'), 500);
   
   // 감정 공 생성
   const ball = document.createElement('div');
@@ -1032,14 +1127,14 @@ function throwEmotion() {
   
   // 시작 위치 (입력창 근처)
   const inputRect = document.getElementById('trash-input').getBoundingClientRect();
-  const charRect = char.getBoundingClientRect();
+  const bagRect = bag.getBoundingClientRect();
   
   ball.style.left = (inputRect.left + inputRect.width / 2 - 20) + 'px';
   ball.style.top = (inputRect.top - 20) + 'px';
   
   // 이동 거리 계산
-  const tx = (charRect.left + charRect.width / 2) - (inputRect.left + inputRect.width / 2);
-  const ty = (charRect.top + charRect.height / 2) - inputRect.top;
+  const tx = (bagRect.left + bagRect.width / 2) - (inputRect.left + inputRect.width / 2);
+  const ty = (bagRect.top + bagRect.height / 2) - inputRect.top;
   
   ball.style.setProperty('--tx', tx + 'px');
   ball.style.setProperty('--ty', ty + 'px');
@@ -1054,45 +1149,42 @@ function throwEmotion() {
   input.value = '';
   
   setTimeout(() => {
-    char.classList.remove('open');
     ball.remove();
   }, 800);
 }
 
-function evaluateTrash() {
-  if (trashItems.length === 0) {
-    alert('쓰레기통이 비어있습니다. 버릴 감정을 먼저 입력해주세요!');
-    return;
-  }
+function openTrashReviewModal() {
+  if (trashItems.length === 0) return;
+  
+  const list = document.getElementById('trash-items-list');
+  list.innerHTML = trashItems.map((item, i) => 
+    `<div class="trash-item-preview">${esc(item.text)}</div>`
+  ).join('');
+  
+  document.getElementById('trash-review-count').textContent = trashItems.length;
+  document.getElementById('trash-review-modal').classList.add('open');
+}
 
-  const reportContent = document.getElementById('report-content');
+function closeTrashReviewModal(e) {
+  if (e && e.target !== document.getElementById('trash-review-modal')) return;
+  document.getElementById('trash-review-modal').classList.remove('open');
+}
+
+function emptyTrash() {
+  // 종합 평가 생성 및 표시
   const keywords = analyzeKeywords(trashItems);
+  const evaluation = generateEvaluation(keywords);
   
-  let html = `
-    <div class="report-section">
-      <div class="report-title">📊 감정 데이터 분석 <span class="report-badge">${trashItems.length}개의 기록</span></div>
-      <p>최근 당신의 마음에는 <strong>${keywords.join(', ')}</strong>와(과) 관련된 감정들이 머물렀네요.</p>
-    </div>
-    <div class="report-section">
-      <div class="report-title">💡 종합 평가 및 위로</div>
-      <p>${generateEvaluation(keywords)}</p>
-    </div>
-    <div class="report-section" style="border-bottom:none">
-      <div class="report-title">✨ 마음 청소 완료</div>
-      <p>모든 감정 쓰레기를 깨끗이 비웠습니다. 새로운 마음으로 다시 시작할 준비가 되셨나요?</p>
-    </div>
-  `;
-  
-  reportContent.innerHTML = html;
-  document.getElementById('report-modal-overlay').classList.add('open');
+  alert(`✨ 마음 청소 완료!\n\n📊 당신의 감정 분석:\n${keywords.join(', ')}\n\n💡 위로의 말:\n${evaluation}`);
   
   // 데이터 초기화
   trashItems = [];
   saveTrash();
+  closeTrashReviewModal();
 }
 
 function analyzeKeywords(items) {
-  const commonKeywords = ['업무', '인간관계', '미래', '불안', '짜증', '피곤', '슬픔', '후회', '스트레스'];
+  const commonKeywords = ['업무', '인간관계', '미래', '불안', '짜증', '피곤', '슬픔', '후회', '스트레스', '외로움', '답답함'];
   const found = [];
   const allText = items.map(i => i.text).join(' ');
   
@@ -1113,9 +1205,6 @@ function generateEvaluation(keywords) {
   ];
   return evals[Math.floor(Math.random() * evals.length)];
 }
-
-function closeReportModal(e) { if (e.target === document.getElementById('report-modal-overlay')) closeReportModalDirect(); }
-function closeReportModalDirect() { document.getElementById('report-modal-overlay').classList.remove('open'); }
 
 // ── DASHBOARD
 function renderDashboard() {
@@ -1177,8 +1266,8 @@ function renderDone() {
     return `<div class="done-item">
       <div class="done-item-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${color.dot}"></div>
       <div class="done-item-text">${esc(item.text)}</div>
-      <span class="done-item-col" style="font-size:11px;color:var(--text-secondary);background:var(--bg);border-radius:20px;padding:2px 10px;">${esc(item.colName)}</span>
-      <span class="done-item-meta" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-tertiary);">${item.doneAt}</span>
+      <span class="done-item-col">${esc(item.colName)}</span>
+      <span class="done-item-meta">${item.doneAt}</span>
       <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
     </div>`;
   }).join('') + '</div>';
@@ -1355,7 +1444,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModalDirect();
     closeCardModalDirect();
-    closeReportModalDirect();
+    closeTrashReviewModal();
   }
   if (e.key === 'Enter') {
     if (document.getElementById('modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmModal();
@@ -1364,6 +1453,7 @@ document.addEventListener('keydown', e => {
 });
 
 render();
+updateTrashFill();
 </script>
 </body>
 </html>
