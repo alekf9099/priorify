@@ -1008,6 +1008,62 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function playPaperCrumpleSound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const noise = audioContext.createBufferSource();
+    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.3, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < buffer.length; i++) data[i] = Math.random() * 2 - 1;
+    const noiseGain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 2000;
+    noise.buffer = buffer;
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(audioContext.destination);
+    noiseGain.gain.setValueAtTime(0.3, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    noise.start(now);
+    noise.stop(now + 0.3);
+  } catch(e) {}
+}
+
+function playTrashEmptySound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const noise = audioContext.createBufferSource();
+    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.5, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < buffer.length; i++) data[i] = Math.random() * 2 - 1;
+    const noiseGain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 1500;
+    noise.buffer = buffer;
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(audioContext.destination);
+    noiseGain.gain.setValueAtTime(0.4, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.05, now + 0.5);
+    noise.start(now);
+    noise.stop(now + 0.5);
+    const osc = audioContext.createOscillator();
+    const oscGain = audioContext.createGain();
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
+    osc.connect(oscGain);
+    oscGain.connect(audioContext.destination);
+    oscGain.gain.setValueAtTime(0.15, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+    osc.start(now);
+    osc.stop(now + 0.4);
+  } catch(e) {}
+}
+
 // ── DATE
 document.getElementById('today-badge').textContent = (() => {
   const d = new Date();
@@ -1176,6 +1232,9 @@ function throwEmotion() {
 
   const bag = document.getElementById('trash-bag');
   
+  // 종이 구겨지는 소리 재생
+  playPaperCrumpleSound();
+  
   // 봉투 팽창 애니메이션
   bag.classList.add('expanding');
   setTimeout(() => bag.classList.remove('expanding'), 600);
@@ -1231,6 +1290,9 @@ function closeTrashReviewModal(e) {
 }
 
 function emptyTrash() {
+  // 쓰레기통 비우는 소리 재생
+  playTrashEmptySound();
+  
   // 종합 평가 생성 및 표시
   const keywords = analyzeKeywords(trashItems);
   const evaluation = generateEvaluation(keywords);
