@@ -175,8 +175,20 @@ header {
 }
 
 /* ───────── PAGE ───────── */
-.page { display: none; flex: 1; overflow: hidden; }
-.page.active { display: flex; flex-direction: column; }
+.page { 
+  display: none !important; 
+  flex: 1; 
+  overflow: hidden; 
+  position: relative;
+  visibility: hidden;
+  pointer-events: none;
+}
+.page.active { 
+  display: flex !important; 
+  flex-direction: column; 
+  visibility: visible;
+  pointer-events: auto;
+}
 
 /* ── BOARD PAGE ── */
 #board-wrap {
@@ -233,6 +245,8 @@ header {
   flex-direction: column;
   position: relative;
   background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+  overflow: hidden;
+  z-index: 1;
 }
 .trash-container {
   flex: 1;
@@ -243,6 +257,8 @@ header {
   padding: 40px;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 /* 종량제 봉투 - 고퀄리티 디자인 */
@@ -252,13 +268,14 @@ header {
   height: 320px;
   margin-bottom: 40px;
   perspective: 1000px;
+  z-index: 1;
 }
 
 .trash-bag {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
   width: 180px;
   height: 260px;
   background: linear-gradient(135deg, #2D5016 0%, #3D6B1F 25%, #4A8C2A 50%, #3D6B1F 75%, #2D5016 100%);
@@ -290,10 +307,10 @@ header {
 
 /* 봉투 상단 매듭 (귀) */
 .trash-bag-handle {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
   width: 0;
   height: 0;
   border-left: 25px solid transparent;
@@ -1500,4 +1517,3 @@ updateTrashFill();
 </script>
 </body>
 </html>
-카드 테이블 수정 기능 추가 방법 - Manus
