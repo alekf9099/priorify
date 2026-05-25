@@ -818,6 +818,8 @@ function render() {
     colEl.querySelectorAll('.card').forEach(cardEl => {
       cardEl.addEventListener('dragstart', e => onCardDragStart(e, cardEl.dataset.cardId, col.id));
       cardEl.addEventListener('dragend', onCardDragEnd);
+      // 더블클릭 시 편집 모달 오픈 이벤트 추가
+      cardEl.addEventListener('dblclick', e => openEditCardModal(e, cardEl.dataset.cardId));
     });
   });
 
@@ -1092,4 +1094,3 @@ render();
 </script>
 </body>
 </html>
-카드 테이블 수정 기능 추가 방법 - Manus
