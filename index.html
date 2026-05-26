@@ -840,17 +840,6 @@ body.dark .plant-widget {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
-.card-fly-clone {
-  position: fixed;
-  z-index: 2000;
-  pointer-events: none;
-  margin: 0;
-  opacity: 0.98;
-  transform-origin: center center;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
-  animation: cardFlyToPlant 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
-}
-
 @keyframes cardFlyToPlant {
   0% {
     transform: translate(0, 0) scale(1) rotate(0deg);
@@ -878,9 +867,21 @@ body.dark .plant-widget {
   transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s;
   position: relative; animation: cardIn 0.18s ease both;
 }
+
 @keyframes cardIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
 .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-color: var(--border-strong); }
 .card.dragging { opacity: 0.28; transform: scale(0.97); cursor: grabbing; }
+
+.card.card-fly-clone {
+  position: fixed !important;
+  z-index: 2000 !important;
+  pointer-events: none;
+  margin: 0;
+  opacity: 0.98;
+  transform-origin: center center;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+  animation: cardFlyToPlant 1.25s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important;
+}
 
 .card-tag {
   display: inline-block; font-size: 10px; font-weight: 500;
@@ -1772,8 +1773,8 @@ function animateCardToPlant(cardEl) {
   clone.style.width = cardRect.width + 'px';
   clone.style.height = cardRect.height + 'px';
 
-  const targetX = plantRect.left + plantRect.width * 0.72;
-  const targetY = plantRect.top + plantRect.height * 0.52;
+  const targetX = plantRect.left + plantRect.width * 0.78;
+  const targetY = plantRect.top + plantRect.height * 0.66;
   const flyX = targetX - (cardRect.left + cardRect.width / 2);
   const flyY = targetY - (cardRect.top + cardRect.height / 2);
 
@@ -1784,7 +1785,7 @@ function animateCardToPlant(cardEl) {
 
   setTimeout(() => {
     clone.remove();
-  }, 760);
+  }, 1300);
 }
 // ── DONE
 function markDone(e, cardId) {
@@ -1806,16 +1807,16 @@ function markDone(e, cardId) {
 
   if (found) {
     animateCardToPlant(cardEl);
-  if (cardEl) cardEl.style.visibility = 'hidden';
+    if (cardEl) cardEl.style.visibility = 'hidden';
 
-  doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
     growPlant();
     saveDone();
     saveData();
 
     setTimeout(() => {
       render();
-    }, 720);
+    }, 1250);
   }
 }
   
