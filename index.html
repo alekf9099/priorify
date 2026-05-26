@@ -452,7 +452,7 @@ body.dark .plant-widget {
 #board-wrap {
   flex: 1;
   overflow-x: auto;
-  padding: 24px 28px 170px;  
+  padding: 24px 28px 96px;
 }
 #board {
   display: flex;
@@ -842,11 +842,12 @@ body.dark .plant-widget {
 /* ── CARDS ── */
 .card-fly-clone {
   position: fixed;
-  z-index: 900;
+  z-index: 2000;
   pointer-events: none;
   margin: 0;
-  opacity: 0.95;
+  opacity: 0.98;
   transform-origin: center center;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
   animation: cardFlyToPlant 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
 }
 
@@ -1805,11 +1806,16 @@ function markDone(e, cardId) {
 
   if (found) {
     animateCardToPlant(cardEl);
-    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+  if (cardEl) cardEl.style.visibility = 'hidden';
+
+  doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
     growPlant();
     saveDone();
     saveData();
-    setTimeout(render, 120);
+
+    setTimeout(() => {
+      render();
+    }, 720);
   }
 }
   
