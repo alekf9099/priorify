@@ -241,10 +241,218 @@ header {
 }
 
 /* ── BOARD PAGE ── */
+#page-board {
+  position: relative;
+}
+
+.plant-widget {
+  position: absolute;
+  right: 28px;
+  bottom: 22px;
+  width: 280px;
+  height: 126px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.74), rgba(255,255,255,0.46)),
+    var(--surface);
+  box-shadow: 0 18px 45px rgba(26, 26, 26, 0.08);
+  backdrop-filter: blur(10px);
+  z-index: 30;
+  pointer-events: none;
+}
+
+body.dark .plant-widget {
+  background:
+    linear-gradient(135deg, rgba(30,30,30,0.84), rgba(30,30,30,0.58)),
+    var(--surface);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+}
+
+.plant-info {
+  min-width: 0;
+}
+
+.plant-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 6px;
+}
+
+.plant-status {
+  font-size: 13.5px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.plant-scene {
+  width: 92px;
+  height: 96px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.plant-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  width: 72px;
+  height: 32px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0) 70%);
+  border-radius: 50%;
+}
+
+.plant {
+  position: absolute;
+  left: 50%;
+  bottom: 29px;
+  width: 72px;
+  height: 66px;
+  transform: translateX(-50%);
+}
+
+.plant-stem {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 5px;
+  height: calc(20px + var(--plant-growth, 0) * 4px);
+  max-height: 58px;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: linear-gradient(180deg, #34D399, #059669);
+  transform-origin: bottom center;
+  transition: height 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.plant-leaf {
+  position: absolute;
+  bottom: calc(8px + var(--leaf-y, 0) * 1px);
+  width: 25px;
+  height: 13px;
+  background: linear-gradient(135deg, #6EE7B7, #10B981);
+  border-radius: 999px 999px 999px 2px;
+  opacity: var(--leaf-opacity, 0);
+  transform: scale(var(--leaf-scale, 0.2)) rotate(var(--leaf-rotate, 0deg));
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.leaf-left {
+  left: 12px;
+  transform-origin: right center;
+}
+
+.leaf-right {
+  right: 12px;
+  border-radius: 999px 999px 2px 999px;
+  transform-origin: left center;
+}
+
+.leaf-a { --leaf-y: 7; --leaf-rotate: -24deg; }
+.leaf-b { --leaf-y: 19; --leaf-rotate: 24deg; }
+.leaf-c { --leaf-y: 31; --leaf-rotate: -20deg; }
+.leaf-d { --leaf-y: 42; --leaf-rotate: 20deg; }
+
+.plant-bloom {
+  position: absolute;
+  left: 50%;
+  bottom: 55px;
+  width: 18px;
+  height: 18px;
+  transform: translateX(-50%) scale(var(--bloom-scale, 0));
+  opacity: var(--bloom-opacity, 0);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #FFF7ED 0 22%, transparent 23%),
+    radial-gradient(circle at 50% 0%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 100% 50%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 50% 100%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 0% 50%, #F9A8D4 0 34%, transparent 35%);
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.plant-pot {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 54px;
+  height: 34px;
+  transform: translateX(-50%);
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(135deg, #D8A36A, #A7663F);
+  border: 1px solid rgba(91, 55, 31, 0.18);
+  box-shadow: inset -8px -8px 16px rgba(91, 55, 31, 0.16);
+}
+
+.plant-pot-lip {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 64px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #E7B47A, #B97245);
+  border: 1px solid rgba(91, 55, 31, 0.16);
+}
+
+.plant-widget[data-stage="1"] .leaf-a,
+.plant-widget[data-stage="2"] .leaf-a,
+.plant-widget[data-stage="3"] .leaf-a,
+.plant-widget[data-stage="4"] .leaf-a,
+.plant-widget[data-stage="5"] .leaf-a {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.85;
+}
+
+.plant-widget[data-stage="2"] .leaf-b,
+.plant-widget[data-stage="3"] .leaf-b,
+.plant-widget[data-stage="4"] .leaf-b,
+.plant-widget[data-stage="5"] .leaf-b {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.95;
+}
+
+.plant-widget[data-stage="3"] .leaf-c,
+.plant-widget[data-stage="4"] .leaf-c,
+.plant-widget[data-stage="5"] .leaf-c {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.95;
+}
+
+.plant-widget[data-stage="4"] .leaf-d,
+.plant-widget[data-stage="5"] .leaf-d {
+  --leaf-opacity: 1;
+  --leaf-scale: 1;
+}
+
+.plant-widget[data-stage="5"] .plant-bloom {
+  --bloom-opacity: 1;
+  --bloom-scale: 1;
+}
+
+.plant-widget.grow-pulse .plant {
+  animation: plantPulse 0.55s ease;
+}
+
+@keyframes plantPulse {
+  0% { transform: translateX(-50%) scale(1); }
+  45% { transform: translateX(-50%) scale(1.08); }
+  100% { transform: translateX(-50%) scale(1); }
+}
 #board-wrap {
   flex: 1;
   overflow-x: auto;
-  padding: 24px 28px 28px;
+  padding: 24px 28px 170px;  
 }
 #board {
   display: flex;
@@ -836,11 +1044,33 @@ header {
   <main class="main">
 
     <!-- BOARD -->
-    <div id="page-board" class="page active">
-      <div id="board-wrap">
-        <div id="board"></div>
+<div id="page-board" class="page active">
+  <div id="board-wrap">
+    <div id="board"></div>
+  </div>
+
+  <div class="plant-widget" id="plant-widget" aria-live="polite">
+    <div class="plant-info">
+      <div class="plant-label">성장 중인 하루</div>
+      <div class="plant-status" id="plant-status">완료한 일정 0개</div>
+    </div>
+
+    <div class="plant-scene">
+      <div class="plant-glow"></div>
+      <div class="plant">
+        <div class="plant-stem"></div>
+        <div class="plant-leaf leaf-left leaf-a"></div>
+        <div class="plant-leaf leaf-right leaf-b"></div>
+        <div class="plant-leaf leaf-left leaf-c"></div>
+        <div class="plant-leaf leaf-right leaf-d"></div>
+        <div class="plant-bloom"></div>
+      </div>
+      <div class="plant-pot">
+        <div class="plant-pot-lip"></div>
       </div>
     </div>
+  </div>
+</div>
 
     <!-- DASHBOARD -->
     <div id="page-dashboard" class="page">
@@ -1042,6 +1272,7 @@ let nextId = 5000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
+let plantXp = Number(localStorage.getItem('priorify_plant_xp') || doneItems.length || 0);
 function toggleLnb() {
   const layout = document.querySelector('.layout');
   const btn = document.getElementById('lnb-toggle');
@@ -1432,7 +1663,39 @@ function renderDashboard() {
     </div>`;
   }).join('');
 }
+function getPlantStage() {
+  if (plantXp >= 12) return 5;
+  if (plantXp >= 8) return 4;
+  if (plantXp >= 5) return 3;
+  if (plantXp >= 2) return 2;
+  if (plantXp >= 1) return 1;
+  return 0;
+}
+function renderPlant(animate = false) {
+  const widget = document.getElementById('plant-widget');
+  const status = document.getElementById('plant-status');
+  if (!widget || !status) return;
 
+
+  const stage = getPlantStage();
+  widget.dataset.stage = stage;
+  widget.style.setProperty('--plant-growth', stage);
+
+  const goals = [1, 2, 5, 8, 12];
+  const nextGoal = stage === 5 ? '만개했습니다' : `다음 성장까지 ${goals[stage] - plantXp}개`;
+  status.textContent = `완료한 일정 ${plantXp}개 · ${nextGoal}`;
+
+  if (animate) {
+    widget.classList.remove('grow-pulse');
+    void widget.offsetWidth;
+    widget.classList.add('grow-pulse');
+  }
+}
+function growPlant() {
+  plantXp += 1;
+  localStorage.setItem('priorify_plant_xp', String(plantXp));
+  renderPlant(true);
+}
 // ── DONE
 function markDone(e, cardId) {
   e.preventDefault(); e.stopPropagation();
@@ -1441,11 +1704,14 @@ function markDone(e, cardId) {
     const idx = col.cards.findIndex(c => c.id === cardId);
     if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
   });
-  if (found) {
-    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); render();
+    if (found) {
+      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+      growPlant();
+      saveDone();
+      saveData();
+      render();
+    }
   }
-}
 
 function renderDone() {
   const wrap = document.getElementById('done-list-wrap');
@@ -1648,6 +1914,7 @@ document.addEventListener('keydown', e => {
 
 initLnbState();
 render();
+renderPlant();
 updateTrashFill();
 </script>
 </body>
