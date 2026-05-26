@@ -59,6 +59,36 @@ header {
 }
 
 .header-left { display: flex; align-items: center; gap: 14px; }
+.lnb-toggle {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lnb-toggle:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.layout.lnb-closed .lnb {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-right: 0;
+  overflow: hidden;
+}
 .header-right { display: flex; align-items: center; }
 
 .logo {
@@ -119,6 +149,7 @@ header {
   padding: 20px 12px;
   gap: 4px;
   overflow-y: auto;
+  transition: width 0.22s ease, padding 0.22s ease, border-color 0.22s ease;
 }
 
 .lnb-section-label {
@@ -729,6 +760,9 @@ header {
 
 <header>
   <div class="header-left">
+    <button class="lnb-toggle" id="lnb-toggle" onclick="toggleLnb()" title="LNB 닫기" aria-label="LNB 닫기">
+      ×
+    </button>
     <a href="#" class="logo">Priorify<span>.</span></a>
     <div class="today-badge" id="today-badge"></div>
   </div>
@@ -1008,7 +1042,33 @@ let nextId = 5000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
+function toggleLnb() {
+  const layout = document.querySelector('.layout');
+  const btn = document.getElementById('lnb-toggle');
+  if (!layout || !btn) return;
 
+  const closed = layout.classList.toggle('lnb-closed');
+
+  btn.textContent = closed ? '☰' : '×';
+  btn.title = closed ? 'LNB 열기' : 'LNB 닫기';
+  btn.setAttribute('aria-label', closed ? 'LNB 열기' : 'LNB 닫기');
+
+  localStorage.setItem('priorify_lnb_closed', closed ? '1' : '0');
+}
+
+function initLnbState() {
+  const layout = document.querySelector('.layout');
+  const btn = document.getElementById('lnb-toggle');
+  if (!layout || !btn) return;
+
+  const closed = localStorage.getItem('priorify_lnb_closed') === '1';
+
+  layout.classList.toggle('lnb-closed', closed);
+
+  btn.textContent = closed ? '☰' : '×';
+  btn.title = closed ? 'LNB 열기' : 'LNB 닫기';
+  btn.setAttribute('aria-label', closed ? 'LNB 열기' : 'LNB 닫기');
+}
 function today() {
   const d = new Date();
   return `${d.getMonth()+1}/${d.getDate()}`;
@@ -1586,6 +1646,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
+initLnbState();
 render();
 updateTrashFill();
 </script>
