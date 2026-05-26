@@ -499,188 +499,330 @@ body.dark .plant-widget {
 /* ── EMOTION TRASH PAGE ── */
 #page-trash {
   padding: 0;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  background: linear-gradient(180deg, #FFF5F9 0%, #FFEBF0 100%);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(244,114,182,0.22), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(129,140,248,0.22), transparent 30%),
+    linear-gradient(135deg, #FFF7FB 0%, #F5F3FF 46%, #ECFEFF 100%);
   overflow: hidden;
   z-index: 1;
 }
+
+#page-trash::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255,255,255,0.64);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
 .trash-container {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(280px, 440px) minmax(320px, 520px);
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  gap: 56px;
+  padding: 54px 56px;
   position: relative;
   overflow: hidden;
   width: 100%;
   height: 100%;
 }
 
-/* 귀여운 쓰레기통 캐릭터 */
+.trash-container .dash-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 10px !important;
+  background: linear-gradient(135deg, #DB2777, #6366F1);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.trash-container .dash-sub {
+  max-width: 420px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #7C3AED;
+  margin-bottom: 0 !important;
+}
+
 .trash-bag-wrap {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  justify-self: center;
   position: relative;
-  width: 200px;
-  height: 280px;
-  margin-bottom: 40px;
+  width: 360px;
+  height: 390px;
+  margin: 0;
   z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+.trash-bag-wrap::before {
+  content: '';
+  position: absolute;
+  width: 310px;
+  height: 310px;
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.78), rgba(255,255,255,0.26));
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow:
+    0 24px 70px rgba(99,102,241,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+  backdrop-filter: blur(18px);
+}
+
+.trash-bag-wrap::after {
+  content: 'MOOD DROP';
+  position: absolute;
+  top: 32px;
+  right: 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  color: rgba(124,58,237,0.62);
+}
+
+.trash-bag-handle {
+  display: none;
 }
 
 .trash-bag {
   position: relative;
-  width: 160px;
-  height: 200px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 50%, #FFB6D9 100%);
-  border-radius: 40px 40px 50px 50px;
-  border: 3px solid #FF99C8;
+  width: 178px;
+  height: 210px;
+  border-radius: 42px 42px 54px 54px;
+  border: 1px solid rgba(255,255,255,0.9);
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.82), rgba(255,255,255,0.3)),
+    linear-gradient(135deg, #FB7185, #C084FC 52%, #60A5FA);
   z-index: 2;
-  overflow: visible;
-  box-shadow: 
-    0 10px 30px rgba(255, 150, 200, 0.3),
-    inset -5px -5px 15px rgba(255, 255, 255, 0.5),
-    inset 5px 5px 15px rgba(255, 150, 200, 0.2);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    0 26px 60px rgba(219,39,119,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.75);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* 쓰레기통 눈 */
 .trash-bag::before {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background: #333;
-  border-radius: 50%;
-  top: 50px;
-  left: 35px;
-  box-shadow: 60px 0 0 #333, 8px 8px 0 2px white, 68px 8px 0 2px white;
-  pointer-events: none;
+  inset: 18px 22px auto;
+  height: 54px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 35% 50%, #111827 0 5px, transparent 6px),
+    radial-gradient(circle at 65% 50%, #111827 0 5px, transparent 6px),
+    rgba(255,255,255,0.62);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
   z-index: 3;
 }
 
-/* 쓰레기통 입 */
 .trash-bag::after {
   content: '';
   position: absolute;
-  width: 40px;
-  height: 20px;
-  border: 2px solid #333;
+  left: 50%;
+  top: 77px;
+  width: 34px;
+  height: 16px;
+  transform: translateX(-50%);
+  border: 2px solid rgba(17,24,39,0.78);
   border-top: none;
   border-radius: 0 0 20px 20px;
-  bottom: 40px;
-  left: 60px;
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* 봉투 상단 매듭 (귀) */
-.trash-bag-handle {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 30px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 100%);
-  border: 2px solid #FF99C8;
-  border-radius: 50% 50% 0 0;
   z-index: 4;
-  box-shadow: 0 -5px 10px rgba(255, 150, 200, 0.2);
 }
 
-/* 봉투 내용물 (채워지는 부분) */
 .trash-fill {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 0%;
-  background: linear-gradient(to top, #FFD4E5 0%, #FFE0ED 100%);
-  opacity: 0.8;
+  background:
+    linear-gradient(to top, rgba(251,113,133,0.95), rgba(253,186,116,0.72));
+  opacity: 0.82;
   transition: height 0.5s ease;
-  border-radius: 0 0 47px 47px;
+  border-radius: 0 0 54px 54px;
   z-index: 1;
 }
 
-/* 봉투 팽창 효과 */
+.trash-chat-wrap {
+  grid-column: 1;
+  width: 100%;
+  max-width: 460px;
+  z-index: 10;
+  margin-top: 28px;
+}
+
+.trash-input-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.74);
+  padding: 10px 10px 10px 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.78);
+  box-shadow: 0 18px 45px rgba(124,58,237,0.12);
+  backdrop-filter: blur(18px);
+}
+
+.trash-input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1F2937;
+}
+
+.trash-input::placeholder {
+  color: rgba(124,58,237,0.52);
+}
+
+.trash-send-btn {
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(236,72,153,0.24);
+}
+
+.trash-send-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 16px 30px rgba(236,72,153,0.3);
+}
+
+.trash-count {
+  grid-column: 1;
+  width: fit-content;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: #7C3AED;
+  margin-top: 16px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(255,255,255,0.74);
+  backdrop-filter: blur(12px);
+}
+
+.trash-actions {
+  grid-column: 1;
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-empty {
+  padding: 11px 18px;
+  border-radius: 16px;
+  border: none;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 14px 26px rgba(17,24,39,0.16);
+}
+
+.btn-empty:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(17,24,39,0.22);
+}
+
+.btn-empty:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.emotion-ball {
+  position: fixed;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  color: white;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow: 0 12px 24px rgba(236,72,153,0.25);
+  word-break: break-all;
+  overflow: hidden;
+  will-change: transform;
+}
+
 .trash-bag.expanding {
   animation: bagExpand 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes bagExpand {
-  0% { transform: scaleY(1) scaleX(1); }
-  50% { transform: scaleY(1.1) scaleX(1.15); }
-  100% { transform: scaleY(1) scaleX(1.12); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08) rotate(-1.5deg); }
+  100% { transform: scale(1.03); }
 }
 
-/* 봉투 넘침 경고 */
 .trash-bag.overflow {
   animation: bagOverflow 0.5s ease-in-out infinite;
 }
 
 @keyframes bagOverflow {
-  0%, 100% { transform: scaleY(1) scaleX(1.12) rotate(0deg); }
-  25% { transform: scaleY(1.02) scaleX(1.14) rotate(-1.5deg); }
-  75% { transform: scaleY(1.02) scaleX(1.14) rotate(1.5deg); }
-}
-
-/* 채팅 인터페이스 */
-.trash-chat-wrap {
-  width: 100%; max-width: 500px; z-index: 10;
-}
-.trash-input-box {
-  display: flex; gap: 10px; background: var(--surface);
-  padding: 12px 16px; border-radius: 30px;
-  border: 1px solid var(--border-strong);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-.trash-input {
-  flex: 1; border: none; outline: none; background: transparent;
-  font-family: inherit; font-size: 14px; color: var(--text-primary);
-}
-.trash-send-btn {
-  background: #FFB6D9; color: white; border: none;
-  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.2s, background 0.2s;
-  font-weight: bold;
-}
-.trash-send-btn:hover { transform: scale(1.1); background: #FF99C8; }
-
-/* 애니메이션 오브젝트 */
-.emotion-ball {
-  position: fixed; width: 40px; height: 40px; border-radius: 50%;
-  background: linear-gradient(135deg, #FFB6D9, #FFC7E0); color: white; font-size: 10px;
-  display: flex; align-items: center; justify-content: center;
-  padding: 5px; text-align: center; pointer-events: none;
-  z-index: 5; box-shadow: 0 4px 10px rgba(255, 150, 200, 0.3);
-  word-break: break-all; overflow: hidden; will-change: transform;
-}
-
-/* 비우기 버튼 */
-.trash-actions { margin-top: 20px; display: flex; gap: 10px; }
-.btn-empty {
-  padding: 10px 24px; border-radius: 25px; border: none;
-  background: linear-gradient(135deg, #FFB6D9, #FF99C8); color: white; cursor: pointer;
-  font-size: 13px; font-weight: 500; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
-}
-.btn-empty:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 150, 200, 0.3); }
-.btn-empty:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.trash-count {
-  font-size: 12px; color: var(--text-secondary); margin-top: 12px;
+  0%, 100% { transform: scale(1.03) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(-1.5deg); }
+  75% { transform: scale(1.05) rotate(1.5deg); }
 }
 
 @keyframes throwToTrash {
-  0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  50% { transform: translate(var(--tx), -100px) scale(1.2); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+  55% { transform: translate(calc(var(--tx) * 0.68), -120px) scale(1.12) rotate(-10deg); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0.28) rotate(18deg); opacity: 0; }
 }
 
+body.dark #page-trash {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(236,72,153,0.2), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(129,140,248,0.22), transparent 30%),
+    linear-gradient(135deg, #17111B 0%, #16162A 48%, #082F49 100%);
+}
+
+body.dark .trash-container .dash-sub,
+body.dark .trash-count {
+  color: #C4B5FD;
+}
+
+body.dark .trash-input-box,
+body.dark .trash-bag-wrap::before,
+body.dark .trash-count {
+  background: rgba(30,30,30,0.62);
+  border-color: rgba(255,255,255,0.12);
+}
+
+body.dark .trash-input {
+  color: #F9FAFB;
+}
 /* ── DONE PAGE ── */
 .done-head {
   display: flex;
