@@ -682,6 +682,35 @@ body.dark .plant-widget {
 }
 
 /* ── DONE PAGE ── */
+.done-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.done-head .done-sub {
+  margin-bottom: 0;
+}
+
+.done-clear-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #FECACA;
+  background: #FFF8F7;
+  color: #B91C1C;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.done-clear-btn:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+}
 #page-done {
   padding: 28px 32px;
   overflow-y: auto;
@@ -1112,12 +1141,17 @@ body.dark .plant-widget {
 
     <!-- DONE -->
     <div id="page-done" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
+  <div style="padding:28px 32px;overflow-y:auto;flex:1">
+    <div class="done-head">
+      <div>
         <div class="done-title">완료 목록</div>
         <div class="done-sub">완료 처리한 항목들이 여기 모입니다</div>
-        <div id="done-list-wrap"></div>
       </div>
+      <button class="done-clear-btn" onclick="clearDone()">완료 목록 비우기</button>
     </div>
+    <div id="done-list-wrap"></div>
+  </div>
+</div>
 
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
