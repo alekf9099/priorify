@@ -840,6 +840,29 @@ body.dark .plant-widget {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
+.card-fly-clone {
+  position: fixed;
+  z-index: 900;
+  pointer-events: none;
+  margin: 0;
+  opacity: 0.95;
+  transform-origin: center center;
+  animation: cardFlyToPlant 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes cardFlyToPlant {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.95;
+  }
+  65% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--fly-x), var(--fly-y)) scale(0.18) rotate(8deg);
+    opacity: 0;
+  }
+}
 .cards-list {
   flex: 1; overflow-y: auto; padding: 8px;
   display: flex; flex-direction: column; gap: 7px; min-height: 60px;
@@ -1725,28 +1748,71 @@ function renderPlant(animate = false) {
     widget.classList.add('grow-pulse');
   }
 }
+  
 function growPlant() {
   plantXp += 1;
   localStorage.setItem('priorify_plant_xp', String(plantXp));
   renderPlant(true);
 }
+
+function animateCardToPlant(cardEl) {
+  const widget = document.getElementById('plant-widget');
+  if (!cardEl || !widget) return;
+
+  const cardRect = cardEl.getBoundingClientRect();
+  const plantRect = widget.getBoundingClientRect();
+
+  const clone = cardEl.cloneNode(true);
+  clone.classList.add('card-fly-clone');
+  clone.classList.remove('dragging');
+
+  clone.style.left = cardRect.left + 'px';
+  clone.style.top = cardRect.top + 'px';
+  clone.style.width = cardRect.width + 'px';
+  clone.style.height = cardRect.height + 'px';
+
+  const targetX = plantRect.left + plantRect.width * 0.72;
+  const targetY = plantRect.top + plantRect.height * 0.52;
+  const flyX = targetX - (cardRect.left + cardRect.width / 2);
+  const flyY = targetY - (cardRect.top + cardRect.height / 2);
+
+  clone.style.setProperty('--fly-x', flyX + 'px');
+  clone.style.setProperty('--fly-y', flyY + 'px');
+
+  document.body.appendChild(clone);
+
+  setTimeout(() => {
+    clone.remove();
+  }, 760);
+}
 // ── DONE
 function markDone(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
-  let found = null, fromColName = '';
+  e.preventDefault();
+  e.stopPropagation();
+
+  const cardEl = e.target.closest('.card');
+
+  let found = null;
+  let fromColName = '';
+
   columns.forEach(col => {
     const idx = col.cards.findIndex(c => c.id === cardId);
-    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-  });
-    if (found) {
-      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-      growPlant();
-      saveDone();
-      saveData();
-      render();
+    if (idx !== -1) {
+      found = col.cards.splice(idx, 1)[0];
+      fromColName = col.name;
     }
-  }
+  });
 
+  if (found) {
+    animateCardToPlant(cardEl);
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    growPlant();
+    saveDone();
+    saveData();
+    setTimeout(render, 120);
+  }
+}
+  
 function renderDone() {
   const wrap = document.getElementById('done-list-wrap');
   if (!wrap) return;
