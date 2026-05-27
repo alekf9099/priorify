@@ -869,11 +869,80 @@ header {
   width: 18px;
   height: 18px;
 }
+
+/* ── FLOWER ANIMATION ── */
+#flower-pot {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none; /* 클릭 방해 방지 */
+}
+
+.flower-level {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 4px 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.flower-level.max {
+  background: #FCE7F3;
+  color: #9D174D;
+  border-color: #FBCFE8;
+}
+
+.flower-plant {
+  font-size: 32px;
+  line-height: 1;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s;
+  will-change: transform;
+}
+
+/* 꽃 성장 단계 */
+.flower-plant.stage-0 { font-size: 32px; filter: grayscale(0.8); }
+.flower-plant.stage-1 { font-size: 40px; filter: grayscale(0.4); }
+.flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
+.flower-plant.stage-3 { 
+  font-size: 60px; 
+  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6));
+  animation: bloom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bloom {
+  0% { transform: scale(0.5) rotate(-15deg); }
+  50% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* 완료 시 날아가는 빛 무무리 (파티클) */
+.done-particle {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #10B981, 0 0 30px #34D399;
+  pointer-events: none;
+  z-index: 1000;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
 </style>
 </head>
 <body>
 
-<!-- Login Screen -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div class="login-logo">Priorify<span>.</span></div>
@@ -890,7 +959,6 @@ header {
   </div>
 </div>
 
-<!-- Main App (hidden until login) -->
 <div id="app-container" style="display: none; flex: 1; overflow: hidden; flex-direction: column;">
 
 <header>
@@ -915,7 +983,6 @@ header {
 </header>
 
 <div class="layout">
-  <!-- ── LNB ── -->
   <nav class="lnb">
     <span class="lnb-section-label">메인</span>
     <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
@@ -975,17 +1042,19 @@ header {
     </button>
   </nav>
 
-  <!-- ── MAIN ── -->
   <main class="main">
 
-    <!-- BOARD -->
-    <div id="page-board" class="page active">
+    <div id="page-board" class="page active" style="position: relative;">
       <div id="board-wrap">
         <div id="board"></div>
       </div>
+      
+      <div id="flower-pot">
+        <div class="flower-level" id="flower-level">0/3</div>
+        <div class="flower-plant stage-0" id="flower-plant">🌱</div>
+      </div>
     </div>
 
-    <!-- DASHBOARD -->
     <div id="page-dashboard" class="page">
       <div style="padding:28px 32px;overflow-y:auto;flex:1">
         <div class="dash-title">대시보드</div>
@@ -995,7 +1064,6 @@ header {
       </div>
     </div>
 
-    <!-- EMOTION TRASH -->
     <div id="page-trash" class="page">
       <div class="trash-container">
         <div class="dash-title" style="margin-bottom: 8px;">감정 쓰레기통</div>
@@ -1023,7 +1091,6 @@ header {
       </div>
     </div>
 
-    <!-- DONE -->
     <div id="page-done" class="page">
       <div style="padding:28px 32px;overflow-y:auto;flex:1">
         <div class="done-title">완료 목록</div>
@@ -1032,7 +1099,6 @@ header {
       </div>
     </div>
 
-    <!-- SETTINGS -->
     <div id="page-settings" class="page">
       <div style="padding:28px 32px;overflow-y:auto;flex:1">
         <div class="settings-title">설정</div>
@@ -1079,7 +1145,6 @@ header {
 
 <div id="save-toast">저장됨 ✓</div>
 
-<!-- Column Modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-title" id="modal-title">새 컬럼 추가</div>
@@ -1102,7 +1167,6 @@ header {
   </div>
 </div>
 
-<!-- Card Edit Modal -->
 <div class="modal-overlay" id="card-modal-overlay" onclick="closeCardModal(event)">
   <div class="modal">
     <div class="modal-title">할 일 편집</div>
@@ -1117,7 +1181,6 @@ header {
   </div>
 </div>
 
-<!-- Trash Review Modal -->
 <div class="modal-overlay" id="trash-review-modal" onclick="closeTrashReviewModal(event)">
   <div class="modal">
     <div class="modal-title">쓰레기통 비우기</div>
@@ -1130,7 +1193,6 @@ header {
   </div>
 </div>
 
-<!-- Google Sign-In Library -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script>
@@ -1291,6 +1353,7 @@ function showApp() {
   
   render();
   updateTrashFill();
+  updateFlower(); // 초기 꽃 상태 반영
 }
 
 function logout() {
@@ -1622,18 +1685,63 @@ function renderDashboard() {
   }).join('');
 }
 
-// ── 완료 ──
+// ── 완료 및 애니메이션 ──
 function markDone(e, cardId) {
   e.preventDefault(); e.stopPropagation();
-  let found = null, fromColName = '';
-  columns.forEach(col => {
-    const idx = col.cards.findIndex(c => c.id === cardId);
-    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-  });
-  if (found) {
-    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); render();
+
+  // 1. 클릭한 버튼과 목표(꽃)의 위치 계산
+  const btn = e.target;
+  const rect = btn.getBoundingClientRect();
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height / 2;
+
+  const flower = document.getElementById('flower-plant');
+  const fRect = flower.getBoundingClientRect();
+  const endX = fRect.left + fRect.width / 2;
+  const endY = fRect.top + fRect.height / 2;
+
+  // 2. 날아가는 파티클 생성
+  const particle = document.createElement('div');
+  particle.className = 'done-particle';
+  particle.style.left = startX - 7 + 'px'; // 7 is half of width (14px)
+  particle.style.top = startY - 7 + 'px';
+  document.body.appendChild(particle);
+
+  // 3. 카드가 부드럽게 사라지는 효과
+  const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
+  if (cardEl) {
+    cardEl.style.transition = 'opacity 0.3s, transform 0.3s';
+    cardEl.style.opacity = '0';
+    cardEl.style.transform = 'scale(0.9)';
   }
+
+  // 브라우저 렌더링 강제 업데이트
+  particle.getBoundingClientRect();
+
+  // 4. 파티클 이동 애니메이션 실행
+  particle.style.left = endX - 7 + 'px';
+  particle.style.top = endY - 7 + 'px';
+  particle.style.transform = 'scale(0.3)';
+  particle.style.opacity = '0';
+
+  // 5. 데이터 처리 (애니메이션이 끝난 후 실행)
+  setTimeout(() => {
+    particle.remove(); // 파티클 제거
+
+    let found = null, fromColName = '';
+    columns.forEach(col => {
+      const idx = col.cards.findIndex(c => c.id === cardId);
+      if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
+    });
+
+    if (found) {
+      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+      saveDone(); 
+      saveData(); 
+      render(); // 보드 갱신
+      updateFlower(); // 🌸 꽃 성장 업데이트
+    }
+  }, 600); // CSS 파티클 transition 시간(0.6s)과 동일하게 맞춤
 }
 
 function renderDone() {
@@ -1661,12 +1769,14 @@ function restoreDone(i) {
   const col = columns.find(c => c.name === item.colName) || columns[0];
   if (col) { const { colName, doneAt, ...card } = item; col.cards.push(card); }
   saveDone(); saveData(); renderDone();
+  updateFlower(); // 복구 시에도 진행도 반영
 }
 
 function clearDone() {
   if (!confirm('완료 목록을 모두 비울까요?')) return;
   doneItems = []; saveDone();
   if (currentPage === 'done') renderDone();
+  updateFlower(); // 비운 후 진행도 초기화 반영
 }
 
 // ── 드래그 ──
@@ -1834,6 +1944,50 @@ document.addEventListener('keydown', e => {
     if (document.getElementById('card-modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmCardEdit();
   }
 });
+
+// ── 꽃 상태 업데이트 함수 ──
+function updateFlower() {
+  const plant = document.getElementById('flower-plant');
+  const levelEl = document.getElementById('flower-level');
+  if (!plant || !levelEl) return;
+
+  const count = doneItems.length;
+  const stage = count % 3; // 0, 1, 2
+  const isBloom = count > 0 && stage === 0; // 3의 배수일 때 만개
+
+  let emoji = '🌱';
+  let stageClass = 'stage-0';
+
+  if (isBloom) {
+    emoji = '🌸';
+    stageClass = 'stage-3';
+    levelEl.textContent = 'MAX!';
+    levelEl.classList.add('max');
+  } else {
+    levelEl.classList.remove('max');
+    if (stage === 1) {
+      emoji = '🌿';
+      stageClass = 'stage-1';
+      levelEl.textContent = '1/3';
+    } else if (stage === 2) {
+      emoji = '🌷';
+      stageClass = 'stage-2';
+      levelEl.textContent = '2/3';
+    } else {
+      emoji = '🌱';
+      stageClass = 'stage-0';
+      levelEl.textContent = '0/3';
+    }
+  }
+
+  // 변경된 상태 적용
+  plant.className = 'flower-plant ' + stageClass;
+  plant.textContent = emoji;
+
+  // 크기 살짝 커졌다 작아지는 바운스 효과
+  plant.style.transform = 'scale(1.2)';
+  setTimeout(() => plant.style.transform = 'scale(1)', 200);
+}
 </script>
 </body>
 </html>
