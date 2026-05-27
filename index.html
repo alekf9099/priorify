@@ -398,6 +398,7 @@ header {
 #board-wrap {
   flex: 1;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 24px 28px 28px;
 }
 #board {
@@ -747,13 +748,29 @@ header {
   .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
 
   /* 각 페이지 기본 여백 축소 */
-  #board-wrap { padding: 16px; scroll-snap-type: x mandatory; }
+  #board-wrap { 
+    padding: 16px; 
+    scroll-snap-type: x mandatory; 
+    -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+  }
   #page-dashboard, #page-done, #page-settings { padding: 20px 16px !important; }
   
-  /* 보드 페이지 가로 스크롤 및 터치 최적화 */
-  #board { gap: 12px; padding-bottom: 20px; }
-  .column { width: 85vw; max-width: 320px; scroll-snap-align: center; }
-  .add-col-ghost { width: 85vw; max-width: 320px; scroll-snap-align: center; }
+  /* 보드 페이지 가로 스와이프 (Trello 스타일 최적화) */
+  #board { 
+    gap: 12px; 
+    padding-bottom: 20px; 
+    padding-right: 16px; /* 끝부분 여백 */
+  }
+  .column { 
+    width: 85vw; /* 화면의 85% 차지 (다음 컬럼이 살짝 보임) */
+    max-width: 320px; 
+    scroll-snap-align: center; /* 스와이프 시 가운데 정렬 */
+  }
+  .add-col-ghost { 
+    width: 85vw; 
+    max-width: 320px; 
+    scroll-snap-align: center; 
+  }
 
   /* 대시보드 2열 그리드 */
   .dash-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
