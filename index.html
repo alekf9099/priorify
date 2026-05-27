@@ -882,7 +882,7 @@ header {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  pointer-events: none; /* 클릭 방해 방지 */
+  pointer-events: none;
 }
 
 .flower-level {
@@ -911,7 +911,6 @@ header {
   will-change: transform;
 }
 
-/* 꽃 성장 단계 */
 .flower-plant.stage-0 { font-size: 32px; filter: grayscale(0.8); }
 .flower-plant.stage-1 { font-size: 40px; filter: grayscale(0.4); }
 .flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
@@ -927,7 +926,6 @@ header {
   100% { transform: scale(1) rotate(0deg); }
 }
 
-/* 완료 시 날아가는 빛 무무리 (파티클) */
 .done-particle {
   position: fixed;
   width: 14px;
@@ -1223,9 +1221,8 @@ const DEFAULT_COLUMNS = [
   ]},
 ];
 
-// ── GOOGLE AUTH ──
 let currentUser = null;
-const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; // ← 여기에 클라이언트 ID 입력하세요!
+const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com";
 
 function getStorageKey(key) {
   if (!currentUser) return key;
@@ -1295,7 +1292,6 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Google Auth 초기화 ──
 function initGoogleAuth() {
   window.google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
@@ -1303,7 +1299,6 @@ function initGoogleAuth() {
     auto_select: false,
   });
   
-  // 저장된 사용자 정보 확인
   const savedUser = localStorage.getItem('priorify_user');
   if (savedUser) {
     try {
@@ -1353,7 +1348,7 @@ function showApp() {
   
   render();
   updateTrashFill();
-  updateFlower(); // 초기 꽃 상태 반영
+  updateFlower();
 }
 
 function logout() {
@@ -1370,18 +1365,15 @@ function logout() {
   trashItems = [];
 }
 
-// ── Event Listeners ──
 document.getElementById('google-login-btn').addEventListener('click', () => {
   window.google.accounts.id.prompt();
 });
 
 document.getElementById('logout-btn').addEventListener('click', logout);
 
-// 페이지 로드 시 Google Auth 및 사이드바 복원
 window.addEventListener('load', () => {
   initGoogleAuth();
   
-  // LNB 상태 복원
   const lnbCollapsed = localStorage.getItem('priorify_lnb_collapsed') === 'true';
   if (lnbCollapsed) {
     const lnb = document.querySelector('.lnb');
@@ -1396,14 +1388,12 @@ function toggleLnb() {
   localStorage.setItem('priorify_lnb_collapsed', isCollapsed ? 'true' : 'false');
 }
 
-// ── 날짜 표시 ──
 document.getElementById('today-badge').textContent = (() => {
   const d = new Date();
   const days = ['일','월','화','수','목','금','토'];
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${days[d.getDay()]}요일`;
 })();
 
-// ── 테마 ──
 function setTheme(t) {
   document.body.classList.toggle('dark', t === 'dark');
   document.getElementById('btn-light').classList.toggle('active', t === 'light');
@@ -1413,7 +1403,6 @@ function setTheme(t) {
 const savedTheme = localStorage.getItem('priorify_theme');
 if (savedTheme) setTheme(savedTheme);
 
-// ── Toast ──
 let toastTimer = null;
 function showToast() {
   const t = document.getElementById('save-toast');
@@ -1423,7 +1412,6 @@ function showToast() {
   toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
 }
 
-// ── 페이지 전환 ──
 function switchPage(page, btn) {
   currentPage = page;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1435,7 +1423,6 @@ function switchPage(page, btn) {
   if (page === 'trash') updateTrashFill();
 }
 
-// ── LNB 컬럼 리스트 ──
 function renderLnbCols() {
   const wrap = document.getElementById('lnb-col-list');
   if (!wrap) return;
@@ -1449,7 +1436,6 @@ function renderLnbCols() {
   });
 }
 
-// ── 보드 렌더링 ──
 function render() {
   const board = document.getElementById('board');
   if (!board) return;
@@ -1529,7 +1515,6 @@ function renderCard(card, color, colName) {
   </div>`;
 }
 
-// ── 감정 쓰레기통 ──
 function updateTrashFill() {
   const fill = document.getElementById('trash-fill');
   const bag = document.getElementById('trash-bag');
@@ -1649,7 +1634,6 @@ function generateEvaluation(keywords) {
   return evals[Math.floor(Math.random() * evals.length)];
 }
 
-// ── 대시보드 ──
 function renderDashboard() {
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const grid = document.getElementById('dash-grid');
@@ -1685,11 +1669,9 @@ function renderDashboard() {
   }).join('');
 }
 
-// ── 완료 및 애니메이션 ──
 function markDone(e, cardId) {
   e.preventDefault(); e.stopPropagation();
 
-  // 1. 클릭한 버튼과 목표(꽃)의 위치 계산
   const btn = e.target;
   const rect = btn.getBoundingClientRect();
   const startX = rect.left + rect.width / 2;
@@ -1700,14 +1682,12 @@ function markDone(e, cardId) {
   const endX = fRect.left + fRect.width / 2;
   const endY = fRect.top + fRect.height / 2;
 
-  // 2. 날아가는 파티클 생성
   const particle = document.createElement('div');
   particle.className = 'done-particle';
-  particle.style.left = startX - 7 + 'px'; // 7 is half of width (14px)
+  particle.style.left = startX - 7 + 'px';
   particle.style.top = startY - 7 + 'px';
   document.body.appendChild(particle);
 
-  // 3. 카드가 부드럽게 사라지는 효과
   const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
   if (cardEl) {
     cardEl.style.transition = 'opacity 0.3s, transform 0.3s';
@@ -1715,18 +1695,15 @@ function markDone(e, cardId) {
     cardEl.style.transform = 'scale(0.9)';
   }
 
-  // 브라우저 렌더링 강제 업데이트
   particle.getBoundingClientRect();
 
-  // 4. 파티클 이동 애니메이션 실행
   particle.style.left = endX - 7 + 'px';
   particle.style.top = endY - 7 + 'px';
   particle.style.transform = 'scale(0.3)';
   particle.style.opacity = '0';
 
-  // 5. 데이터 처리 (애니메이션이 끝난 후 실행)
   setTimeout(() => {
-    particle.remove(); // 파티클 제거
+    particle.remove();
 
     let found = null, fromColName = '';
     columns.forEach(col => {
@@ -1738,10 +1715,10 @@ function markDone(e, cardId) {
       doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
       saveDone(); 
       saveData(); 
-      render(); // 보드 갱신
-      updateFlower(); // 🌸 꽃 성장 업데이트
+      render();
+      updateFlower();
     }
-  }, 600); // CSS 파티클 transition 시간(0.6s)과 동일하게 맞춤
+  }, 600);
 }
 
 function renderDone() {
@@ -1769,17 +1746,16 @@ function restoreDone(i) {
   const col = columns.find(c => c.name === item.colName) || columns[0];
   if (col) { const { colName, doneAt, ...card } = item; col.cards.push(card); }
   saveDone(); saveData(); renderDone();
-  updateFlower(); // 복구 시에도 진행도 반영
+  updateFlower();
 }
 
 function clearDone() {
   if (!confirm('완료 목록을 모두 비울까요?')) return;
   doneItems = []; saveDone();
   if (currentPage === 'done') renderDone();
-  updateFlower(); // 비운 후 진행도 초기화 반영
+  updateFlower();
 }
 
-// ── 드래그 ──
 function onCardDragStart(e, cardId, colId) {
   dragCardId = cardId; dragFromColId = colId;
   setTimeout(() => { const el = document.querySelector(`[data-card-id="${cardId}"]`); if (el) el.classList.add('dragging'); }, 0);
@@ -1808,7 +1784,6 @@ function onCardDrop(e, targetColId) {
   saveData(); render();
 }
 
-// ── 카드 액션 ──
 function deleteCard(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
@@ -1839,7 +1814,6 @@ function addCardFromInput(colId, textarea) {
   saveData(); render();
 }
 
-// ── 카드 편집 모달 ──
 function openEditCardModal(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   editingCardId = cardId;
@@ -1872,7 +1846,6 @@ function confirmCardEdit() {
   render();
 }
 
-// ── 컬럼 액션 ──
 function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
 function editColDesc(colId, desc) { const c = columns.find(c => c.id === colId); if (c) { c.desc = desc; saveData(); } }
 function deleteCol(colId) {
@@ -1886,7 +1859,6 @@ function resetData() {
   saveData(); render();
 }
 
-// ── 모달 ──
 function openAddColModal() {
   editingColId = null;
   document.getElementById('modal-title').textContent = '새 컬럼 추가';
@@ -1945,46 +1917,53 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── 꽃 상태 업데이트 함수 ──
+// ── 꽃 상태 업데이트 함수 (3회 완료당 1단계 성장 적용) ──
 function updateFlower() {
   const plant = document.getElementById('flower-plant');
   const levelEl = document.getElementById('flower-level');
   if (!plant || !levelEl) return;
 
   const count = doneItems.length;
-  const stage = count % 3; // 0, 1, 2
-  const isBloom = count > 0 && stage === 0; // 3의 배수일 때 만개
-
+  
   let emoji = '🌱';
   let stageClass = 'stage-0';
+  let text = '0/3';
 
-  if (isBloom) {
+  if (count === 0) {
+    emoji = '🌱';
+    stageClass = 'stage-0';
+    text = '0/3';
+    levelEl.classList.remove('max');
+  } else if (count % 9 === 0) {
+    // 9번 완료했을 때 만개 (MAX)
     emoji = '🌸';
     stageClass = 'stage-3';
-    levelEl.textContent = 'MAX!';
+    text = 'MAX!';
     levelEl.classList.add('max');
   } else {
     levelEl.classList.remove('max');
-    if (stage === 1) {
+    const currentCycle = count % 9; // 9를 주기로 사이클 회전
+    const stage = Math.floor(currentCycle / 3); // 3회마다 1단계 성장 (0, 1, 2)
+    const progress = currentCycle % 3; // 현재 단계에서의 진행도 (0, 1, 2)
+    
+    text = `${progress}/3`;
+    
+    if (stage === 0) {
+      emoji = '🌱';
+      stageClass = 'stage-0';
+    } else if (stage === 1) {
       emoji = '🌿';
       stageClass = 'stage-1';
-      levelEl.textContent = '1/3';
     } else if (stage === 2) {
       emoji = '🌷';
       stageClass = 'stage-2';
-      levelEl.textContent = '2/3';
-    } else {
-      emoji = '🌱';
-      stageClass = 'stage-0';
-      levelEl.textContent = '0/3';
     }
   }
 
-  // 변경된 상태 적용
   plant.className = 'flower-plant ' + stageClass;
   plant.textContent = emoji;
+  levelEl.textContent = text;
 
-  // 크기 살짝 커졌다 작아지는 바운스 효과
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
