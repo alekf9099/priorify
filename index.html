@@ -862,7 +862,7 @@ header {
 
 <header>
   <div class="header-left">
-    <a href="#" class="logo">Priorify<span>.</span></a>
+    <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
     <div class="today-badge" id="today-badge"></div>
   </div>
   <div class="header-right">
