@@ -243,6 +243,17 @@ header {
   padding: 20px 12px;
   gap: 4px;
   overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s, opacity 0.3s, border-color 0.3s;
+}
+
+.lnb.collapsed {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-right-color: transparent;
 }
 
 .lnb-section-label {
@@ -836,6 +847,28 @@ header {
 }
 .trash-item-preview:last-child { margin-bottom: 0; }
 
+/* LNB Toggle Button Styles */
+.lnb-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+}
+.lnb-toggle-btn:hover {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+.lnb-toggle-icon {
+  width: 18px;
+  height: 18px;
+}
 </style>
 </head>
 <body>
@@ -862,6 +895,13 @@ header {
 
 <header>
   <div class="header-left">
+    <button class="lnb-toggle-btn" id="lnb-toggle-btn" onclick="toggleLnb()" title="사이드바 접기/펼치기" style="margin-right: -4px;">
+      <svg class="lnb-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
     <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
     <div class="today-badge" id="today-badge"></div>
   </div>
@@ -1274,10 +1314,24 @@ document.getElementById('google-login-btn').addEventListener('click', () => {
 
 document.getElementById('logout-btn').addEventListener('click', logout);
 
-// 페이지 로드 시 Google Auth 초기화
+// 페이지 로드 시 Google Auth 및 사이드바 복원
 window.addEventListener('load', () => {
   initGoogleAuth();
+  
+  // LNB 상태 복원
+  const lnbCollapsed = localStorage.getItem('priorify_lnb_collapsed') === 'true';
+  if (lnbCollapsed) {
+    const lnb = document.querySelector('.lnb');
+    if (lnb) lnb.classList.add('collapsed');
+  }
 });
+
+function toggleLnb() {
+  const lnb = document.querySelector('.lnb');
+  if (!lnb) return;
+  const isCollapsed = lnb.classList.toggle('collapsed');
+  localStorage.setItem('priorify_lnb_collapsed', isCollapsed ? 'true' : 'false');
+}
 
 // ── 날짜 표시 ──
 document.getElementById('today-badge').textContent = (() => {
