@@ -44,83 +44,6 @@ body.dark {
   --text-tertiary: #666666;
 }
 
-/* ───────── LOGIN SCREEN ───────── */
-.login-screen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  opacity: 1;
-  transition: opacity 0.3s;
-}
-
-.login-screen.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.login-box {
-  background: var(--surface);
-  border-radius: 20px;
-  padding: 48px 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-}
-
-.login-logo {
-  font-family: 'DM Mono', monospace;
-  font-size: 32px;
-  font-weight: 500;
-  letter-spacing: -1px;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-}
-
-.login-logo span {
-  color: #667eea;
-}
-
-.login-subtitle {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 36px;
-}
-
-.google-login-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 24px;
-  background: white;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 15px;
-  font-weight: 500;
-  color: #1f1f1f;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.google-login-btn:hover {
-  background: #f8f8f8;
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-}
-
 /* ───────── HEADER ───────── */
 header {
   display: flex;
@@ -136,7 +59,37 @@ header {
 }
 
 .header-left { display: flex; align-items: center; gap: 14px; }
-.header-right { display: flex; align-items: center; gap: 12px; }
+.lnb-toggle {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lnb-toggle:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.layout.lnb-closed .lnb {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-right: 0;
+  overflow: hidden;
+}
+.header-right { display: flex; align-items: center; }
 
 .logo {
   font-family: 'DM Mono', monospace;
@@ -160,34 +113,7 @@ header {
   padding: 4px 12px;
 }
 
-.user-profile {
-  display: none;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-profile.visible {
-  display: flex;
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-}
-
-.user-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.login-btn, .logout-btn {
+.login-btn {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -199,30 +125,10 @@ header {
   transition: all 0.15s;
   font-family: 'DM Sans', sans-serif;
 }
-
-.login-btn:hover, .logout-btn:hover {
+.login-btn:hover {
   background: var(--surface);
   color: var(--text-primary);
   border-color: var(--text-primary);
-}
-
-.logout-btn {
-  display: none;
-}
-
-.logout-btn.visible {
-  display: block;
-}
-
-/* ───────── APP LAYOUT ───────── */
-.app-layout {
-  display: none;
-  flex: 1;
-  overflow: hidden;
-}
-
-.app-layout.visible {
-  display: flex;
 }
 
 /* ───────── LAYOUT ───────── */
@@ -243,6 +149,7 @@ header {
   padding: 20px 12px;
   gap: 4px;
   overflow-y: auto;
+  transition: width 0.22s ease, padding 0.22s ease, border-color 0.22s ease;
 }
 
 .lnb-section-label {
@@ -334,10 +241,218 @@ header {
 }
 
 /* ── BOARD PAGE ── */
+#page-board {
+  position: relative;
+}
+
+.plant-widget {
+  position: absolute;
+  right: 28px;
+  bottom: 22px;
+  width: 280px;
+  height: 126px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.74), rgba(255,255,255,0.46)),
+    var(--surface);
+  box-shadow: 0 18px 45px rgba(26, 26, 26, 0.08);
+  backdrop-filter: blur(10px);
+  z-index: 30;
+  pointer-events: none;
+}
+
+body.dark .plant-widget {
+  background:
+    linear-gradient(135deg, rgba(30,30,30,0.84), rgba(30,30,30,0.58)),
+    var(--surface);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+}
+
+.plant-info {
+  min-width: 0;
+}
+
+.plant-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 6px;
+}
+
+.plant-status {
+  font-size: 13.5px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.plant-scene {
+  width: 92px;
+  height: 96px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.plant-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  width: 72px;
+  height: 32px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0) 70%);
+  border-radius: 50%;
+}
+
+.plant {
+  position: absolute;
+  left: 50%;
+  bottom: 29px;
+  width: 72px;
+  height: 66px;
+  transform: translateX(-50%);
+}
+
+.plant-stem {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 5px;
+  height: calc(20px + var(--plant-growth, 0) * 4px);
+  max-height: 58px;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: linear-gradient(180deg, #34D399, #059669);
+  transform-origin: bottom center;
+  transition: height 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.plant-leaf {
+  position: absolute;
+  bottom: calc(8px + var(--leaf-y, 0) * 1px);
+  width: 25px;
+  height: 13px;
+  background: linear-gradient(135deg, #6EE7B7, #10B981);
+  border-radius: 999px 999px 999px 2px;
+  opacity: var(--leaf-opacity, 0);
+  transform: scale(var(--leaf-scale, 0.2)) rotate(var(--leaf-rotate, 0deg));
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.leaf-left {
+  left: 12px;
+  transform-origin: right center;
+}
+
+.leaf-right {
+  right: 12px;
+  border-radius: 999px 999px 2px 999px;
+  transform-origin: left center;
+}
+
+.leaf-a { --leaf-y: 7; --leaf-rotate: -24deg; }
+.leaf-b { --leaf-y: 19; --leaf-rotate: 24deg; }
+.leaf-c { --leaf-y: 31; --leaf-rotate: -20deg; }
+.leaf-d { --leaf-y: 42; --leaf-rotate: 20deg; }
+
+.plant-bloom {
+  position: absolute;
+  left: 50%;
+  bottom: 55px;
+  width: 18px;
+  height: 18px;
+  transform: translateX(-50%) scale(var(--bloom-scale, 0));
+  opacity: var(--bloom-opacity, 0);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #FFF7ED 0 22%, transparent 23%),
+    radial-gradient(circle at 50% 0%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 100% 50%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 50% 100%, #F9A8D4 0 34%, transparent 35%),
+    radial-gradient(circle at 0% 50%, #F9A8D4 0 34%, transparent 35%);
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.plant-pot {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 54px;
+  height: 34px;
+  transform: translateX(-50%);
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(135deg, #D8A36A, #A7663F);
+  border: 1px solid rgba(91, 55, 31, 0.18);
+  box-shadow: inset -8px -8px 16px rgba(91, 55, 31, 0.16);
+}
+
+.plant-pot-lip {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 64px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #E7B47A, #B97245);
+  border: 1px solid rgba(91, 55, 31, 0.16);
+}
+
+.plant-widget[data-stage="1"] .leaf-a,
+.plant-widget[data-stage="2"] .leaf-a,
+.plant-widget[data-stage="3"] .leaf-a,
+.plant-widget[data-stage="4"] .leaf-a,
+.plant-widget[data-stage="5"] .leaf-a {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.85;
+}
+
+.plant-widget[data-stage="2"] .leaf-b,
+.plant-widget[data-stage="3"] .leaf-b,
+.plant-widget[data-stage="4"] .leaf-b,
+.plant-widget[data-stage="5"] .leaf-b {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.95;
+}
+
+.plant-widget[data-stage="3"] .leaf-c,
+.plant-widget[data-stage="4"] .leaf-c,
+.plant-widget[data-stage="5"] .leaf-c {
+  --leaf-opacity: 1;
+  --leaf-scale: 0.95;
+}
+
+.plant-widget[data-stage="4"] .leaf-d,
+.plant-widget[data-stage="5"] .leaf-d {
+  --leaf-opacity: 1;
+  --leaf-scale: 1;
+}
+
+.plant-widget[data-stage="5"] .plant-bloom {
+  --bloom-opacity: 1;
+  --bloom-scale: 1;
+}
+
+.plant-widget.grow-pulse .plant {
+  animation: plantPulse 0.55s ease;
+}
+
+@keyframes plantPulse {
+  0% { transform: translateX(-50%) scale(1); }
+  45% { transform: translateX(-50%) scale(1.08); }
+  100% { transform: translateX(-50%) scale(1); }
+}
 #board-wrap {
   flex: 1;
   overflow-x: auto;
-  padding: 24px 28px 28px;
+  padding: 24px 28px 96px;
 }
 #board {
   display: flex;
@@ -384,93 +499,142 @@ header {
 /* ── EMOTION TRASH PAGE ── */
 #page-trash {
   padding: 0;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  background: linear-gradient(180deg, #FFF5F9 0%, #FFEBF0 100%);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(244,114,182,0.22), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(129,140,248,0.22), transparent 30%),
+    linear-gradient(135deg, #FFF7FB 0%, #F5F3FF 46%, #ECFEFF 100%);
   overflow: hidden;
   z-index: 1;
 }
+
+#page-trash::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255,255,255,0.64);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
 .trash-container {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(280px, 440px) minmax(320px, 520px);
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  gap: 56px;
+  padding: 54px 56px;
   position: relative;
   overflow: hidden;
   width: 100%;
   height: 100%;
 }
 
+.trash-container .dash-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 10px !important;
+  background: linear-gradient(135deg, #DB2777, #6366F1);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.trash-container .dash-sub {
+  max-width: 420px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #7C3AED;
+  margin-bottom: 0 !important;
+}
+
 .trash-bag-wrap {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  justify-self: center;
   position: relative;
-  width: 200px;
-  height: 280px;
-  margin-bottom: 40px;
+  width: 360px;
+  height: 390px;
+  margin: 0;
   z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+.trash-bag-wrap::before {
+  content: '';
+  position: absolute;
+  width: 310px;
+  height: 310px;
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.78), rgba(255,255,255,0.26));
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow:
+    0 24px 70px rgba(99,102,241,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+  backdrop-filter: blur(18px);
+}
+
+.trash-bag-wrap::after {
+  content: 'MOOD DROP';
+  position: absolute;
+  top: 32px;
+  right: 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  color: rgba(124,58,237,0.62);
+}
+
+.trash-bag-handle {
+  display: none;
 }
 
 .trash-bag {
   position: relative;
-  width: 160px;
-  height: 200px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 50%, #FFB6D9 100%);
-  border-radius: 40px 40px 50px 50px;
-  border: 3px solid #FF99C8;
+  width: 178px;
+  height: 210px;
+  border-radius: 42px 42px 54px 54px;
+  border: 1px solid rgba(255,255,255,0.9);
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.82), rgba(255,255,255,0.3)),
+    linear-gradient(135deg, #FB7185, #C084FC 52%, #60A5FA);
   z-index: 2;
-  overflow: visible;
-  box-shadow: 
-    0 10px 30px rgba(255, 150, 200, 0.3),
-    inset -5px -5px 15px rgba(255, 255, 255, 0.5),
-    inset 5px 5px 15px rgba(255, 150, 200, 0.2);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    0 26px 60px rgba(219,39,119,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.75);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .trash-bag::before {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background: #333;
-  border-radius: 50%;
-  top: 50px;
-  left: 35px;
-  box-shadow: 60px 0 0 #333, 8px 8px 0 2px white, 68px 8px 0 2px white;
-  pointer-events: none;
+  inset: 18px 22px auto;
+  height: 54px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 35% 50%, #111827 0 5px, transparent 6px),
+    radial-gradient(circle at 65% 50%, #111827 0 5px, transparent 6px),
+    rgba(255,255,255,0.62);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
   z-index: 3;
 }
 
 .trash-bag::after {
   content: '';
   position: absolute;
-  width: 40px;
-  height: 20px;
-  border: 2px solid #333;
+  left: 50%;
+  top: 77px;
+  width: 34px;
+  height: 16px;
+  transform: translateX(-50%);
+  border: 2px solid rgba(17,24,39,0.78);
   border-top: none;
   border-radius: 0 0 20px 20px;
-  bottom: 40px;
-  left: 60px;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.trash-bag-handle {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 30px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 100%);
-  border: 2px solid #FF99C8;
-  border-radius: 50% 50% 0 0;
   z-index: 4;
-  box-shadow: 0 -5px 10px rgba(255, 150, 200, 0.2);
 }
 
 .trash-fill {
@@ -479,11 +643,136 @@ header {
   left: 0;
   width: 100%;
   height: 0%;
-  background: linear-gradient(to top, #FFD4E5 0%, #FFE0ED 100%);
-  opacity: 0.8;
+  background:
+    linear-gradient(to top, rgba(251,113,133,0.95), rgba(253,186,116,0.72));
+  opacity: 0.82;
   transition: height 0.5s ease;
-  border-radius: 0 0 47px 47px;
+  border-radius: 0 0 54px 54px;
   z-index: 1;
+}
+
+.trash-chat-wrap {
+  grid-column: 1;
+  width: 100%;
+  max-width: 460px;
+  z-index: 10;
+  margin-top: 28px;
+}
+
+.trash-input-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.74);
+  padding: 10px 10px 10px 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.78);
+  box-shadow: 0 18px 45px rgba(124,58,237,0.12);
+  backdrop-filter: blur(18px);
+}
+
+.trash-input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1F2937;
+}
+
+.trash-input::placeholder {
+  color: rgba(124,58,237,0.52);
+}
+
+.trash-send-btn {
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(236,72,153,0.24);
+}
+
+.trash-send-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 16px 30px rgba(236,72,153,0.3);
+}
+
+.trash-count {
+  grid-column: 1;
+  width: fit-content;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: #7C3AED;
+  margin-top: 16px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(255,255,255,0.74);
+  backdrop-filter: blur(12px);
+}
+
+.trash-actions {
+  grid-column: 1;
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-empty {
+  padding: 11px 18px;
+  border-radius: 16px;
+  border: none;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 14px 26px rgba(17,24,39,0.16);
+}
+
+.btn-empty:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(17,24,39,0.22);
+}
+
+.btn-empty:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.emotion-ball {
+  position: fixed;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #EC4899, #8B5CF6);
+  color: white;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow: 0 12px 24px rgba(236,72,153,0.25);
+  word-break: break-all;
+  overflow: hidden;
+  will-change: transform;
 }
 
 .trash-bag.expanding {
@@ -491,9 +780,9 @@ header {
 }
 
 @keyframes bagExpand {
-  0% { transform: scaleY(1) scaleX(1); }
-  50% { transform: scaleY(1.1) scaleX(1.15); }
-  100% { transform: scaleY(1) scaleX(1.12); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08) rotate(-1.5deg); }
+  100% { transform: scale(1.03); }
 }
 
 .trash-bag.overflow {
@@ -501,62 +790,69 @@ header {
 }
 
 @keyframes bagOverflow {
-  0%, 100% { transform: scaleY(1) scaleX(1.12) rotate(0deg); }
-  25% { transform: scaleY(1.02) scaleX(1.14) rotate(-1.5deg); }
-  75% { transform: scaleY(1.02) scaleX(1.14) rotate(1.5deg); }
-}
-
-.trash-chat-wrap {
-  width: 100%; max-width: 500px; z-index: 10;
-}
-.trash-input-box {
-  display: flex; gap: 10px; background: var(--surface);
-  padding: 12px 16px; border-radius: 30px;
-  border: 1px solid var(--border-strong);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-.trash-input {
-  flex: 1; border: none; outline: none; background: transparent;
-  font-family: inherit; font-size: 14px; color: var(--text-primary);
-}
-.trash-send-btn {
-  background: #FFB6D9; color: white; border: none;
-  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.2s, background 0.2s;
-  font-weight: bold;
-}
-.trash-send-btn:hover { transform: scale(1.1); background: #FF99C8; }
-
-.emotion-ball {
-  position: fixed; width: 40px; height: 40px; border-radius: 50%;
-  background: linear-gradient(135deg, #FFB6D9, #FFC7E0); color: white; font-size: 10px;
-  display: flex; align-items: center; justify-content: center;
-  padding: 5px; text-align: center; pointer-events: none;
-  z-index: 5; box-shadow: 0 4px 10px rgba(255, 150, 200, 0.3);
-  word-break: break-all; overflow: hidden; will-change: transform;
-}
-
-.trash-actions { margin-top: 20px; display: flex; gap: 10px; }
-.btn-empty {
-  padding: 10px 24px; border-radius: 25px; border: none;
-  background: linear-gradient(135deg, #FFB6D9, #FF99C8); color: white; cursor: pointer;
-  font-size: 13px; font-weight: 500; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
-}
-.btn-empty:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 150, 200, 0.3); }
-.btn-empty:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.trash-count {
-  font-size: 12px; color: var(--text-secondary); margin-top: 12px;
+  0%, 100% { transform: scale(1.03) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(-1.5deg); }
+  75% { transform: scale(1.05) rotate(1.5deg); }
 }
 
 @keyframes throwToTrash {
-  0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  50% { transform: translate(var(--tx), -100px) scale(1.2); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+  55% { transform: translate(calc(var(--tx) * 0.68), -120px) scale(1.12) rotate(-10deg); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0.28) rotate(18deg); opacity: 0; }
 }
 
+body.dark #page-trash {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(236,72,153,0.2), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(129,140,248,0.22), transparent 30%),
+    linear-gradient(135deg, #17111B 0%, #16162A 48%, #082F49 100%);
+}
+
+body.dark .trash-container .dash-sub,
+body.dark .trash-count {
+  color: #C4B5FD;
+}
+
+body.dark .trash-input-box,
+body.dark .trash-bag-wrap::before,
+body.dark .trash-count {
+  background: rgba(30,30,30,0.62);
+  border-color: rgba(255,255,255,0.12);
+}
+
+body.dark .trash-input {
+  color: #F9FAFB;
+}
 /* ── DONE PAGE ── */
+.done-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.done-head .done-sub {
+  margin-bottom: 0;
+}
+
+.done-clear-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #FECACA;
+  background: #FFF8F7;
+  color: #B91C1C;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.done-clear-btn:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+}
 #page-done {
   padding: 28px 32px;
   overflow-y: auto;
@@ -686,6 +982,19 @@ header {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
+@keyframes cardFlyToPlant {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.95;
+  }
+  65% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--fly-x), var(--fly-y)) scale(0.18) rotate(8deg);
+    opacity: 0;
+  }
+}
 .cards-list {
   flex: 1; overflow-y: auto; padding: 8px;
   display: flex; flex-direction: column; gap: 7px; min-height: 60px;
@@ -700,9 +1009,21 @@ header {
   transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s;
   position: relative; animation: cardIn 0.18s ease both;
 }
+
 @keyframes cardIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
 .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-color: var(--border-strong); }
 .card.dragging { opacity: 0.28; transform: scale(0.97); cursor: grabbing; }
+
+.card.card-fly-clone {
+  position: fixed !important;
+  z-index: 2000 !important;
+  pointer-events: none;
+  margin: 0;
+  opacity: 0.98;
+  transform-origin: center center;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+  animation: cardFlyToPlant 1.25s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important;
+}
 
 .card-tag {
   display: inline-block; font-size: 10px; font-weight: 500;
@@ -816,6 +1137,7 @@ header {
 
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
 
+/* 쓰레기 내용 리스트 */
 .trash-items-list {
   background: var(--bg);
   border-radius: var(--radius-sm);
@@ -840,37 +1162,16 @@ header {
 </head>
 <body>
 
-<!-- Login Screen -->
-<div class="login-screen" id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">Priorify<span>.</span></div>
-    <div class="login-subtitle">우선순위를 정리하는 가장 쉬운 방법</div>
-    <button class="google-login-btn" id="google-login-btn">
-      <svg class="google-icon" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-      </svg>
-      구글로 로그인
-    </button>
-  </div>
-</div>
-
-<!-- Main App (hidden until login) -->
-<div id="app-container" style="display: none; flex: 1; overflow: hidden; flex-direction: column;">
-
 <header>
   <div class="header-left">
+    <button class="lnb-toggle" id="lnb-toggle" onclick="toggleLnb()" title="LNB 닫기" aria-label="LNB 닫기">
+      ×
+    </button>
     <a href="#" class="logo">Priorify<span>.</span></a>
     <div class="today-badge" id="today-badge"></div>
   </div>
   <div class="header-right">
-    <div class="user-profile" id="user-profile">
-      <img class="user-avatar" id="user-avatar" src="" alt="프로필">
-      <span class="user-name" id="user-name"></span>
-    </div>
-    <button class="logout-btn" id="logout-btn">로그아웃</button>
+    <button class="login-btn">로그인</button>
   </div>
 </header>
 
@@ -939,11 +1240,33 @@ header {
   <main class="main">
 
     <!-- BOARD -->
-    <div id="page-board" class="page active">
-      <div id="board-wrap">
-        <div id="board"></div>
+<div id="page-board" class="page active">
+  <div id="board-wrap">
+    <div id="board"></div>
+  </div>
+
+  <div class="plant-widget" id="plant-widget" aria-live="polite">
+    <div class="plant-info">
+      <div class="plant-label">성장 중인 하루</div>
+      <div class="plant-status" id="plant-status">완료한 일정 0개</div>
+    </div>
+
+    <div class="plant-scene">
+      <div class="plant-glow"></div>
+      <div class="plant">
+        <div class="plant-stem"></div>
+        <div class="plant-leaf leaf-left leaf-a"></div>
+        <div class="plant-leaf leaf-right leaf-b"></div>
+        <div class="plant-leaf leaf-left leaf-c"></div>
+        <div class="plant-leaf leaf-right leaf-d"></div>
+        <div class="plant-bloom"></div>
+      </div>
+      <div class="plant-pot">
+        <div class="plant-pot-lip"></div>
       </div>
     </div>
+  </div>
+</div>
 
     <!-- DASHBOARD -->
     <div id="page-dashboard" class="page">
@@ -985,12 +1308,17 @@ header {
 
     <!-- DONE -->
     <div id="page-done" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
+  <div style="padding:28px 32px;overflow-y:auto;flex:1">
+    <div class="done-head">
+      <div>
         <div class="done-title">완료 목록</div>
         <div class="done-sub">완료 처리한 항목들이 여기 모입니다</div>
-        <div id="done-list-wrap"></div>
       </div>
+      <button class="done-clear-btn" onclick="clearDone()">완료 목록 비우기</button>
     </div>
+    <div id="done-list-wrap"></div>
+  </div>
+</div>
 
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
@@ -1035,8 +1363,6 @@ header {
   </main>
 </div>
 
-</div>
-
 <div id="save-toast">저장됨 ✓</div>
 
 <!-- Column Modal -->
@@ -1077,7 +1403,7 @@ header {
   </div>
 </div>
 
-<!-- Trash Review Modal -->
+<!-- Trash Review Modal (비우기 전 확인) -->
 <div class="modal-overlay" id="trash-review-modal" onclick="closeTrashReviewModal(event)">
   <div class="modal">
     <div class="modal-title">쓰레기통 비우기</div>
@@ -1089,9 +1415,6 @@ header {
     </div>
   </div>
 </div>
-
-<!-- Google Sign-In Library -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script>
 const COLORS = [
@@ -1121,172 +1444,140 @@ const DEFAULT_COLUMNS = [
   ]},
 ];
 
-// ── GOOGLE AUTH ──
-let currentUser = null;
-const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; // ← 여기에 클라이언트 ID 입력하세요!
-
-function getStorageKey(key) {
-  if (!currentUser) return key;
-  return `${key}_${currentUser.sub}`;
-}
-
 function loadData() {
-  try { 
-    const s = localStorage.getItem(getStorageKey('priorify_columns')); 
-    if (s) return JSON.parse(s); 
-  } catch(e) {}
+  try { const s = localStorage.getItem('priorify_columns'); if (s) return JSON.parse(s); } catch(e) {}
   return JSON.parse(JSON.stringify(DEFAULT_COLUMNS));
 }
-
 function loadDone() {
-  try { 
-    const s = localStorage.getItem(getStorageKey('priorify_done')); 
-    if (s) return JSON.parse(s); 
-  } catch(e) {}
+  try { const s = localStorage.getItem('priorify_done'); if (s) return JSON.parse(s); } catch(e) {}
   return [];
 }
-
 function loadTrash() {
-  try { 
-    const s = localStorage.getItem(getStorageKey('priorify_trash')); 
-    if (s) return JSON.parse(s); 
-  } catch(e) {}
+  try { const s = localStorage.getItem('priorify_trash'); if (s) return JSON.parse(s); } catch(e) {}
   return [];
 }
-
 function saveData() {
-  try { 
-    localStorage.setItem(getStorageKey('priorify_columns'), JSON.stringify(columns)); 
-    showToast(); 
-  } catch(e) {}
+  try { localStorage.setItem('priorify_columns', JSON.stringify(columns)); showToast(); } catch(e) {}
 }
-
 function saveDone() {
-  try { 
-    localStorage.setItem(getStorageKey('priorify_done'), JSON.stringify(doneItems)); 
-  } catch(e) {}
+  try { localStorage.setItem('priorify_done', JSON.stringify(doneItems)); } catch(e) {}
 }
-
 function saveTrash() {
-  try { 
-    localStorage.setItem(getStorageKey('priorify_trash'), JSON.stringify(trashItems)); 
-    updateTrashFill(); 
-  } catch(e) {}
+  try { localStorage.setItem('priorify_trash', JSON.stringify(trashItems)); updateTrashFill(); } catch(e) {}
 }
 
-let columns = [];
-let doneItems = [];
-let trashItems = [];
+let columns = loadData();
+let doneItems = loadDone();
+let trashItems = loadTrash();
 let nextId = 5000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
+let plantXp = Number(localStorage.getItem('priorify_plant_xp') || doneItems.length || 0);
+function toggleLnb() {
+  const layout = document.querySelector('.layout');
+  const btn = document.getElementById('lnb-toggle');
+  if (!layout || !btn) return;
 
+  const closed = layout.classList.toggle('lnb-closed');
+
+  btn.textContent = closed ? '☰' : '×';
+  btn.title = closed ? 'LNB 열기' : 'LNB 닫기';
+  btn.setAttribute('aria-label', closed ? 'LNB 열기' : 'LNB 닫기');
+
+  localStorage.setItem('priorify_lnb_closed', closed ? '1' : '0');
+}
+
+function initLnbState() {
+  const layout = document.querySelector('.layout');
+  const btn = document.getElementById('lnb-toggle');
+  if (!layout || !btn) return;
+
+  const closed = localStorage.getItem('priorify_lnb_closed') === '1';
+
+  layout.classList.toggle('lnb-closed', closed);
+
+  btn.textContent = closed ? '☰' : '×';
+  btn.title = closed ? 'LNB 열기' : 'LNB 닫기';
+  btn.setAttribute('aria-label', closed ? 'LNB 열기' : 'LNB 닫기');
+}
 function today() {
   const d = new Date();
   return `${d.getMonth()+1}/${d.getDate()}`;
 }
-
 function genId() { return 'id' + (nextId++); }
-
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Google Auth 초기화 ──
-function initGoogleAuth() {
-  window.google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleCredentialResponse,
-    auto_select: false,
-  });
-  
-  // 저장된 사용자 정보 확인
-  const savedUser = localStorage.getItem('priorify_user');
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      showApp();
-    } catch(e) {
-      localStorage.removeItem('priorify_user');
-    }
-  }
+function playPaperCrumpleSound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const noise = audioContext.createBufferSource();
+    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.22, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < buffer.length; i++) data[i] = (Math.random() * 2 - 1) * 0.4;
+    const noiseGain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 3500;
+    filter.Q.value = 0.3;
+    noise.buffer = buffer;
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(audioContext.destination);
+    noiseGain.gain.setValueAtTime(0.12, now);
+    noiseGain.gain.linearRampToValueAtTime(0.16, now + 0.04);
+    noiseGain.gain.exponentialRampToValueAtTime(0.015, now + 0.22);
+    noise.start(now);
+    noise.stop(now + 0.22);
+  } catch(e) {}
 }
 
-function handleCredentialResponse(response) {
-  const userObject = parseJwt(response.credential);
-  
-  currentUser = {
-    sub: userObject.sub,
-    email: userObject.email,
-    name: userObject.name,
-    picture: userObject.picture,
-  };
-  
-  localStorage.setItem('priorify_user', JSON.stringify(currentUser));
-  showApp();
+function playTrashEmptySound() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const noise = audioContext.createBufferSource();
+    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.35, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < buffer.length; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
+    const noiseGain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 2000;
+    filter.Q.value = 0.4;
+    noise.buffer = buffer;
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(audioContext.destination);
+    noiseGain.gain.setValueAtTime(0.08, now);
+    noiseGain.gain.linearRampToValueAtTime(0.12, now + 0.1);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+    noise.start(now);
+    noise.stop(now + 0.35);
+    const osc = audioContext.createOscillator();
+    const oscGain = audioContext.createGain();
+    osc.frequency.setValueAtTime(120, now);
+    osc.frequency.exponentialRampToValueAtTime(70, now + 0.3);
+    osc.connect(oscGain);
+    oscGain.connect(audioContext.destination);
+    oscGain.gain.setValueAtTime(0.08, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.005, now + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  } catch(e) {}
 }
 
-function parseJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-  return JSON.parse(jsonPayload);
-}
-
-function showApp() {
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app-container').style.display = 'flex';
-  
-  document.getElementById('user-avatar').src = currentUser.picture;
-  document.getElementById('user-name').textContent = currentUser.name;
-  document.getElementById('user-profile').classList.add('visible');
-  document.getElementById('logout-btn').classList.add('visible');
-  
-  columns = loadData();
-  doneItems = loadDone();
-  trashItems = loadTrash();
-  
-  render();
-  updateTrashFill();
-}
-
-function logout() {
-  if (!confirm('로그아웃 하시겠습니까?')) return;
-  
-  currentUser = null;
-  localStorage.removeItem('priorify_user');
-  
-  document.getElementById('app-container').style.display = 'none';
-  document.getElementById('login-screen').classList.remove('hidden');
-  
-  columns = [];
-  doneItems = [];
-  trashItems = [];
-}
-
-// ── Event Listeners ──
-document.getElementById('google-login-btn').addEventListener('click', () => {
-  window.google.accounts.id.prompt();
-});
-
-document.getElementById('logout-btn').addEventListener('click', logout);
-
-// 페이지 로드 시 Google Auth 초기화
-window.addEventListener('load', () => {
-  initGoogleAuth();
-});
-
-// ── 날짜 표시 ──
+// ── DATE
 document.getElementById('today-badge').textContent = (() => {
   const d = new Date();
   const days = ['일','월','화','수','목','금','토'];
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${days[d.getDay()]}요일`;
 })();
 
-// ── 테마 ──
+// ── THEME
 function setTheme(t) {
   document.body.classList.toggle('dark', t === 'dark');
   document.getElementById('btn-light').classList.toggle('active', t === 'light');
@@ -1296,7 +1587,7 @@ function setTheme(t) {
 const savedTheme = localStorage.getItem('priorify_theme');
 if (savedTheme) setTheme(savedTheme);
 
-// ── Toast ──
+// ── TOAST
 let toastTimer = null;
 function showToast() {
   const t = document.getElementById('save-toast');
@@ -1306,7 +1597,7 @@ function showToast() {
   toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
 }
 
-// ── 페이지 전환 ──
+// ── PAGE SWITCH
 function switchPage(page, btn) {
   currentPage = page;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1318,7 +1609,7 @@ function switchPage(page, btn) {
   if (page === 'trash') updateTrashFill();
 }
 
-// ── LNB 컬럼 리스트 ──
+// ── LNB COL LIST
 function renderLnbCols() {
   const wrap = document.getElementById('lnb-col-list');
   if (!wrap) return;
@@ -1332,7 +1623,7 @@ function renderLnbCols() {
   });
 }
 
-// ── 보드 렌더링 ──
+// ── RENDER BOARD
 function render() {
   const board = document.getElementById('board');
   if (!board) return;
@@ -1412,7 +1703,7 @@ function renderCard(card, color, colName) {
   </div>`;
 }
 
-// ── 감정 쓰레기통 ──
+// ── EMOTION TRASH LOGIC
 function updateTrashFill() {
   const fill = document.getElementById('trash-fill');
   const bag = document.getElementById('trash-bag');
@@ -1446,6 +1737,8 @@ function throwEmotion() {
 
   const bag = document.getElementById('trash-bag');
   
+  playPaperCrumpleSound();
+  
   bag.classList.add('expanding');
   setTimeout(() => bag.classList.remove('expanding'), 600);
   
@@ -1478,7 +1771,9 @@ function throwEmotion() {
   
   input.value = '';
   
-  setTimeout(() => ball.remove(), 800);
+  setTimeout(() => {
+    ball.remove();
+  }, 800);
 }
 
 function openTrashReviewModal() {
@@ -1499,6 +1794,8 @@ function closeTrashReviewModal(e) {
 }
 
 function emptyTrash() {
+  playTrashEmptySound();
+  
   const keywords = analyzeKeywords(trashItems);
   const evaluation = generateEvaluation(keywords);
   
@@ -1532,7 +1829,7 @@ function generateEvaluation(keywords) {
   return evals[Math.floor(Math.random() * evals.length)];
 }
 
-// ── 대시보드 ──
+// ── DASHBOARD
 function renderDashboard() {
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const grid = document.getElementById('dash-grid');
@@ -1567,21 +1864,104 @@ function renderDashboard() {
     </div>`;
   }).join('');
 }
+function getPlantStage() {
+  if (plantXp >= 12) return 5;
+  if (plantXp >= 8) return 4;
+  if (plantXp >= 5) return 3;
+  if (plantXp >= 2) return 2;
+  if (plantXp >= 1) return 1;
+  return 0;
+}
+function renderPlant(animate = false) {
+  const widget = document.getElementById('plant-widget');
+  const status = document.getElementById('plant-status');
+  if (!widget || !status) return;
 
-// ── 완료 ──
-function markDone(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
-  let found = null, fromColName = '';
-  columns.forEach(col => {
-    const idx = col.cards.findIndex(c => c.id === cardId);
-    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-  });
-  if (found) {
-    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); render();
+
+  const stage = getPlantStage();
+  widget.dataset.stage = stage;
+  widget.style.setProperty('--plant-growth', stage);
+
+  const goals = [1, 2, 5, 8, 12];
+  const nextGoal = stage === 5 ? '만개했습니다' : `다음 성장까지 ${goals[stage] - plantXp}개`;
+  status.textContent = `완료한 일정 ${plantXp}개 · ${nextGoal}`;
+
+  if (animate) {
+    widget.classList.remove('grow-pulse');
+    void widget.offsetWidth;
+    widget.classList.add('grow-pulse');
   }
 }
+  
+function growPlant() {
+  plantXp += 1;
+  localStorage.setItem('priorify_plant_xp', String(plantXp));
+  renderPlant(true);
+}
 
+function animateCardToPlant(cardEl) {
+  const widget = document.getElementById('plant-widget');
+  if (!cardEl || !widget) return;
+
+  const cardRect = cardEl.getBoundingClientRect();
+  const plantRect = widget.getBoundingClientRect();
+
+  const clone = cardEl.cloneNode(true);
+  clone.classList.add('card-fly-clone');
+  clone.classList.remove('dragging');
+
+  clone.style.left = cardRect.left + 'px';
+  clone.style.top = cardRect.top + 'px';
+  clone.style.width = cardRect.width + 'px';
+  clone.style.height = cardRect.height + 'px';
+
+  const targetX = plantRect.left + plantRect.width * 0.78;
+  const targetY = plantRect.top + plantRect.height * 0.66;
+  const flyX = targetX - (cardRect.left + cardRect.width / 2);
+  const flyY = targetY - (cardRect.top + cardRect.height / 2);
+
+  clone.style.setProperty('--fly-x', flyX + 'px');
+  clone.style.setProperty('--fly-y', flyY + 'px');
+
+  document.body.appendChild(clone);
+
+  setTimeout(() => {
+    clone.remove();
+  }, 1300);
+}
+// ── DONE
+function markDone(e, cardId) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const cardEl = e.target.closest('.card');
+
+  let found = null;
+  let fromColName = '';
+
+  columns.forEach(col => {
+    const idx = col.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) {
+      found = col.cards.splice(idx, 1)[0];
+      fromColName = col.name;
+    }
+  });
+
+  if (found) {
+    animateCardToPlant(cardEl);
+    if (cardEl) cardEl.style.visibility = 'hidden';
+
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    growPlant();
+    saveDone();
+    saveData();
+
+    setTimeout(() => {
+      render();
+    }, 1250);
+  }
+}
+  
 function renderDone() {
   const wrap = document.getElementById('done-list-wrap');
   if (!wrap) return;
@@ -1615,7 +1995,7 @@ function clearDone() {
   if (currentPage === 'done') renderDone();
 }
 
-// ── 드래그 ──
+// ── DRAG
 function onCardDragStart(e, cardId, colId) {
   dragCardId = cardId; dragFromColId = colId;
   setTimeout(() => { const el = document.querySelector(`[data-card-id="${cardId}"]`); if (el) el.classList.add('dragging'); }, 0);
@@ -1644,7 +2024,7 @@ function onCardDrop(e, targetColId) {
   saveData(); render();
 }
 
-// ── 카드 액션 ──
+// ── CARD ACTIONS
 function deleteCard(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
@@ -1675,7 +2055,7 @@ function addCardFromInput(colId, textarea) {
   saveData(); render();
 }
 
-// ── 카드 편집 모달 ──
+// ── CARD EDIT MODAL
 function openEditCardModal(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   editingCardId = cardId;
@@ -1708,7 +2088,7 @@ function confirmCardEdit() {
   render();
 }
 
-// ── 컬럼 액션 ──
+// ── COLUMN ACTIONS
 function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
 function editColDesc(colId, desc) { const c = columns.find(c => c.id === colId); if (c) { c.desc = desc; saveData(); } }
 function deleteCol(colId) {
@@ -1722,7 +2102,7 @@ function resetData() {
   saveData(); render();
 }
 
-// ── 모달 ──
+// ── MODAL
 function openAddColModal() {
   editingColId = null;
   document.getElementById('modal-title').textContent = '새 컬럼 추가';
@@ -1780,6 +2160,11 @@ document.addEventListener('keydown', e => {
     if (document.getElementById('card-modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmCardEdit();
   }
 });
+
+initLnbState();
+render();
+renderPlant();
+updateTrashFill();
 </script>
 </body>
 </html>
