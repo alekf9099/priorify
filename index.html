@@ -537,17 +537,6 @@ header {
 .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
 .card:hover .card-actions { opacity: 1; }
 
-/* 모바일 터치 개선 */
-@media (hover: none) {
-  .col-header-actions { opacity: 1; }
-  .card-actions { opacity: 1; }
-}
-
-.card-btn { background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 2px 4px; border-radius: 4px; font-size: 11px; line-height: 1; transition: background 0.1s, color 0.1s; }
-.card-btn:hover { background: var(--border); color: var(--text-secondary); }
-.card-btn.done-btn:hover { background: #D1FAE5; color: #065F46; }
-.card-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
-
 /* ── ADD CARD ── */
 .add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.25s, opacity 0.25s; }
 .add-card-input {
@@ -614,7 +603,7 @@ header {
 .flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
 .flower-plant.stage-3 { font-size: 60px; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6)); animation: bloom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-/* ── 💡 FLOATING CALENDAR BUTTON (우측 최하단 고정) ── */
+/* ── FLOATING CALENDAR BUTTON ── */
 .cal-floating-container {
   position: fixed;
   bottom: 24px;
@@ -647,7 +636,7 @@ header {
   color: var(--text-primary);
 }
 
-/* ── 💡 PRIORIFY CUSTOM CALENDAR MODAL ── */
+/* ── PRIORIFY CUSTOM CALENDAR MODAL ── */
 .cal-grid-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -672,13 +661,32 @@ header {
   border-radius: 8px;
   position: relative;
   color: var(--text-primary);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
 }
 .cal-day-cell.empty { pointer-events: none; }
+.cal-day-cell:not(.empty):not(.today-cell):hover {
+  background: var(--bg);
+}
+
+/* 💡 오늘 날짜 하이라이트 (인디고 가득 찬 원형) */
 .cal-day-cell.today-cell {
-  background: var(--accent);
+  background: var(--accent) !important;
   color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+/* 💡 선택된 날짜 하이라이트 (은은한 보더 라인) */
+.cal-day-cell.selected-day-cell {
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.06);
   font-weight: 500;
 }
+.cal-day-cell.today-cell.selected-day-cell {
+  border-color: var(--text-primary); /* 오늘이면서 동시에 선택됐을 때 외곽선 제어 */
+}
+
 .cal-day-dot {
   position: absolute;
   bottom: 4px;
@@ -689,6 +697,31 @@ header {
 }
 .cal-day-cell.today-cell .cal-day-dot {
   background: #FFFFFF;
+}
+
+/* 달력 하단 일정 리스트용 스타일 */
+.cal-agenda-wrap {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+.cal-agenda-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.cal-agenda-item {
+  font-size: 12.5px;
+  padding: 6px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .done-particle {
@@ -715,15 +748,19 @@ header {
   }
   .lnb-backdrop.show { opacity: 1; pointer-events: auto; }
 
+  /* 💡 LNB 모바일 서랍장 너비 이전 크기(280px)로 시원하게 복원 */
   .lnb {
     position: fixed;
     top: 0; left: 0; height: 100vh;
-    width: 280px;
-    max-width: 80vw;
+    width: 280px !important;
+    max-width: 85vw;
     z-index: 3000;
     box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+    padding: 20px 12px;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
-  .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
+  .lnb.collapsed { transform: translateX(-100%); }
 
   #board-wrap { 
     padding: 12px;
@@ -1018,13 +1055,19 @@ header {
 </div>
 
 <div class="modal-overlay" id="calendar-modal-overlay" onclick="closeCalendarModal(event)">
-  <div class="modal">
+  <div class="modal" style="max-width: 400px;">
     <div class="modal-title" id="calendar-modal-title">0000년 00월</div>
     <div class="cal-grid-header">
       <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
     </div>
     <div class="cal-grid-body" id="calendar-grid-body"></div>
-    <div class="modal-actions" style="margin-top: 20px;">
+    
+    <div class="cal-agenda-wrap" id="cal-agenda-wrap">
+      <div class="cal-agenda-title" id="cal-agenda-title">선택된 날짜의 일정</div>
+      <div id="cal-agenda-list"></div>
+    </div>
+
+    <div class="modal-actions" style="margin-top: 16px;">
       <button class="btn-cancel" onclick="closeCalendarModalDirect()">닫기</button>
     </div>
   </div>
@@ -1034,7 +1077,6 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-// 💡 변수 정의 순서를 최상단으로 재정리하여 ReferenceError 완벽 차단
 const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
@@ -1044,6 +1086,9 @@ let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
 let colCollapseStatus = {};
+
+// 💡 달력에서 선택된 포커스 날짜를 저장할 상태변수 (초기값 null)
+let selectedCalendarDateStr = null;
 
 MobileDragDrop.polyfill({
   dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
@@ -1668,12 +1713,17 @@ function confirmModal() {
 function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
 function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); editingColId = null; }
 
-// ── 💡 캘린더 구동 함수 ──
+// ── 💡 캘린더 핵심 구동 및 이벤트 인터랙션 스크립트 ──
 function openCalendarModal() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth(); 
   
+  // 최초 달력을 켤 때 선택된 상태 날짜가 없다면 기본값으로 오늘 매칭 문자열 부여
+  if (!selectedCalendarDateStr) {
+    selectedCalendarDateStr = `${month + 1}/${now.getDate()}`;
+  }
+
   document.getElementById('calendar-modal-title').textContent = `${year}년 ${month + 1}월`;
   
   const gridBody = document.getElementById('calendar-grid-body');
@@ -1693,16 +1743,23 @@ function openCalendarModal() {
     cell.className = 'cal-day-cell';
     cell.textContent = date;
     
+    const currentLoopDateStr = `${month + 1}/${date}`;
+
+    // 1. 오늘 날짜 하이라이트 분기 조건문
     if (date === now.getDate()) {
       cell.classList.add('today-cell');
     }
     
-    const matchDateStr = `${month + 1}/${date}`;
+    // 2. 선택된 날짜 하이라이트 분기 조건문
+    if (currentLoopDateStr === selectedCalendarDateStr) {
+      cell.classList.add('selected-day-cell');
+    }
     
+    // 날짜별 할 일 집계용 카운터
     let matchCount = 0;
     columns.forEach(col => {
       col.cards.forEach(card => {
-        if (card.date === matchDateStr) matchCount++;
+        if (card.date === currentLoopDateStr) matchCount++;
       });
     });
     
@@ -1712,10 +1769,56 @@ function openCalendarModal() {
       cell.appendChild(dot);
     }
     
+    // 날짜 셀 클릭(터치) 시 선택 인터랙션 함수 호출 바인딩
+    cell.onclick = () => selectCalendarDate(currentLoopDateStr);
+    
     gridBody.appendChild(cell);
   }
   
+  // 하단 아젠다 의제 리스트 동기화 호출
+  updateCalendarAgendaView();
+  
   document.getElementById('calendar-modal-overlay').classList.add('open');
+}
+
+// 날짜 선택 트리거 처리 함수
+function selectCalendarDate(dateStr) {
+  selectedCalendarDateStr = dateStr;
+  
+  // 클릭된 포커스 클래스 갱신을 위해 캘린더 격자판 리렌더링
+  const now = new Date();
+  openCalendarModal();
+}
+
+// 선택된 날짜의 상세 카드를 뽑아와서 출력하는 뷰 메이커 함수
+function updateCalendarAgendaView() {
+  const agendaList = document.getElementById('cal-agenda-list');
+  const agendaTitle = document.getElementById('cal-agenda-title');
+  if (!agendaList || !agendaTitle) return;
+
+  agendaTitle.textContent = `📅 ${selectedCalendarDateStr} 마감 일정 목록`;
+  agendaList.innerHTML = '';
+
+  let agendaCards = [];
+  columns.forEach(col => {
+    col.cards.forEach(card => {
+      if (card.date === selectedCalendarDateStr) {
+        agendaCards.push({ text: card.text, colName: col.name });
+      }
+    });
+  });
+
+  if (agendaCards.length === 0) {
+    agendaList.innerHTML = `<div style="font-size:12px; color:var(--text-tertiary); text-align:center; padding:10px 0;">이 날은 등록된 할 일이 없습니다.</div>`;
+    return;
+  }
+
+  agendaCards.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'cal-agenda-item';
+    div.innerHTML = `<span style="font-weight:500; color:var(--accent); margin-right:6px;">[${esc(item.colName)}]</span>${esc(item.text)}`;
+    agendaList.appendChild(div);
+  });
 }
 
 function closeCalendarModal(e) {
