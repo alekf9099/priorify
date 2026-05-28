@@ -524,7 +524,6 @@ header {
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
 .col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
 
-/* 수량 + 화살표 드롭다운 토글 통합 배지 버튼 */
 .col-dropdown-toggle-btn {
   display: flex;
   align-items: center;
@@ -547,7 +546,21 @@ header {
   background: var(--surface);
 }
 
-.col-desc-input { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-tertiary); background: transparent; border: none; outline: none; width: 100%; cursor: text; resize: none; height: 17px; overflow: hidden; }
+/* 💡 [설명 항목 잘림 패치] 고정 높이와 overflow: hidden을 파괴하고 자음/모음이 다 보이게 여백 가이드 부여 */
+.col-desc-input { 
+  font-family: 'DM Sans', sans-serif; 
+  font-size: 11.5px; 
+  color: var(--text-tertiary); 
+  background: transparent; 
+  border: none; 
+  outline: none; 
+  width: 100%; 
+  cursor: text; 
+  resize: none; 
+  height: auto !important; /* 고정 높이 제거 */
+  line-height: 1.4;        /* 자음/모음 균형 맞춤 */
+  padding: 2px 0;         /* 위아래 안전 바퍼 설정 */
+}
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
 .col-header-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; margin-left: 4px; }
@@ -858,13 +871,13 @@ header {
 }
 
 /* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
-/* 💡 접힌 상태 레이아웃 구조 조정 - 자름 버그 원천 차단 */
+/* 💡 [설명 항목 잘림 방어 패치 완성] 접혀있을 때 여백을 더 지능적으로 분리하여 충돌 박멸 */
 .column.collapsed-col {
   max-height: 52px !important; 
 }
 .column.collapsed-col .col-header {
-  border-bottom: 1px solid transparent; /* 접혔을 때는 헤더 내부 가름선 제거 */
-  padding: 14px 14px 12px; /* 텍스트 짓눌림을 케어하는 안전 여백 배치 */
+  border-bottom: 1px solid transparent; 
+  padding: 12px 14px 10px; /* 고정선과 부딪히지 않는 여유 비율로 마감 */
 }
 .column.collapsed-col .cards-list {
   max-height: 0 !important;
@@ -1430,7 +1443,7 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  // 💡 앱 최초 진입 시 Default 상태값을 전부 '닫힘(true)'으로 무조건 세팅
+  // 앱 최초 진입 시 Default 상태값을 전부 '닫힘(true)'으로 세팅
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
       colCollapseStatus[col.id] = true; 
@@ -1522,7 +1535,7 @@ function switchPage(page, btn) {
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
 
-  // 💡 LNB 타 메뉴 클릭 이동 시 모바일 서랍 레이아웃이 무조건 자동으로 닫히도록 완벽 보정
+  // LNB 타 메뉴 클릭 이동 시 모바일 서랍 레이아웃이 무조건 자동으로 닫히도록 완벽 보정
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
     const backdrop = document.getElementById('lnb-backdrop');
@@ -1566,7 +1579,7 @@ function render() {
 
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = true; // 대기값도 기본 닫힘으로 안정 가이드 고정
+      colCollapseStatus[col.id] = true; 
     }
 
     const color = COLORS[col.colorIdx];
@@ -1990,7 +2003,7 @@ function confirmModal() {
     if (col) { col.name = name; col.desc = desc; col.colorIdx = selectedColorIdx; }
   } else {
     const newId = genId();
-    colCollapseStatus[newId] = true; // 새 컬럼 역시 Default는 닫힘 상태로 동적 생성 제어
+    colCollapseStatus[newId] = true; 
     columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
