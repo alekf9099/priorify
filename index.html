@@ -412,23 +412,25 @@ header {
   pointer-events: auto;
 }
 
-/* ── BOARD PAGE (PC 버전 가로 정렬 고유 레이아웃 정의) ── */
+/* ── BOARD PAGE ── */
 #board-wrap {
   flex: 1;
-  overflow-x: auto; 
+  overflow-x: auto;
   overflow-y: hidden;
   padding: 24px 28px 28px;
 }
 #board {
   display: flex;
-  flex-direction: row; 
   gap: 16px;
   min-height: 100%;
   align-items: flex-start;
 }
 
 .col-toggle-arrow {
-  display: none; 
+  display: inline-block;
+  font-size: 9px;
+  color: var(--text-tertiary);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── DASHBOARD PAGE ── */
@@ -515,8 +517,8 @@ header {
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.col-header { padding: 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: all 0.22s; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
@@ -544,7 +546,21 @@ header {
   background: var(--surface);
 }
 
-.col-desc-input { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-tertiary); background: transparent; border: none; outline: none; width: 100%; cursor: text; resize: none; height: auto !important; line-height: 1.4; padding: 2px 0; }
+.col-desc-input { 
+  font-family: 'DM Sans', sans-serif; 
+  font-size: 11.5px; 
+  color: var(--text-tertiary); 
+  background: transparent; 
+  border: none; 
+  outline: none; 
+  width: 100%; 
+  cursor: text; 
+  resize: none; 
+  height: auto !important; 
+  line-height: 1.4;        
+  padding: 2px 0;         
+  transition: opacity 0.2s, max-height 0.2s;
+}
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
 .col-header-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; margin-left: 4px; }
@@ -553,24 +569,13 @@ header {
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS (하얀색 배경 고정) ── */
-.cards-list { 
-  flex: 1; 
-  overflow-y: auto; 
-  padding: 8px; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 7px; 
-  min-height: 60px; 
-  touch-action: pan-y; 
-  transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; 
-  background: var(--surface) !important; 
-}
+/* ── CARDS ── */
+.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; }
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
 .card {
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;
   cursor: grab; user-select: none; transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s; position: relative; animation: cardIn 0.18s ease both;
   display: flex;
   flex-direction: column;
@@ -587,73 +592,16 @@ header {
   line-height: 1.5; 
   color: var(--text-primary); 
   word-break: break-word; 
-  padding-right: 4px; 
+  pointer-events: none;
 }
 
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
-
-/* 캘러그래피 플로팅 액션 그룹 디자인 */
-.card-actions-group {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  transform: translateY(2px);
-  
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  padding: 3px;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-}
-.card:hover .card-actions-group {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.card-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-tertiary);
-  padding: 5px;
-  border-radius: 50%; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-.card-btn:hover {
-  background: var(--bg);
-  color: var(--text-primary);
-}
-
-.card-btn.done-btn:hover {
-  color: #10B981;
-  background: rgba(16, 185, 129, 0.08);
-}
-
-.card-btn.danger:hover {
-  color: #EF4444;
-  background: #FEE2E2;
-}
-
-.card-icon {
-  width: 14px;
-  height: 14px;
-}
+.card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
+.card:hover .card-actions { opacity: 1; }
 
 /* ── ADD CARD AREA ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); background: var(--surface); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
+.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
   border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
@@ -922,7 +870,42 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ───────── 모바일 전용 미디어 쿼리 구조 격리 패치 ───────── */
+/* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
+/* 💡 [완성형 하이딩 패치] 접힌 상태 구조 재튜닝 - 하위 요소를 깨끗하게 숨겨 잘림 현상 완벽 박멸 */
+.column.collapsed-col {
+  max-height: 48px !important; /* 타이틀 라인 높이로 완전히 잠금 */
+}
+.column.collapsed-col .col-header {
+  border-bottom: 1px solid transparent; 
+  padding: 12px 14px; 
+}
+/* 접혀있을 때는 설명 텍스트 인풋창을 화면에서 투명도 0과 공간 분리로 숨김 */
+.column.collapsed-col .col-desc-input {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
+}
+.column.collapsed-col .cards-list {
+  max-height: 0 !important;
+  padding: 0 8px !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.column.collapsed-col .add-card-area {
+  max-height: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.column.collapsed-col .col-toggle-arrow {
+  transform: rotate(-90deg);
+}
+
+/* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
   .logo { font-size: 16px; }
@@ -972,7 +955,7 @@ header {
     width: 100% !important;
     max-width: none !important;
     max-height: 480px !important; 
-    min-height: 0 !important;
+    min-height: auto !important;
     display: flex;
     flex-direction: column;
   }
@@ -990,17 +973,9 @@ header {
     padding: 8px !important;
   }
 
-  /* 모바일 화면 카드 내부 액션 버튼 가이드 */
   .card {
-    padding: 12px 12px 46px 12px !important; 
-    min-height: 96px !important; 
-  }
-  .card-actions-group {
-    opacity: 1 !important; 
-    pointer-events: auto !important;
-    transform: translateY(0) !important;
-    bottom: 8px;
-    right: 8px;
+    padding: 12px 12px 42px 12px !important; 
+    min-height: 90px !important; 
   }
 
   .add-card-area {
@@ -1009,44 +984,26 @@ header {
     border-top: 1px solid var(--border);
   }
 
-  /* 모바일 접힘 아코디언 공백 차단 */
-  .column.collapsed-col {
-    max-height: 48px !important; 
-    min-height: 0 !important; 
+  .card-meta {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 24px);
   }
-  .column.collapsed-col .col-header {
-    border-bottom: 1px solid transparent; 
-    padding: 12px 14px; 
+  .card-actions {
+    opacity: 1 !important; 
+    display: flex;
+    gap: 6px;
   }
-  .column.collapsed-col .col-desc-input {
-    opacity: 0 !important;
-    max-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    pointer-events: none;
-  }
-  .column.collapsed-col .cards-list {
-    max-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .column.collapsed-col .add-card-area {
-    max-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  
-  .col-toggle-arrow {
-    display: inline-block;
-  }
-  .column.collapsed-col .col-toggle-arrow {
-    transform: rotate(-90deg);
+  .card-btn {
+    padding: 4px 8px !important;
+    background: var(--border);
+    border-radius: 4px;
+    font-size: 12px !important;
   }
 
   .add-col-ghost {
@@ -1167,7 +1124,7 @@ header {
     <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
       <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="9" r="2.5"/>
-        <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
+        <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01 13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
       </svg>
       설정
     </button>
@@ -1288,6 +1245,15 @@ header {
     <div class="modal-field">
       <label class="modal-label">내용</label>
       <textarea class="modal-textarea" id="modal-card-text" placeholder="할 일을 입력하세요"></textarea>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">일정 기간 관리</label>
+      <div style="display:flex; flex-direction:row; align-items:center; gap:8px; margin-top:4px;">
+        <span class="add-card-date-label">시작</span>
+        <input type="date" class="add-card-date-input" id="modal-card-start-date">
+        <span class="add-card-date-label">종료</span>
+        <input type="date" class="add-card-date-input" id="modal-card-end-date">
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeCardModalDirect()">취소</button>
@@ -1473,11 +1439,6 @@ function parseJwt(token) {
 }
 
 function showApp() {
-  const now = new Date();
-  selectedCalendarDateStr = `${now.getMonth() + 1}/${now.getDate()}`;
-  calendarCurrentYear = now.getFullYear();
-  calendarCurrentMonth = now.getMonth();
-
   document.getElementById('loading-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-container').style.display = 'flex';
@@ -1490,10 +1451,10 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  const isMobile = window.innerWidth <= 768;
+  // 앱 최초 진입 시 모든 드롭다운 상태를 항상 '닫힘(true)'으로 일관되게 초기 세팅
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = isMobile; 
+      colCollapseStatus[col.id] = true; 
     }
   });
   
@@ -1502,6 +1463,8 @@ function showApp() {
 }
 
 function logout() {
+  if (!confirm('로그아웃 하시겠습니까?')) return;
+  
   currentUser = null;
   localStorage.removeItem('priorify_user');
   
@@ -1589,8 +1552,20 @@ function switchPage(page, btn) {
   }
 }
 
+function renderLnbCols() {
+  const wrap = document.getElementById('lnb-col-list');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  columns.forEach(col => {
+    const color = COLORS[col.colorIdx];
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:12.5px;color:var(--text-secondary);border-radius:6px;';
+    item.innerHTML = `<span style="width:7px;height:7px;border-radius:50%;background:${color.dot};flex-shrink:0;display:inline-block"></span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(col.name)}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-tertiary)">${col.cards.length}</span>`;
+    wrap.appendChild(item);
+  });
+}
+
 function toggleMobileCol(colId, event) {
-  if (window.innerWidth > 768) return;
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.col-dropdown-toggle-btn') || event.target.closest('.add-card-date-picker-wrap')) return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
@@ -1609,17 +1584,15 @@ function render() {
   if (!board) return;
   board.innerHTML = '';
 
-  const isMobile = window.innerWidth <= 768;
-
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = isMobile; 
+      colCollapseStatus[col.id] = true; 
     }
 
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
     
-    const isCollapsed = isMobile && colCollapseStatus[col.id];
+    const isCollapsed = colCollapseStatus[col.id];
     colEl.className = 'column' + (isCollapsed ? ' collapsed-col' : '');
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
@@ -1694,22 +1667,10 @@ function renderCard(card, color, colId) {
     <div class="card-text">${esc(card.text)}</div>
     <div class="card-meta">
       <span class="card-date">${card.date}</span>
-      <div class="card-actions-group">
-        <button class="card-btn" title="편집" onmousedown="openEditCardModal(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-          </svg>
-        </button>
-        <button class="card-btn done-btn" title="완료" onmousedown="markDone(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
-        </button>
-        <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
+      <div class="card-actions">
+        <button class="card-btn" title="편집" onmousedown="openEditCardModal(event,'${card.id}')">✎</button>
+        <button class="card-btn done-btn" title="완료" onmousedown="markDone(event,'${card.id}')">✓</button>
+        <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">✕</button>
       </div>
     </div>
   </div>`;
@@ -1752,17 +1713,54 @@ function renderDashboard() {
 
 function markDone(e, cardId) {
   e.preventDefault(); e.stopPropagation();
-  let found = null, fromColName = '';
-  columns.forEach(col => {
-    const idx = col.cards.findIndex(c => c.id === cardId);
-    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-  });
 
-  if (found) {
-    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-    saveDone(); saveData(); render();
-    updateFlower();
+  const btn = e.target;
+  const rect = btn.getBoundingClientRect();
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height / 2;
+
+  const flower = document.getElementById('flower-plant');
+  const fRect = flower.getBoundingClientRect();
+  const endX = fRect.left + fRect.width / 2;
+  const endY = fRect.top + fRect.height / 2;
+
+  const particle = document.createElement('div');
+  particle.className = 'done-particle';
+  particle.style.left = startX - 7 + 'px';
+  particle.style.top = startY - 7 + 'px';
+  document.body.appendChild(particle);
+
+  const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
+  if (cardEl) {
+    cardEl.style.transition = 'opacity 0.3s, transform 0.3s';
+    cardEl.style.opacity = '0';
+    cardEl.style.transform = 'scale(0.9)';
   }
+
+  particle.getBoundingClientRect();
+
+  particle.style.left = endX - 7 + 'px';
+  particle.style.top = endY - 7 + 'px';
+  particle.style.transform = 'scale(0.3)';
+  particle.style.opacity = '0';
+
+  setTimeout(() => {
+    particle.remove();
+
+    let found = null, fromColName = '';
+    columns.forEach(col => {
+      const idx = col.cards.findIndex(c => c.id === cardId);
+      if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
+    });
+
+    if (found) {
+      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+      saveDone(); 
+      saveData(); 
+      render();
+      updateFlower();
+    }
+  }, 600);
 }
 
 function renderDone() {
@@ -1885,7 +1883,7 @@ function addCardFromInput(colId, textarea) {
 
   col.cards.push({ id: genId(), text, date: finalDateStr });
   textarea.value = ''; textarea.style.height = 'auto';
-  textarea.parentElement.classList.remove('focused-area');
+  area.classList.remove('focused-area');
   saveData(); render();
 }
 
@@ -2190,17 +2188,47 @@ function updateFlower() {
   const plant = document.getElementById('flower-plant');
   const levelEl = document.getElementById('flower-level');
   if (!plant || !levelEl) return;
+
   const count = doneItems.length;
-  let emoji = '🌱'; let stageClass = 'stage-0'; let text = '0/3';
-  if (count > 0) emoji = '🌿', stageClass = 'stage-1', text = `${count%3}/3`;
-  if (count >= 3) emoji = '🌷', stageClass = 'stage-2';
-  if (count % 3 === 0 && count > 0) {
-    levelEl.classList.add('max'); text = 'MAX!'; emoji = '🌸'; stageClass = 'stage-3';
+
+  let emoji = '🌱';
+  let stageClass = 'stage-0';
+  let text = '0/3';
+
+  if (count === 0) {
+    emoji = '🌱';
+    stageClass = 'stage-0';
+    text = '0/3';
+    levelEl.classList.remove('max');
+  } else if (count % 9 === 0) {
+    emoji = '🌸';
+    stageClass = 'stage-3';
+    text = 'MAX!';
+    levelEl.classList.add('max');
   } else {
     levelEl.classList.remove('max');
+    const currentCycle = count % 9; 
+    const stage = Math.floor(currentCycle / 3); 
+    const progress = currentCycle % 3; 
+    
+    text = `${progress}/3`;
+    
+    if (stage === 0) {
+      emoji = '🌱';
+      stageClass = 'stage-0';
+    } else if (stage === 1) {
+      emoji = '🌿';
+      stageClass = 'stage-1';
+    } else if (stage === 2) {
+      emoji = '🌷';
+      stageClass = 'stage-2';
+    }
   }
+
   plant.className = 'flower-plant ' + stageClass;
-  plant.textContent = emoji; levelEl.textContent = text;
+  plant.textContent = emoji;
+  levelEl.textContent = text;
+
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
