@@ -85,6 +85,7 @@ body.dark {
   animation: spinDot 1.2s infinite cubic-bezier(0.68, -0.55, 0.26, 1.55);
 }
 
+@pragma opacity;
 @keyframes pulseLogo {
   0%, 100% { opacity: 0.6; transform: scale(0.98); }
   50% { opacity: 1; transform: scale(1); }
@@ -412,7 +413,7 @@ header {
   pointer-events: auto;
 }
 
-/* ── 💡 BOARD PAGE (PC 화면 전체 2x2 사분할 그리드 튜닝 완료) ── */
+/* ── 💡 BOARD PAGE (PC 화면 전체 2x2 사분할 그리드) ── */
 #board-wrap {
   flex: 1;
   padding: 20px;
@@ -421,11 +422,11 @@ header {
 }
 #board {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 💡 가로 2분할 */
-  grid-template-rows: repeat(2, minmax(280px, 1fr)); /* 💡 세로 2분할 */
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(2, minmax(280px, 1fr)); 
   gap: 16px;
   width: 100%;
-  height: calc(100vh - 100px); /* 화면 크기에 맞춤 */
+  height: calc(100vh - 100px); 
 }
 
 .col-toggle-arrow {
@@ -511,7 +512,7 @@ header {
 
 /* ── 사분할 전용 박스 컴포넌트 ── */
 .column {
-  width: 100% !important; /* 가로 확장 */
+  width: 100% !important; 
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -523,7 +524,7 @@ header {
 }
 
 .col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
@@ -924,6 +925,8 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 /* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
@@ -956,7 +959,6 @@ header {
   }
   .lnb.collapsed { transform: translateX(-100%); }
 
-  /* 💡 모바일 환경에서는 1열 세로 스택형 아코디언 컴포넌트로 완벽 트랜스폼 */
   #board-wrap { padding: 12px; }
   #board {
     display: flex;
@@ -993,7 +995,6 @@ header {
     border-top: 1px solid var(--border);
   }
 
-  /* 모바일 접힘 처리 공백 압축 */
   .column.collapsed-col {
     max-height: 48px !important; 
     min-height: 0 !important; 
@@ -1025,7 +1026,7 @@ header {
     overflow: hidden;
     pointer-events: none;
   }
-
+  
   .col-dropdown-toggle-btn {
     display: flex;
   }
@@ -1985,7 +1986,8 @@ function confirmModal() {
   } else {
     const newId = genId();
     colCollapseStatus[newId] = true; 
-    columns.push({ id: newId, name, desc, colorIdx = selectedColorIdx, cards: [] });
+    // 💡 [버그 완전 박멸] 등호(=) 오타 부호를 콜론(:) 문법으로 명확하게 수정 교정 완료!
+    columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
 }
@@ -2083,6 +2085,19 @@ function openCalendarModal() {
 function selectCalendarDate(dateStr) {
   selectedCalendarDateStr = dateStr;
   openCalendarModal();
+}
+
+// 사분할 전용 박스 컴포넌트 디자인 가이드
+.column {
+  width: 100% !important; 
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  animation: fadeUp 0.25s ease both;
 }
 
 function isDateInRange(year, month, date, cardDateStr) {
