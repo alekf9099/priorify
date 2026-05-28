@@ -428,14 +428,6 @@ header {
   align-items: flex-start;
 }
 
-.col-toggle-arrow {
-  display: none;
-  font-size: 10px;
-  color: var(--text-secondary);
-  margin-left: 4px;
-  transition: transform 0.2s;
-}
-
 /* ── DASHBOARD PAGE ── */
 #page-dashboard { padding: 28px 32px; overflow-y: auto; }
 .dash-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
@@ -468,7 +460,7 @@ header {
 .dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 
-/* ── ... DONE PAGE ── */
+/* ── DONE PAGE ── */
 #page-done { padding: 28px 32px; overflow-y: auto; }
 .done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
 .done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
@@ -525,22 +517,52 @@ header {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.col-header { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; }
-.col-header-top { display: flex; align-items: center; gap: 8px; }
+.col-header { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
 .col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
-.col-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); background: var(--bg); border-radius: 20px; padding: 2px 7px; border: 1px solid var(--border); margin-left: auto; flex-shrink: 0; }
+
+/* 💡 수량 노출 배지와 드롭다운 화살표를 단일 영역으로 이쁘게 병합한 통합 토글 스위치 버튼 */
+.col-dropdown-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  flex-shrink: 0;
+  user-select: none;
+}
+.col-dropdown-toggle-btn:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  background: var(--surface);
+}
+.col-toggle-arrow {
+  font-size: 9px;
+  color: var(--text-tertiary);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
 .col-desc-input { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-tertiary); background: transparent; border: none; outline: none; width: 100%; cursor: text; resize: none; height: 17px; overflow: hidden; }
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
-.col-header-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
+.col-header-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; margin-left: 4px; }
 .col-header:hover .col-header-actions { opacity: 1; }
 .col-icon-btn { background: none; border: none; cursor: pointer; color: var(--text-tertiary); padding: 3px 5px; border-radius: 5px; font-size: 12px; line-height: 1; transition: background 0.1s, color 0.1s; }
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS (💡 잘림 방지 구조 고도화) ── */
+/* ── CARDS ── */
 .cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.25s ease-out, padding 0.25s; }
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
@@ -556,41 +578,15 @@ header {
 .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-color: var(--border-strong); }
 .card.dragging { opacity: 0.28; transform: scale(0.97); cursor: grabbing; }
 
-/* 상단 태그 및 드롭다운 컨테이너 */
-.card-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
+.card-tag { display: inline-block; font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.card-tag { display: inline-block; font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* 💡 통합형 수량노출 드롭다운 셀렉트 박스 디자인 스타일링 */
-.card-move-select {
-  font-family: inherit;
-  font-size: 11px;
-  color: var(--text-secondary);
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  padding: 2px 4px;
-  outline: none;
-  cursor: pointer;
-  max-width: 100px;
-}
-.card-move-select:focus {
-  border-color: var(--accent);
-}
-
-/* 💡 설명 부분 자동 증식 배치 (글자 잘림 원천 봉쇄) */
+/* 💡 카드 글자 원천 노출 (잘림 완전 해결 보장 패스) */
 .card-text { 
   font-size: 13px; 
   line-height: 1.5; 
   color: var(--text-primary); 
   word-break: break-word; 
   pointer-events: none;
-  flex: 1; /* 가용한 세로 공간 확보 및 가림 방지 */
 }
 
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
@@ -923,10 +919,12 @@ header {
     flex-direction: column;
   }
 
+  /* 💡 아코디언 접혔을 때 설명 텍스트 잘림 현상 제거 보정 패치 */
   .col-header {
-    cursor: pointer;
-    padding: 14px;
+    padding: 12px 14px;
     flex-shrink: 0;
+    height: auto !important; /* 가변 높이 보장 */
+    overflow: hidden;
   }
 
   .cards-list {
@@ -936,7 +934,6 @@ header {
     padding: 8px !important;
   }
 
-  /* 💡 텍스트가 절대 잘리지 않도록 모바일에서 카드 최소 높이 조절 */
   .card {
     padding: 12px 12px 42px 12px !important; 
     min-height: 90px !important; 
@@ -948,12 +945,9 @@ header {
     border-top: 1px solid var(--border);
   }
 
-  .col-toggle-arrow {
-    display: inline-block;
-  }
-
+  /* 접힌 상태 레이아웃 패딩 최소화 및 잘림 방어 */
   .column.collapsed-col {
-    max-height: 52px !important; 
+    max-height: 64px !important; /* 설명 텍스트 크기까지 고려하여 높이 미세 확장 */
   }
   .column.collapsed-col .cards-list {
     max-height: 0 !important;
@@ -966,6 +960,8 @@ header {
     opacity: 0;
     overflow: hidden;
   }
+  
+  /* 💡 화살표 아이콘 회전 각도 조정 */
   .column.collapsed-col .col-toggle-arrow {
     transform: rotate(-90deg);
   }
@@ -1544,8 +1540,15 @@ function renderLnbCols() {
 
 function toggleMobileCol(colId, event) {
   if (window.innerWidth > 768) return;
-  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'SELECT' || event.target.closest('.add-card-date-picker-wrap')) return;
+  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.col-dropdown-toggle-btn') || event.target.closest('.add-card-date-picker-wrap')) return;
   
+  colCollapseStatus[colId] = !colCollapseStatus[colId];
+  render();
+}
+
+// 💡 아코디언 헤더 우측 수량배지+화살표 버튼 전용 토글 이벤트 핸들러
+function clickColDropdownBtn(colId, event) {
+  event.stopPropagation(); // 부모 헤더 클릭 이벤트 전파 차단
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
 }
@@ -1571,14 +1574,18 @@ function render() {
     colEl.innerHTML = `
       <div class="col-header" style="background:${color.colBg}" onclick="toggleMobileCol('${col.id}', event)">
         <div class="col-header-top">
-          <div class="col-dot" style="background:${color.dot}"></div>
-          <input class="col-title-input" value="${esc(col.name)}" placeholder="컬럼 이름"
-            onchange="renameCol('${col.id}',this.value)" onclick="event.stopPropagation()">
-          <span class="col-count">${col.cards.length}</span>
-          <span class="col-toggle-arrow">▼</span>
-          <div class="col-header-actions">
-            <button class="col-icon-btn" onclick="openEditColModal('${col.id}')">✎</button>
-            <button class="col-icon-btn danger" onclick="deleteCol('${col.id}')">✕</button>
+          <div class="col-header-left">
+            <div class="col-dot" style="background:${color.dot}"></div>
+            <input class="col-title-input" value="${esc(col.name)}" placeholder="컬럼 이름"
+              onchange="renameCol('${col.id}',this.value)" onclick="event.stopPropagation()">
+            <div class="col-header-actions">
+              <button class="col-icon-btn" onclick="openEditColModal('${col.id}')">✎</button>
+              <button class="col-icon-btn danger" onclick="deleteCol('${col.id}')">✕</button>
+            </div>
+          </div>
+          <div class="col-dropdown-toggle-btn" onclick="clickColDropdownBtn('${col.id}', event)">
+            <span>${col.cards.length}</span>
+            <span class="col-toggle-arrow">▼</span>
           </div>
         </div>
         <input class="col-desc-input" value="${esc(col.desc)}" placeholder="짧은 설명…"
@@ -1629,21 +1636,8 @@ function render() {
   renderLnbCols();
 }
 
-// 💡 카드 렌더링 시스템 고도화 (통합 드롭다운 및 수량 추적)
 function renderCard(card, color, colId) {
-  // 드롭다운 옵션 태그 동적 루프 생성
-  const optionsHtml = columns.map(c => {
-    // 💡 수량 정보(c.cards.length)를 연동하여 가호 문구 포맷팅 노출
-    return `<option value="${c.id}" ${c.id === colId ? 'selected' : ''}>${esc(c.name)} (${c.cards.length}개)</option>`;
-  }).join('');
-
   return `<div class="card" draggable="true" data-card-id="${card.id}">
-    <div class="card-header-row">
-      <div class="card-tag" style="background:${color.tag};color:${color.tagText}">이동</div>
-      <select class="card-move-select" onchange="moveCardViaDropdown('${card.id}', '${colId}', this.value)">
-        ${optionsHtml}
-      </select>
-    </div>
     <div class="card-text">${esc(card.text)}</div>
     <div class="card-meta">
       <span class="card-date">${card.date}</span>
@@ -1654,25 +1648,6 @@ function renderCard(card, color, colId) {
       </div>
     </div>
   </div>`;
-}
-
-// 💡 통합 드롭다운 메뉴 전용 실시간 컬럼 스와핑 자바스크립트 액션 핸들러
-function moveCardViaDropdown(cardId, fromColId, toColId) {
-  if (fromColId === toColId) return;
-
-  const fromCol = columns.find(c => c.id === fromColId);
-  const toCol = columns.find(c => c.id === toColId);
-  if (!fromCol || !toCol) return;
-
-  const cardIdx = fromCol.cards.findIndex(c => c.id === cardId);
-  if (cardIdx === -1) return;
-
-  // 카드 탈취 및 이동 적재
-  const [targetCard] = fromCol.cards.splice(cardIdx, 1);
-  toCol.cards.push(targetCard);
-
-  saveData();
-  render(); // 보드 및 내역 재계산 출력
 }
 
 function renderDashboard() {
@@ -1837,7 +1812,7 @@ function focusCardInput(textarea) {
 
 function blurCardInput(e, textarea) {
   setTimeout(() => {
-    if (document.activeElement && (document.activeElement.classList.contains('add-card-date-input') || document.activeElement.classList.contains('add-card-input') || document.activeElement.tagName === 'SELECT')) {
+    if (document.activeElement && (document.activeElement.classList.contains('add-card-date-input') || document.activeElement.classList.contains('add-card-input'))) {
       return; 
     }
     textarea.parentElement.classList.remove('focused-area');
@@ -2110,6 +2085,7 @@ function selectCalendarDate(dateStr) {
   openCalendarModal();
 }
 
+// 연속 마감 범위 크로스 체크 매칭 함수
 function isDateInRange(year, month, date, cardDateStr) {
   if (!cardDateStr) return false;
   const loopTime = new Date(year, month - 1, date).getTime();
