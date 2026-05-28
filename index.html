@@ -369,6 +369,8 @@ header {
   margin: 8px 0;
 }
 
+#lnb-col-list { display: flex; flex-direction: column; gap: 2px; }
+
 /* ───────── MAIN CONTENT ───────── */
 .main {
   flex: 1;
@@ -393,27 +395,27 @@ header {
   pointer-events: auto;
 }
 
-/* ── 💡 BOARD PAGE (PC 화면 전체 2x2 사분할 그리드 완벽 세팅) ── */
+/* ── 💡 BOARD PAGE (PC 화면 전체 완벽한 십자가형 2x2 격자 사분할 대수술) ── */
 #board-wrap {
   flex: 1;
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 #board {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-template-rows: repeat(2, minmax(280px, 1fr)); 
+  grid-template-columns: repeat(2, 1fr); /* 가로 2칸 쪼개기 */
+  grid-template-rows: repeat(2, minmax(280px, 1fr)); /* 세로 2칸 쪼개기 */
   gap: 16px;
   width: 100%;
-  height: calc(100vh - 100px); 
+  height: calc(100vh - 110px); 
 }
 
 .col-toggle-arrow {
   display: none; 
 }
 
-/* ── 사분할 전용 박스 컴포넌트 CSS 구조 격리 ── */
+/* ── 사분할 전용 박스 컴포넌트 ── */
 .column {
   width: 100% !important; 
   height: 100%;
@@ -501,7 +503,7 @@ header {
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
 
-/* 캘러그래피 플로팅 액션 그룹 디자인 */
+/* 액션 그룹 모던 반투명 알약 디자인 배지 */
 .card-actions-group {
   display: flex;
   align-items: center;
@@ -555,83 +557,6 @@ header {
 
 .card-icon { width: 14px; height: 14px; }
 
-/* ── DASHBOARD PAGE ── */
-#page-dashboard { padding: 28px 32px; overflow-y: auto; }
-.dash-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.dash-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
-
-.dash-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 28px;
-}
-.dash-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-}
-.dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
-.dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; }
-
-.dash-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-.dash-col-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-}
-.dash-col-name { font-size: 13px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
-.dash-col-bar-wrap { background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
-.dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
-.dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-
-/* ── DONE PAGE ── */
-#page-done { padding: 28px 32px; overflow-y: auto; }
-.done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
-.done-empty { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
-.done-list { display: flex; flex-direction: column; gap: 8px; }
-.done-item {
-  display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px;
-}
-.done-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.done-item-text { flex: 1; font-size: 13.5px; }
-.done-item-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); }
-.done-item-col { font-size: 11px; color: var(--text-secondary); background: var(--bg); border-radius: 20px; padding: 2px 10px; white-space: nowrap;}
-.done-restore {
-  background: none; border: 1px solid var(--border-strong); border-radius: 6px; padding: 4px 10px; font-size: 11px; flex-shrink: 0;
-  color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s;
-}
-.done-restore:hover { background: var(--bg); color: var(--text-primary); }
-
-/* ── SETTINGS PAGE ── */
-#page-settings { padding: 28px 32px; overflow-y: auto; }
-.settings-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.settings-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
-.settings-section { margin-bottom: 28px; }
-.settings-section-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; }
-.settings-row {
-  display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 8px;
-}
-.settings-row-label { font-size: 13.5px; }
-.settings-row-desc { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
-
-.theme-btns { display: flex; gap: 6px; }
-.theme-btn {
-  padding: 5px 14px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border-strong); background: var(--bg);
-  cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--text-secondary); transition: background 0.1s, color 0.1s;
-}
-.theme-btn.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
-
-.danger-btn {
-  padding: 6px 16px; border-radius: 6px; font-size: 12px; border: 1px solid #FECACA; background: #FFF8F7;
-  color: #B91C1C; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s;
-}
-.danger-btn:hover { background: #FEE2E2; }
-
 /* ── ADD CARD AREA ── */
 .add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); background: var(--surface); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
 .add-card-input {
@@ -642,7 +567,7 @@ header {
 .add-card-input::placeholder { color: var(--text-tertiary); }
 .add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
 
-/* 가로형 기간 설정 피커 구성 */
+/* 가로형 기간 설정 선택 피커 박스 */
 .add-card-date-picker-wrap {
   display: none;
   align-items: center;
@@ -684,6 +609,38 @@ header {
 .btn-save:hover { opacity: 0.8; }
 
 .add-col-ghost { display: none !important; }
+
+/* ── DASHBOARD PAGE ── */
+#page-dashboard { padding: 28px 32px; overflow-y: auto; }
+.dash-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+.dash-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.dash-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+.dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; }
+
+.dash-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.dash-col-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.dash-col-name { font-size: 13px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.dash-col-bar-wrap { background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
+.dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 
 /* ── EMPTY STATE ── */
 .empty-state { text-align: center; padding: 20px 10px; color: var(--text-tertiary); font-size: 12px; }
@@ -1303,6 +1260,7 @@ MobileDragDrop.polyfill({
 });
 window.addEventListener('touchmove', function() {}, {passive: false});
 
+/* 💡 사분할 4개 유형 완벽 정밀 복원 */
 const COLORS = [
   { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
   { dot:'#0EA5E9', tag:'#E0F2FE', tagText:'#0369A1', colBg:'#F0F9FF', colBorder:'#BAE6FD' },
@@ -1555,6 +1513,19 @@ function clickColDropdownBtn(colId, event) {
   event.stopPropagation(); 
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
+}
+
+function renderLnbCols() {
+  const wrap = document.getElementById('lnb-col-list');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  columns.forEach(col => {
+    const color = COLORS[col.colorIdx];
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:12.5px;color:var(--text-secondary);border-radius:6px;';
+    item.innerHTML = `<span style="width:7px;height:7px;border-radius:50%;background:${color.dot};flex-shrink:0;display:inline-block"></span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(col.name)}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-tertiary)">${col.cards.length}</span>`;
+    wrap.appendChild(item);
+  });
 }
 
 function render() {
@@ -1959,7 +1930,6 @@ function confirmModal() {
   } else {
     const newId = genId();
     colCollapseStatus[newId] = true; 
-    // 💡 [문법 완벽 교정] 대입 연산자(=) 오타를 콜론(:) 명세로 확실하게 수정 완료!
     columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
