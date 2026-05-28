@@ -6,7 +6,7 @@
 <title>Priorify — 일정 관리</title>
 <link rel="manifest" href="app-manifest.json">
 <meta name="theme-color" content="#6366F1">
-<link rel="apple-touch-icon" href="app-icon.png">
+<link class="apple-touch-icon" href="app-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,6 +17,7 @@
 :root {
   --bg: #F7F6F3;
   --surface: #FFFFFF;
+  --card-bg: #F3F4F6; /* 라이트모드 카드 배경 기본값 분리 */
   --border: rgba(0,0,0,0.07);
   --border-strong: rgba(0,0,0,0.13);
   --text-primary: #1A1A1A;
@@ -41,6 +42,7 @@ body {
 body.dark {
   --bg: #121212;
   --surface: #1E1E1E;
+  --card-bg: #2A2A2A; /* 다크모드 카드 시인성 대폭 개선 */
   --border: rgba(255,255,255,0.08);
   --border-strong: rgba(255,255,255,0.15);
   --text-primary: #E5E5E5;
@@ -570,7 +572,7 @@ header {
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
 .card {
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
   cursor: grab; user-select: none; transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s; position: relative; animation: cardIn 0.18s ease both;
   display: flex;
   flex-direction: column;
@@ -613,6 +615,10 @@ header {
   border-radius: 20px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+body.dark .card-actions-group {
+  background: rgba(30, 30, 30, 0.8);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 .card:hover .card-actions-group {
   opacity: 1;
@@ -1365,7 +1371,6 @@ header {
 </div>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/default.css"></script>
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
@@ -1383,10 +1388,18 @@ let selectedCalendarDateStr = null;
 let calendarCurrentYear = new Date().getFullYear();
 let calendarCurrentMonth = new Date().getMonth(); 
 
+// 모바일 드래그앤드롭 폴리필 활성화
 MobileDragDrop.polyfill({
   dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
 });
-window.addEventListener('touchmove', function() {}, {passive: false});
+
+// 피드백 1: 무조건적인 preventDefault를 제거하여 모바일에서의 일반 세로 스크롤 버그 교정
+window.addEventListener('touchmove', function(e) {
+  // 현재 드래그 중인 카드가 있는 경우에만 기본 스크롤 동작을 차단하여 안전성 확보
+  if (dragCardId) {
+    e.preventDefault();
+  }
+}, {passive: false});
 
 const COLORS = [
   { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
@@ -1644,6 +1657,26 @@ function clickColDropdownBtn(colId, event) {
   event.stopPropagation(); 
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
+}
+
+function renderLnbCols() {
+  const list = document.getElementById('lnb-col-list');
+  if (!list) return;
+  list.innerHTML = columns.map(col => {
+    const color = COLORS[col.colorIdx];
+    return `<button class="lnb-item" style="padding-left:16px;" onclick="scrollToCol('${col.id}')">
+      <div class="col-dot" style="background:${color.dot}; width:7px; height:7px;"></div>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">${esc(col.name)}</span>
+    </button>`;
+  }).join('');
+}
+
+function scrollToCol(colId) {
+  switchPage('board', document.querySelector('.lnb-item[data-page="board"]'));
+  setTimeout(() => {
+    const el = document.querySelector(`[data-col-id="${colId}"]`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, 100);
 }
 
 function render() {
@@ -1945,11 +1978,12 @@ function openEditCardModal(e, cardId) {
   let sDate = getTodayYMD();
   let eDate = getTodayYMD();
   
+  // 피드백 4: 일반 텍스트가 섞여 유효하지 않은 포맷일 때 발생하는 크래시 방어 코드 보강
   if (card.date && card.date.includes('~')) {
     const parts = card.date.split('~').map(p => p.trim());
     sDate = convertMDtoYMD(parts[0]);
     eDate = convertMDtoYMD(parts[1]);
-  } else if (card.date) {
+  } else if (card.date && card.date.includes('/')) {
     sDate = convertMDtoYMD(card.date);
     eDate = sDate;
   }
@@ -1963,7 +1997,7 @@ function openEditCardModal(e, cardId) {
 
 function convertMDtoYMD(mdStr) {
   const parts = mdStr.split('/').map(Number);
-  if(parts.length !== 2) return getTodayYMD();
+  if(parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) return getTodayYMD();
   const year = calendarCurrentYear; 
   return `${year}-${String(parts[0]).padStart(2,'0')}-${String(parts[1]).padStart(2,'0')}`;
 }
@@ -1971,6 +2005,7 @@ function convertMDtoYMD(mdStr) {
 function closeCardModal(e) { if (e.target === document.getElementById('card-modal-overlay')) closeCardModalDirect(); }
 function closeCardModalDirect() { document.getElementById('card-modal-overlay').classList.remove('open'); editingCardId = null; }
 
+// 피드백 2: 데이터 수정을 확실하게 선(先) 저장 후 후(後) 렌더링되도록 동기화 타이밍 교정
 function confirmCardEdit() {
   const text = document.getElementById('modal-card-text').value.trim();
   if (!text) { document.getElementById('modal-card-text').focus(); return; }
@@ -1996,8 +2031,8 @@ function confirmCardEdit() {
   });
   
   closeCardModalDirect();
-  saveData();
-  render();
+  saveData(); // 데이터를 우선 안전하게 보관한 후
+  render();   // 레이아웃 스크립트를 새로고침하여 화면 일치성 보장
 }
 
 function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
@@ -2066,7 +2101,7 @@ function getTodayYMD() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// ── 💡 캘린더 엔진 스크립트 ──
+// ── 캘린더 엔진 스크립트 ──
 function moveCalendarMonth(dir) {
   calendarCurrentMonth += dir;
   if (calendarCurrentMonth < 0) {
@@ -2165,6 +2200,8 @@ function isDateInRange(year, month, date, cardDateStr) {
     const sParts = parts[0].split('/').map(Number);
     const eParts = parts[1].split('/').map(Number);
     
+    if(isNaN(sParts[0]) || isNaN(eParts[0])) return false;
+
     const startTime = new Date(year, sParts[0] - 1, sParts[1]).getTime();
     const endTime = new Date(year, eParts[0] - 1, eParts[1]).getTime();
     
@@ -2172,7 +2209,7 @@ function isDateInRange(year, month, date, cardDateStr) {
   } 
   
   const targetParts = cardDateStr.split('/').map(Number);
-  if (targetParts.length !== 2) return false;
+  if (targetParts.length !== 2 || isNaN(targetParts[0])) return false;
   return targetParts[0] === month && targetParts[1] === date;
 }
 
@@ -2227,7 +2264,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// 💡 [게이미피케이션 엔진 완벽 복원] 완료 시 식물이 단 한 단계의 누락 없이 3진법 주기로 쑥쑥 자라도록 공식 마스터 교정
 function updateFlower() {
   const plant = document.getElementById('flower-plant');
   const levelEl = document.getElementById('flower-level');
@@ -2273,7 +2309,6 @@ function updateFlower() {
   plant.textContent = emoji;
   levelEl.textContent = text;
 
-  // 레벨업 시 팅김 팝 효과 추가
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
