@@ -257,7 +257,7 @@ header {
   display: block;
 }
 
-/* 💡 3선으로 구성된 정사각형 LNB 토글 버튼 스타일 커스텀 */
+/* LNB 토글 버튼 스타일 커스텀 */
 .lnb-toggle-btn {
   background: none;
   border: 1px solid var(--border-strong);
@@ -561,7 +561,7 @@ header {
 .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
 .card:hover .card-actions { opacity: 1; }
 
-/* ── ADD CARD ── */
+/* ── ADD CARD AREA (💡 기간 선택 인풋 구조 통합 확장) ── */
 .add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.25s, opacity 0.25s; }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
@@ -570,7 +570,32 @@ header {
 }
 .add-card-input::placeholder { color: var(--text-tertiary); }
 .add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
-.add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 5px; }
+
+.add-card-date-picker-wrap {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.add-card-input:focus ~ .add-card-date-picker-wrap {
+  display: flex;
+}
+.add-card-date-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.add-card-date-input {
+  font-family: inherit;
+  font-size: 11.5px;
+  padding: 3px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  outline: none;
+}
+
+.add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 6px; }
 .add-card-input:focus ~ .add-card-footer { display: flex; }
 .btn-cancel { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-secondary); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .btn-save { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500; color: var(--surface); background: var(--text-primary); border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: opacity 0.15s; }
@@ -666,6 +691,7 @@ header {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  gap: 8px;
 }
 .cal-nav-btn {
   background: transparent;
@@ -684,6 +710,25 @@ header {
 .cal-nav-btn:hover {
   background: var(--bg);
   color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+/* 💡 상단 오늘 복귀용 미니멀 버튼 스타일 */
+.cal-today-return-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cal-today-return-btn:hover {
+  background: var(--text-primary);
+  color: #FFFFFF;
   border-color: var(--text-primary);
 }
 
@@ -1104,7 +1149,10 @@ header {
   <div class="modal" style="max-width: 400px;">
     <div class="calendar-header-title-wrap">
       <button class="cal-nav-btn" onclick="moveCalendarMonth(-1)">◀</button>
-      <div class="modal-title" id="calendar-modal-title" style="margin-bottom: 0;">0000년 00월</div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <div class="modal-title" id="calendar-modal-title" style="margin-bottom: 0;">0000년 00월</div>
+        <button class="cal-today-return-btn" onclick="returnCalendarToToday()">오늘</button>
+      </div>
       <button class="cal-nav-btn" onclick="moveCalendarMonth(1)">▶</button>
     </div>
     
@@ -1139,8 +1187,6 @@ let currentPage = 'board';
 let colCollapseStatus = {};
 
 let selectedCalendarDateStr = null;
-
-// 💡 미래 및 과거 달 이동 제어를 위한 달력 전용 기준 년/월 상태 저장 객체
 let calendarCurrentYear = new Date().getFullYear();
 let calendarCurrentMonth = new Date().getMonth(); 
 
@@ -1395,7 +1441,7 @@ function renderLnbCols() {
 
 function toggleMobileCol(colId, event) {
   if (window.innerWidth > 768) return;
-  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON') return;
+  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA') return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
@@ -1419,6 +1465,7 @@ function render() {
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
 
+    // 💡 날짜 및 기간 지정을 위한 input 박스를 add-card-area 내부에 주입
     colEl.innerHTML = `
       <div class="col-header" style="background:${color.colBg}" onclick="toggleMobileCol('${col.id}', event)">
         <div class="col-header-top">
@@ -1442,8 +1489,16 @@ function render() {
       <div class="add-card-area">
         <textarea class="add-card-input" placeholder="+ 할 일 추가…" rows="1"
           onkeydown="handleCardInput(event,'${col.id}',this)"
-          onfocus="this.parentElement.querySelector('.add-card-footer').style.display='flex'"
+          onfocus="this.parentElement.querySelector('.add-card-date-picker-wrap').style.display='flex'; this.parentElement.querySelector('.add-card-footer').style.display='flex';"
           onblur="blurCardInput(event,'${col.id}',this)"></textarea>
+        
+        <div class="add-card-date-picker-wrap">
+          <span class="add-card-date-label">시작</span>
+          <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
+          <span class="add-card-date-label">종료</span>
+          <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
+        </div>
+
         <div class="add-card-footer" style="display:none">
           <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
           <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
@@ -1649,7 +1704,11 @@ function handleCardInput(e, colId, textarea) {
   textarea.style.height = Math.min(textarea.scrollHeight, 88) + 'px';
 }
 function blurCardInput(e, colId, textarea) {
-  setTimeout(() => { const f = textarea.parentElement.querySelector('.add-card-footer'); if (f) f.style.display = 'none'; }, 150);
+  setTimeout(() => { 
+    const area = textarea.parentElement;
+    area.querySelector('.add-card-date-picker-wrap').style.display = 'none';
+    area.querySelector('.add-card-footer').style.display = 'none'; 
+  }, 200); // 인풋 선택 상쇄 방지 딜레이
 }
 function saveCardInput(e, colId) {
   const area = e.target.closest('.add-card-area');
@@ -1659,10 +1718,30 @@ function cancelCardInput(e) {
   const area = e.target.closest('.add-card-area');
   const ta = area.querySelector('.add-card-input'); ta.value = ''; ta.blur();
 }
+
+// 💡 기간 지정을 매핑하여 카드 일정을 생성하는 신규 비즈니스 로직 함수
 function addCardFromInput(colId, textarea) {
   const text = textarea.value.trim(); if (!text) return;
   const col = columns.find(c => c.id === colId); if (!col) return;
-  col.cards.push({ id: genId(), text, date: today() });
+  
+  const area = textarea.parentElement;
+  const startVal = area.querySelector('.start-date').value;
+  const endVal = area.querySelector('.end-date').value;
+  
+  let finalDateStr = today(); // 기본값 오늘
+  
+  if (startVal && endVal) {
+    const sD = new Date(startVal);
+    const eD = new Date(endVal);
+    
+    const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
+    const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
+    
+    // 시작과 끝이 같으면 단일 날짜, 다르면 범위 문자열 부여
+    finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
+  }
+
+  col.cards.push({ id: genId(), text, date: finalDateStr });
   textarea.value = ''; textarea.style.height = 'auto';
   saveData(); render();
 }
@@ -1760,7 +1839,12 @@ function confirmModal() {
 function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
 function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); editingColId = null; }
 
-// ── 💡 월 이동 전환 제어 및 캘린더 인터랙션 스크립트 ──
+function getTodayYMD() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── 💡 캘린더 구동 및 귀환 엔진 스크립트 ──
 function moveCalendarMonth(dir) {
   calendarCurrentMonth += dir;
   if (calendarCurrentMonth < 0) {
@@ -1770,16 +1854,22 @@ function moveCalendarMonth(dir) {
     calendarCurrentMonth = 0;
     calendarCurrentYear += 1;
   }
-  
-  // 달을 이동할 때 선택 날짜의 싱크 유지를 위해 해당 월의 1일로 포커스 기본값 변경 처리
   selectedCalendarDateStr = `${calendarCurrentMonth + 1}/1`;
+  openCalendarModal();
+}
+
+// 💡 오늘 날짜 기반으로 달력을 강제 원상복구 시키는 이벤트 제어 스크립트
+function returnCalendarToToday() {
+  const now = new Date();
+  calendarCurrentYear = now.getFullYear();
+  calendarCurrentMonth = now.getMonth();
+  selectedCalendarDateStr = `${calendarCurrentMonth + 1}/${now.getDate()}`;
   openCalendarModal();
 }
 
 function openCalendarModal() {
   const now = new Date();
   
-  // 최초 달력을 켤 때 선택된 상태 날짜 문자열 값이 지정 전이라면 오늘 날짜 포맷팅 대입
   if (!selectedCalendarDateStr) {
     selectedCalendarDateStr = `${now.getMonth() + 1}/${now.getDate()}`;
     calendarCurrentYear = now.getFullYear();
@@ -1807,24 +1897,25 @@ function openCalendarModal() {
     
     const currentLoopDateStr = `${calendarCurrentMonth + 1}/${date}`;
 
-    // 1. 오늘 날짜 분기 처리 (실제 현실의 금일 년/월/일 정보가 한치 오차 없이 일치할 때만 원형 배지 부여)
     if (calendarCurrentYear === now.getFullYear() && calendarCurrentMonth === now.getMonth() && date === now.getDate()) {
       cell.classList.add('today-cell');
     }
     
-    // 2. 선택된 미래/과거 날짜 보더 외곽선 분기 처리
     if (currentLoopDateStr === selectedCalendarDateStr) {
       cell.classList.add('selected-day-cell');
     }
     
-    let matchCount = 0;
+    // 💡 기간 매칭 여부 체크용 고급 트래킹 로직 변수 선언
+    let hasTask = false;
     columns.forEach(col => {
       col.cards.forEach(card => {
-        if (card.date === currentLoopDateStr) matchCount++;
+        if (isDateInRange(calendarCurrentYear, calendarCurrentMonth + 1, date, card.date)) {
+          hasTask = true;
+        }
       });
     });
     
-    if (matchCount > 0) {
+    if (hasTask) {
       const dot = document.createElement('div');
       dot.className = 'cal-day-dot';
       cell.appendChild(dot);
@@ -1843,32 +1934,60 @@ function selectCalendarDate(dateStr) {
   openCalendarModal();
 }
 
+// 💡 단일 마감 및 연속 기간 지정을 달력 필터와 크로스 체크하여 판별하는 코어 매칭 스크립트 함수
+function isDateInRange(year, month, date, cardDateStr) {
+  if (!cardDateStr) return false;
+  const loopTime = new Date(year, month - 1, date).getTime();
+  
+  // 1. 범위 날짜인 경우 ("5/28 ~ 5/30")
+  if (cardDateStr.includes('~')) {
+    const parts = cardDateStr.split('~').map(p => p.trim());
+    if (parts.length !== 2) return false;
+    
+    const sParts = parts[0].split('/').map(Number);
+    const eParts = parts[1].split('/').map(Number);
+    
+    // 연도는 우선 현재 달력 연도를 기준으로 판단
+    const startTime = new Date(year, sParts[0] - 1, sParts[1]).getTime();
+    const endTime = new Date(year, eParts[0] - 1, eParts[1]).getTime();
+    
+    return loopTime >= startTime && loopTime <= endTime;
+  } 
+  
+  // 2. 단일 날짜인 경우 ("5/28")
+  const targetParts = cardDateStr.split('/').map(Number);
+  if (targetParts.length !== 2) return false;
+  return targetParts[0] === month && targetParts[1] === date;
+}
+
 function updateCalendarAgendaView() {
   const agendaList = document.getElementById('cal-agenda-list');
   const agendaTitle = document.getElementById('cal-agenda-title');
   if (!agendaList || !agendaTitle) return;
 
-  agendaTitle.textContent = `📅 ${calendarCurrentYear}년 ${selectedCalendarDateStr} 마감 일정 목록`;
+  agendaTitle.textContent = `📅 ${calendarCurrentYear}년 ${selectedCalendarDateStr} 스케줄 목록`;
   agendaList.innerHTML = '';
 
   let agendaCards = [];
+  const parts = selectedCalendarDateStr.split('/').map(Number);
+  
   columns.forEach(col => {
     col.cards.forEach(card => {
-      if (card.date === selectedCalendarDateStr) {
-        agendaCards.push({ text: card.text, colName: col.name });
+      if (isDateInRange(calendarCurrentYear, parts[0], parts[1], card.date)) {
+        agendaCards.push({ text: card.text, colName: col.name, dateText: card.date });
       }
     });
   });
 
   if (agendaCards.length === 0) {
-    agendaList.innerHTML = `<div style="font-size:12px; color:var(--text-tertiary); text-align:center; padding:10px 0;">이 날은 등록된 할 일이 없습니다.</div>`;
+    agendaList.innerHTML = `<div style="font-size:12px; color:var(--text-tertiary); text-align:center; padding:10px 0;">이 날은 대기 중인 일정이 없습니다.</div>`;
     return;
   }
 
   agendaCards.forEach(item => {
     const div = document.createElement('div');
     div.className = 'cal-agenda-item';
-    div.innerHTML = `<span style="font-weight:500; color:var(--accent); margin-right:6px;">[${esc(item.colName)}]</span>${esc(item.text)}`;
+    div.innerHTML = `<span style="font-weight:500; color:var(--accent); margin-right:6px;">[${esc(item.colName)}]</span>${esc(item.text)} <span style="font-size:10px; color:var(--text-tertiary); float:right;">(${item.dateText})</span>`;
     agendaList.appendChild(div);
   });
 }
