@@ -561,8 +561,8 @@ header {
 .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
 .card:hover .card-actions { opacity: 1; }
 
-/* ── ADD CARD AREA (💡 기간 선택 인풋 구조 통합 확장) ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.25s, opacity 0.25s; }
+/* ── ADD CARD AREA (💡 가로 배치 정렬 및 커스텀 디자인 날짜 선택기 적용) ── */
+.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
   border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
@@ -571,32 +571,45 @@ header {
 .add-card-input::placeholder { color: var(--text-tertiary); }
 .add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
 
+/* 💡 세로 스택형에서 깔끔하게 떨어지는 가로형(row) 레이아웃으로 변경 */
 .add-card-date-picker-wrap {
   display: none;
   align-items: center;
-  gap: 6px;
-  margin-top: 6px;
+  flex-direction: row; 
+  gap: 8px;
+  margin-top: 8px;
+  padding: 2px 4px;
 }
-.add-card-input:focus ~ .add-card-date-picker-wrap {
+/* 복합 유연 선택 제어 기법 */
+.add-card-area.focused-area .add-card-date-picker-wrap {
   display: flex;
 }
 .add-card-date-label {
   font-size: 11px;
-  color: var(--text-tertiary);
-}
-.add-card-date-input {
-  font-family: inherit;
-  font-size: 11.5px;
-  padding: 3px 6px;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  background: var(--surface);
+  font-weight: 500;
   color: var(--text-secondary);
-  outline: none;
 }
 
-.add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 6px; }
-.add-card-input:focus ~ .add-card-footer { display: flex; }
+/* 💡 피커 내부 인풋박스를 Priorify 배색에 맞는 커스텀 모던 UI 스타일로 튜닝 */
+.add-card-date-input {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  padding: 5px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  max-width: 115px;
+}
+.add-card-date-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
+}
+
+.add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 8px; }
+.add-card-area.focused-area .add-card-footer { display: flex; }
 .btn-cancel { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-secondary); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .btn-save { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500; color: var(--surface); background: var(--text-primary); border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: opacity 0.15s; }
 .btn-save:hover { opacity: 0.8; }
@@ -713,7 +726,6 @@ header {
   border-color: var(--text-primary);
 }
 
-/* 💡 상단 오늘 복귀용 미니멀 버튼 스타일 */
 .cal-today-return-btn {
   font-family: inherit;
   font-size: 11px;
@@ -761,6 +773,7 @@ header {
   transition: all 0.15s ease;
 }
 .cal-day-cell.empty { pointer-events: none; }
+.cal-day-cell.empty:hover { background: transparent !important; }
 .cal-day-cell:not(.empty):not(.today-cell):hover {
   background: var(--bg);
 }
@@ -1138,6 +1151,15 @@ header {
       <label class="modal-label">내용</label>
       <textarea class="modal-textarea" id="modal-card-text" placeholder="할 일을 입력하세요"></textarea>
     </div>
+    <div class="modal-field">
+      <label class="modal-label">일정 기간 관리</label>
+      <div style="display:flex; flex-direction:row; align-items:center; gap:8px; margin-top:4px;">
+        <span class="add-card-date-label">시작</span>
+        <input type="date" class="add-card-date-input" id="modal-card-start-date">
+        <span class="add-card-date-label">종료</span>
+        <input type="date" class="add-card-date-input" id="modal-card-end-date">
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeCardModalDirect()">취소</button>
       <button class="btn-save" onclick="confirmCardEdit()">저장</button>
@@ -1441,7 +1463,8 @@ function renderLnbCols() {
 
 function toggleMobileCol(colId, event) {
   if (window.innerWidth > 768) return;
-  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA') return;
+  // 인풋, 버튼, 텍스트에리어 및 날짜 피커 컨테이너 내부 터치 시 아코디언이 접히는 오작동 차단
+  if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.add-card-date-picker-wrap')) return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
@@ -1465,7 +1488,6 @@ function render() {
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
 
-    // 💡 날짜 및 기간 지정을 위한 input 박스를 add-card-area 내부에 주입
     colEl.innerHTML = `
       <div class="col-header" style="background:${color.colBg}" onclick="toggleMobileCol('${col.id}', event)">
         <div class="col-header-top">
@@ -1489,8 +1511,8 @@ function render() {
       <div class="add-card-area">
         <textarea class="add-card-input" placeholder="+ 할 일 추가…" rows="1"
           onkeydown="handleCardInput(event,'${col.id}',this)"
-          onfocus="this.parentElement.querySelector('.add-card-date-picker-wrap').style.display='flex'; this.parentElement.querySelector('.add-card-footer').style.display='flex';"
-          onblur="blurCardInput(event,'${col.id}',this)"></textarea>
+          onfocus="focusCardInput(this)"
+          onblur="blurCardInput(event,this)"></textarea>
         
         <div class="add-card-date-picker-wrap">
           <span class="add-card-date-label">시작</span>
@@ -1499,7 +1521,7 @@ function render() {
           <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
         </div>
 
-        <div class="add-card-footer" style="display:none">
+        <div class="add-card-footer">
           <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
           <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
         </div>
@@ -1697,29 +1719,40 @@ function deleteCard(e, cardId) {
   columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
   saveData(); render();
 }
+
+/* ── 💡 인풋 포커스 유실 버그 방어막 제어 함수군 ── */
+function focusCardInput(textarea) {
+  textarea.parentElement.classList.add('focused-area');
+}
+
+function blurCardInput(e, textarea) {
+  // 사용자가 날짜 피커 인풋을 터치하여 포커스를 옮긴 것이라면 입력창을 닫지 않고 차단함
+  setTimeout(() => {
+    if (document.activeElement && (document.activeElement.classList.contains('add-card-date-input') || document.activeElement.classList.contains('add-card-input'))) {
+      return; 
+    }
+    textarea.parentElement.classList.remove('focused-area');
+  }, 150);
+}
+
 function handleCardInput(e, colId, textarea) {
   if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); addCardFromInput(colId, textarea); }
   if (e.key === 'Escape') { textarea.value = ''; textarea.blur(); }
   textarea.style.height = 'auto';
   textarea.style.height = Math.min(textarea.scrollHeight, 88) + 'px';
 }
-function blurCardInput(e, colId, textarea) {
-  setTimeout(() => { 
-    const area = textarea.parentElement;
-    area.querySelector('.add-card-date-picker-wrap').style.display = 'none';
-    area.querySelector('.add-card-footer').style.display = 'none'; 
-  }, 200); // 인풋 선택 상쇄 방지 딜레이
-}
+
 function saveCardInput(e, colId) {
   const area = e.target.closest('.add-card-area');
   addCardFromInput(colId, area.querySelector('.add-card-input'));
 }
+
 function cancelCardInput(e) {
   const area = e.target.closest('.add-card-area');
   const ta = area.querySelector('.add-card-input'); ta.value = ''; ta.blur();
+  area.classList.remove('focused-area');
 }
 
-// 💡 기간 지정을 매핑하여 카드 일정을 생성하는 신규 비즈니스 로직 함수
 function addCardFromInput(colId, textarea) {
   const text = textarea.value.trim(); if (!text) return;
   const col = columns.find(c => c.id === colId); if (!col) return;
@@ -1728,24 +1761,23 @@ function addCardFromInput(colId, textarea) {
   const startVal = area.querySelector('.start-date').value;
   const endVal = area.querySelector('.end-date').value;
   
-  let finalDateStr = today(); // 기본값 오늘
+  let finalDateStr = today();
   
   if (startVal && endVal) {
     const sD = new Date(startVal);
     const eD = new Date(endVal);
-    
     const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
     const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
-    
-    // 시작과 끝이 같으면 단일 날짜, 다르면 범위 문자열 부여
     finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
   }
 
   col.cards.push({ id: genId(), text, date: finalDateStr });
   textarea.value = ''; textarea.style.height = 'auto';
+  area.classList.remove('focused-area');
   saveData(); render();
 }
 
+// 💡 할 일 편집 모달 오픈 스크립트 (기존 등록 날짜 파싱하여 모달 인풋에 주입)
 function openEditCardModal(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   editingCardId = cardId;
@@ -1757,20 +1789,61 @@ function openEditCardModal(e, cardId) {
   if (!card) return;
   
   document.getElementById('modal-card-text').value = card.text;
+  
+  // 기존 일정을 분석해서 날짜 피커 디폴트값 주입
+  let sDate = getTodayYMD();
+  let eDate = getTodayYMD();
+  
+  if (card.date && card.date.includes('~')) {
+    const parts = card.date.split('~').map(p => p.trim());
+    sDate = convertMDtoYMD(parts[0]);
+    eDate = convertMDtoYMD(parts[1]);
+  } else if (card.date) {
+    sDate = convertMDtoYMD(card.date);
+    eDate = sDate;
+  }
+  
+  document.getElementById('modal-card-start-date').value = sDate;
+  document.getElementById('modal-card-end-date').value = eDate;
+  
   document.getElementById('card-modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('modal-card-text').focus(), 50);
+}
+
+// "5/28" 포맷팅을 "2026-05-28" 인풋 밸류용 데이터로 파싱 변환해주는 헬퍼 스크립트
+function convertMDtoYMD(mdStr) {
+  const parts = mdStr.split('/').map(Number);
+  if(parts.length !== 2) return getTodayYMD();
+  const year = calendarCurrentYear; // 현재 다이어리 조율 연도 기준 연동
+  return `${year}-${String(parts[0]).padStart(2,'0')}-${String(parts[1]).padStart(2,'0')}`;
 }
 
 function closeCardModal(e) { if (e.target === document.getElementById('card-modal-overlay')) closeCardModalDirect(); }
 function closeCardModalDirect() { document.getElementById('card-modal-overlay').classList.remove('open'); editingCardId = null; }
 
+// 💡 카드 저장 컨펌 스크립트 (모달 내부에서 수정된 신규 날짜/기간 정보 파싱 연동 처리)
 function confirmCardEdit() {
   const text = document.getElementById('modal-card-text').value.trim();
   if (!text) { document.getElementById('modal-card-text').focus(); return; }
   
+  const startVal = document.getElementById('modal-card-start-date').value;
+  const endVal = document.getElementById('modal-card-end-date').value;
+  
+  let finalDateStr = today();
+  if (startVal && endVal) {
+    const sD = new Date(startVal);
+    const eD = new Date(endVal);
+    const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
+    const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
+    finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
+  }
+
   columns.forEach(col => {
     const card = col.cards.find(c => c.id === editingCardId);
-    if (card) { card.text = text; }
+    if (card) { 
+      card.text = text; 
+      card.date = finalDateStr; // 수정 모달의 날짜 동기화
+    }
   });
   
   closeCardModalDirect();
@@ -1844,7 +1917,7 @@ function getTodayYMD() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// ── 💡 캘린더 구동 및 귀환 엔진 스크립트 ──
+// ── 💡 캘린더 엔진 스크립트 ──
 function moveCalendarMonth(dir) {
   calendarCurrentMonth += dir;
   if (calendarCurrentMonth < 0) {
@@ -1858,7 +1931,6 @@ function moveCalendarMonth(dir) {
   openCalendarModal();
 }
 
-// 💡 오늘 날짜 기반으로 달력을 강제 원상복구 시키는 이벤트 제어 스크립트
 function returnCalendarToToday() {
   const now = new Date();
   calendarCurrentYear = now.getFullYear();
@@ -1905,7 +1977,6 @@ function openCalendarModal() {
       cell.classList.add('selected-day-cell');
     }
     
-    // 💡 기간 매칭 여부 체크용 고급 트래킹 로직 변수 선언
     let hasTask = false;
     columns.forEach(col => {
       col.cards.forEach(card => {
@@ -1934,12 +2005,10 @@ function selectCalendarDate(dateStr) {
   openCalendarModal();
 }
 
-// 💡 단일 마감 및 연속 기간 지정을 달력 필터와 크로스 체크하여 판별하는 코어 매칭 스크립트 함수
 function isDateInRange(year, month, date, cardDateStr) {
   if (!cardDateStr) return false;
   const loopTime = new Date(year, month - 1, date).getTime();
   
-  // 1. 범위 날짜인 경우 ("5/28 ~ 5/30")
   if (cardDateStr.includes('~')) {
     const parts = cardDateStr.split('~').map(p => p.trim());
     if (parts.length !== 2) return false;
@@ -1947,14 +2016,12 @@ function isDateInRange(year, month, date, cardDateStr) {
     const sParts = parts[0].split('/').map(Number);
     const eParts = parts[1].split('/').map(Number);
     
-    // 연도는 우선 현재 달력 연도를 기준으로 판단
     const startTime = new Date(year, sParts[0] - 1, sParts[1]).getTime();
     const endTime = new Date(year, eParts[0] - 1, eParts[1]).getTime();
     
     return loopTime >= startTime && loopTime <= endTime;
   } 
   
-  // 2. 단일 날짜인 경우 ("5/28")
   const targetParts = cardDateStr.split('/').map(Number);
   if (targetParts.length !== 2) return false;
   return targetParts[0] === month && targetParts[1] === date;
