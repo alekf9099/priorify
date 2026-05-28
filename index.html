@@ -412,19 +412,20 @@ header {
   pointer-events: auto;
 }
 
-/* ── BOARD PAGE (PC 버전 가로 칸반 레이아웃) ── */
+/* ── 💡 BOARD PAGE (PC 화면 전체 2x2 사분할 그리드 튜닝 완료) ── */
 #board-wrap {
   flex: 1;
-  overflow-x: auto; 
-  overflow-y: hidden;
-  padding: 24px 28px 28px;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 #board {
-  display: flex;
-  flex-direction: row; 
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 💡 가로 2분할 */
+  grid-template-rows: repeat(2, minmax(280px, 1fr)); /* 💡 세로 2분할 */
   gap: 16px;
-  min-height: 100%;
-  align-items: flex-start;
+  width: 100%;
+  height: calc(100vh - 100px); /* 화면 크기에 맞춤 */
 }
 
 .col-toggle-arrow {
@@ -508,15 +509,21 @@ header {
 }
 .danger-btn:hover { background: #FEE2E2; }
 
-/* ── COLUMNS ── */
+/* ── 사분할 전용 박스 컴포넌트 ── */
 .column {
-  width: 280px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeUp 0.25s ease both;
+  width: 100% !important; /* 가로 확장 */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  animation: fadeUp 0.25s ease both;
 }
-.column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
@@ -536,7 +543,6 @@ header {
   color: var(--text-secondary);
   transition: all 0.15s;
   flex-shrink: 0;
-  user-select: none;
 }
 .col-dropdown-toggle-btn:hover {
   border-color: var(--text-secondary);
@@ -553,7 +559,7 @@ header {
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS ── */
+/* ── 할 일 목록 하얀색 배경 고정 ── */
 .cards-list { 
   flex: 1; 
   overflow-y: auto; 
@@ -593,7 +599,7 @@ header {
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
 
-/* 캘러그래피 플로팅 액션 그룹 디자인 */
+/* 액션 그룹 모던 배지 디자인 */
 .card-actions-group {
   display: flex;
   align-items: center;
@@ -702,16 +708,12 @@ header {
 .btn-save { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500; color: var(--surface); background: var(--text-primary); border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: opacity 0.15s; }
 .btn-save:hover { opacity: 0.8; }
 
-/* ── ADD COL GHOST ── */
-.add-col-ghost {
-  width: 240px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px dashed var(--border-strong);
-  border-radius: var(--radius); min-height: 100px; cursor: pointer; transition: background 0.15s, border-color 0.15s; color: var(--text-tertiary); font-size: 13px; gap: 7px;
-}
-.add-col-ghost:hover { background: var(--surface); border-color: var(--text-primary); color: var(--text-secondary); }
+/* 사분할 그리드 유지를 위해 고스트 비활성화 처리 */
+.add-col-ghost { display: none !important; }
 
 /* ── EMPTY STATE ── */
-.empty-state { text-align: center; padding: 30px 10px; color: var(--text-tertiary); font-size: 12px; }
-.empty-icon { font-size: 20px; margin-bottom: 4px; opacity: 0.5; }
+.empty-state { text-align: center; padding: 20px 10px; color: var(--text-tertiary); font-size: 12px; }
+.empty-icon { font-size: 16px; margin-bottom: 2px; opacity: 0.5; }
 
 /* ── TOAST ── */
 #save-toast {
@@ -922,40 +924,6 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.column.collapsed-col {
-  max-height: 48px !important; 
-}
-.column.collapsed-col .col-header {
-  border-bottom: 1px solid transparent; 
-  padding: 12px 14px; 
-}
-.column.collapsed-col .col-desc-input {
-  opacity: 0 !important;
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  pointer-events: none;
-}
-.column.collapsed-col .cards-list {
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .add-card-area {
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .col-toggle-arrow {
-  transform: rotate(-90deg);
-}
-
 /* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
@@ -988,40 +956,23 @@ header {
   }
   .lnb.collapsed { transform: translateX(-100%); }
 
-  #board-wrap { 
-    padding: 12px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
+  /* 💡 모바일 환경에서는 1열 세로 스택형 아코디언 컴포넌트로 완벽 트랜스폼 */
+  #board-wrap { padding: 12px; }
   #board {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    min-height: auto;
-    padding-bottom: 100px;
+    height: auto;
   }
 
   .column {
     width: 100% !important;
-    max-width: none !important;
-    max-height: 480px !important; 
-    min-height: 0 !important;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .col-header {
-    padding: 14px;
-    flex-shrink: 0;
-    overflow: hidden;
+    max-height: 480px !important;
   }
 
   .cards-list {
-    flex: 1;
-    overflow-y: auto !important;
     max-height: 260px; 
-    padding: 8px !important;
   }
 
   .card {
@@ -1042,6 +993,7 @@ header {
     border-top: 1px solid var(--border);
   }
 
+  /* 모바일 접힘 처리 공백 압축 */
   .column.collapsed-col {
     max-height: 48px !important; 
     min-height: 0 !important; 
@@ -1073,19 +1025,15 @@ header {
     overflow: hidden;
     pointer-events: none;
   }
-  
+
+  .col-dropdown-toggle-btn {
+    display: flex;
+  }
   .col-toggle-arrow {
     display: inline-block;
   }
   .column.collapsed-col .col-toggle-arrow {
     transform: rotate(-90deg);
-  }
-
-  .add-col-ghost {
-    width: 100% !important;
-    min-height: 50px !important;
-    margin-top: 4px;
-    flex-shrink: 0;
   }
 
   #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
@@ -1184,13 +1132,6 @@ header {
 
     <div class="lnb-divider"></div>
     <span class="lnb-section-label">컬럼</span>
-
-    <button class="lnb-new-col" onclick="openAddColModal()">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/>
-      </svg>
-      새 컬럼 추가
-    </button>
 
     <div id="lnb-col-list"></div>
 
@@ -1390,13 +1331,9 @@ window.addEventListener('touchmove', function() {}, {passive: false});
 
 const COLORS = [
   { dot:'#EF4444', tag:'#FEE2E2', tagText:'#B91C1C', colBg:'#FFF8F7', colBorder:'#FECACA' },
-  { dot:'#F59E0B', tag:'#FEF3C7', tagText:'#92400E', colBg:'#FFFBEB', colBorder:'#FDE68A' },
-  { dot:'#10B981', tag:'#D1FAE5', tagText:'#065F46', colBg:'#F0FDF9', colBorder:'#A7F3D0' },
   { dot:'#0EA5E9', tag:'#E0F2FE', tagText:'#0369A1', colBg:'#F0F9FF', colBorder:'#BAE6FD' },
-  { dot:'#8B5CF6', tag:'#EDE9FE', tagText:'#5B21B6', colBg:'#FAF5FF', colBorder:'#DDD6FE' },
-  { dot:'#EC4899', tag:'#FCE7F3', tagText:'#9D174D', colBg:'#FFF1F8', colBorder:'#FBCFE8' },
-  { dot:'#6366F1', tag:'#E0E7FF', tagText:'#3730A3', colBg:'#F8F8FF', colBorder:'#C7D2FE' },
-  { dot:'#9CA3AF', tag:'#F3F4F6', tagText:'#4B5563', colBg:'#F9FAFB', colBorder:'#E5E7EB' },
+  { dot:'#F59E0B', tag:'#FEF3C7', tagText:'#92400E', colBg:'#FFFBEB', colBorder:'#FDE68A' },
+  { dot:'#9CA3AF', tag:'#F3F4F6', tagText:'#4B5563', colBg:'#F9FAFB', colBorder:'#E5E7EB' }
 ];
 
 const DEFAULT_COLUMNS = [
@@ -1404,15 +1341,15 @@ const DEFAULT_COLUMNS = [
     { id:'c1', text:'오늘 마감 보고서 제출', date:today() },
     { id:'c2', text:'클라이언트 미팅 준비', date:today() },
   ]},
-  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:3, cards:[
+  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:1, cards:[
     { id:'c3', text:'장기 목표 로드맵 작성', date:today() },
   ]},
-  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:1, cards:[
+  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:2, cards:[
     { id:'c4', text:'이메일 답장 처리', date:today() },
   ]},
-  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:7, cards:[
+  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:3, cards:[
     { id:'c5', text:'읽을 아티클 정리', date:today() },
-  ]},
+  ]}
 ];
 
 let currentUser = null;
@@ -1722,12 +1659,6 @@ function render() {
     });
   });
 
-  const ghost = document.createElement('div');
-  ghost.className = 'add-col-ghost';
-  ghost.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg> 컬럼 추가`;
-  ghost.onclick = openAddColModal;
-  board.appendChild(ghost);
-
   renderLnbCols();
 }
 
@@ -1816,7 +1747,7 @@ function renderDone() {
   }
   wrap.innerHTML = '<div class="done-list">' + doneItems.map((item, i) => {
     const col = columns.find(c => c.name === item.colName);
-    const color = col ? COLORS[col.colorIdx] : COLORS[7];
+    const color = col ? COLORS[col.colorIdx] : COLORS[3];
     return `<div class="done-item">
       <div class="done-item-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${color.dot}"></div>
       <div class="done-item-text">${esc(item.text)}</div>
@@ -2054,7 +1985,7 @@ function confirmModal() {
   } else {
     const newId = genId();
     colCollapseStatus[newId] = true; 
-    columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
+    columns.push({ id: newId, name, desc, colorIdx = selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
 }
@@ -2227,7 +2158,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// 💡 [게이미피케이션 엔진 완벽 복원] 완료 시 식물이 단 한 단계의 누락 없이 3진법 주기로 쑥쑥 자라도록 공식 마스터 교정
 function updateFlower() {
   const plant = document.getElementById('flower-plant');
   const levelEl = document.getElementById('flower-level');
@@ -2273,7 +2203,6 @@ function updateFlower() {
   plant.textContent = emoji;
   levelEl.textContent = text;
 
-  // 레벨업 시 팅김 팝 효과 추가
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
