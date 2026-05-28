@@ -1392,10 +1392,32 @@ MobileDragDrop.polyfill({
   dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
 });
 
-// 터치이벤트 스크롤 제어 고도화
+// ───────── 모바일 터치 간섭 및 잔상 버그 완벽 방어 ─────────
+let touchStartTarget = null;
+
+window.addEventListener('touchstart', function(e) {
+  // 터치된 타겟 저장
+  touchStartTarget = e.target;
+  
+  // 만약 버튼 그룹 내부를 터치했다면 드래그 및 잔상 유발을 방지하기 위해 드래그 ID 초기화
+  if (e.target.closest('.card-actions-group')) {
+    dragCardId = null;
+  }
+}, {passive: true});
+
 window.addEventListener('touchmove', function(e) {
-  // 사용자가 일반 카드를 드래그할 때만 세로 스크롤을 막고, 아닐 땐 원활한 스크롤 보장
   if (dragCardId) {
+// 텍스트가 없는 카드 빈 영역(패딩)이나 버튼 뒤쪽 공백을 잡았을 때 스크롤이 씹히는 현상 방지
+// 실제로 카드의 '글자(card-text)'를 정확히 잡고 움직일 때만 카드 드래그를 허용
+    if (touchStartTarget && !touchStartTarget.classList.contains('card-text')) {
+// 글자 영역이 아니면 카드가 아니라 화면 스크롤이 되도록 드래그 상태를 해제
+      const draggingEl = document.querySelector('.card.dragging');
+      if (draggingEl) draggingEl.classList.remove('dragging');
+      dragCardId = null;
+      return; 
+    }
+    
+    // 순수 글자 영역을 잡고 드래그할 때만 브라우저 기본 스크롤을 막아 줌
     e.preventDefault();
   }
 }, {passive: false});
