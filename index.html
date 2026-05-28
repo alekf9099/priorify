@@ -445,7 +445,7 @@ header {
 .dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 
-/* ── PLAYMENT DONE PAGE ── */
+/* ── DONE PAGE ── */
 #page-done { padding: 28px 32px; overflow-y: auto; }
 .done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
 .done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
@@ -614,7 +614,7 @@ header {
 .flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
 .flower-plant.stage-3 { font-size: 60px; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6)); animation: bloom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-/* ── 💡 FLOATING CALENDAR BUTTON ── */
+/* ── 💡 FLOATING CALENDAR BUTTON (우측 최하단 고정) ── */
 .cal-floating-container {
   position: fixed;
   bottom: 24px;
@@ -1034,6 +1034,9 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
+// 💡 변수 정의 순서를 최상단으로 재정리하여 ReferenceError 완벽 차단
+const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
+
 let columns = [];
 let doneItems = [];
 let nextId = 5000;
@@ -1073,6 +1076,8 @@ const DEFAULT_COLUMNS = [
     { id:'c5', text:'읽을 아티클 정리', date:today() },
   ]},
 ];
+
+let currentUser = null;
 
 function getStorageKey(key) {
   if (!currentUser) return key;
