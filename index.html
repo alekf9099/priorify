@@ -250,7 +250,7 @@ header {
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'DM Sans', sans-serif;
-  white-space: nowrap; /* 글자 쪼개짐 방지 */
+  white-space: nowrap;
 }
 
 .login-btn:hover, .logout-btn:hover {
@@ -286,7 +286,7 @@ header {
   position: relative;
 }
 
-/* ───────── LNB BACKDROP (모바일 전용 어두운 배경) ───────── */
+/* ───────── LNB BACKDROP ───────── */
 .lnb-backdrop { display: none; }
 
 /* ───────── LNB ───────── */
@@ -413,6 +413,44 @@ header {
   gap: 16px;
   min-height: 100%;
   align-items: flex-start;
+}
+
+/* 모바일 전용 컬럼 탭 바 */
+.board-tab-bar {
+  display: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 4px 8px;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.board-tab-bar::-webkit-scrollbar { display: none; }
+.board-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.board-tab.active {
+  background: var(--bg);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.board-tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 
 /* ── DASHBOARD PAGE ── */
@@ -641,7 +679,7 @@ header {
 .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
 .card:hover .card-actions { opacity: 1; }
 
-/* 모바일 터치 개선 - 기본적으로 버튼 노출 */
+/* 모바일 터치 개선 */
 @media (hover: none) {
   .col-header-actions { opacity: 1; }
   .card-actions { opacity: 1; }
@@ -742,11 +780,11 @@ header {
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
   .logo { font-size: 16px; }
-  .user-name { display: none; } /* 프로필 이름 숨김 */
+  .user-name { display: none; }
   .today-badge { font-size: 10px; padding: 3px 8px; }
-  .header-right { gap: 8px; } /* 마진 및 여백 조정으로 공간 확보 */
+  .header-right { gap: 8px; }
 
-  /* LNB 어두운 배경 (서랍형 모달 효과) */
+  /* LNB 어두운 배경 */
   .lnb-backdrop {
     display: block;
     position: fixed;
@@ -757,55 +795,67 @@ header {
     pointer-events: none;
     transition: opacity 0.3s;
   }
-  .lnb-backdrop.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .lnb-backdrop.show { opacity: 1; pointer-events: auto; }
 
-  /* 사이드바(LNB) 모바일 가림 현상 수정 */
+  /* 사이드바(LNB) 모바일 구조 고정 */
   .lnb {
     position: fixed;
-    top: 0; left: 0; 
-    height: 100vh;
-    width: 280px; /* 고정 너비를 주어 메인 콘텐츠 일정 박스를 확실하게 덮음 */
-    max-width: 80vw; /* 화면 비율 분할 케어 */
+    top: 0; left: 0; height: 100vh;
+    width: 280px;
+    max-width: 80vw;
     z-index: 3000;
     box-shadow: 4px 0 20px rgba(0,0,0,0.25);
   }
   .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
 
-  /* 각 페이지 기본 여백 조정 (줄바꿈 방지) */
-  #board-wrap { 
-    padding: 16px; 
-    scroll-snap-type: x mandatory; 
-    -webkit-overflow-scrolling: touch;
-  }
-  #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
-  
-  /* 보드 페이지 가로 스와이프 다듬기 */
-  #board { gap: 12px; padding-bottom: 20px; padding-right: 16px; }
-  .column { width: 85vw; max-width: 320px; scroll-snap-align: center; }
-  .add-col-ghost { width: 85vw; max-width: 320px; scroll-snap-align: center; }
+  /* 💡 모바일 탭 뷰 전환 전용 레이아웃 튜닝 */
+  .board-tab-bar { display: flex; } /* 탭 표시 */
 
-  /* 대시보드 박스 안쪽 여백 축소 (글자 안 깨지게) */
+  #board-wrap { 
+    padding: 12px;
+    overflow-x: hidden; /* 가로 스크롤 완전히 제거 */
+    overflow-y: auto;   /* 위아래 스크롤 부여 */
+  }
+
+  #board {
+    flex-direction: column; /* 세로로 리스트 배치 */
+    align-items: stretch;
+    gap: 0;
+    min-height: auto;
+    padding-bottom: 80px; /* 꽃 아이콘 공간 확보 */
+  }
+
+  /* 활성화되지 않은 컬럼은 모바일에서 아예 숨김 처리 */
+  .column {
+    display: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+  .column.active-tab {
+    display: flex !important;
+  }
+  
+  .add-col-ghost {
+    display: none !important; /* 모바일 보드판에서는 고스트 숨김 (LNB로 추가 가능) */
+  }
+
+  /* 대시보드 및 기타 세팅 */
+  #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
   .dash-card { padding: 12px 14px; }
   .dash-card-num { font-size: 24px; }
   .dash-col-card { padding: 12px 14px; }
   .dash-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .dash-cols { grid-template-columns: 1fr; }
 
-  /* 설정 페이지 세로 정렬 */
   .settings-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .theme-btns { align-self: flex-end; }
   .danger-btn { align-self: flex-end; }
-
-  /* 모달 사이즈 */
   .modal { padding: 20px 16px; width: 92%; }
-  
-  /* 꽃 컨테이너 위치 미세 조정 */
   #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
   
-  /* 완료 목록 레이아웃 개선 (자연스러운 줄바꿈 유도) */
   .done-item { flex-wrap: wrap; }
   .done-item-text { min-width: 100%; margin-bottom: 4px; }
   .done-item-meta { margin-right: auto; }
@@ -924,6 +974,8 @@ header {
       설정
     </button>
   </nav>
+
+  <nav id="board-tab-bar" class="board-tab-bar"></nav>
 
   <main class="main">
 
@@ -1080,7 +1132,6 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-// 모바일 드래그 폴리필 활성화
 MobileDragDrop.polyfill({
   dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
 });
@@ -1113,9 +1164,9 @@ const DEFAULT_COLUMNS = [
   ]},
 ];
 
-// ── GOOGLE AUTH ──
 let currentUser = null;
-const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; // ← 여기에 클라이언트 ID 입력하세요!
+const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
+let activeMobileTabId = null; // 모바일 탭 관리용 상태 변수
 
 function getStorageKey(key) {
   if (!currentUser) return key;
@@ -1251,6 +1302,10 @@ function showApp() {
   doneItems = loadDone();
   trashItems = loadTrash();
   
+  if (columns.length > 0 && !activeMobileTabId) {
+    activeMobileTabId = columns[0].id;
+  }
+  
   render();
   updateTrashFill();
   updateFlower();
@@ -1279,7 +1334,6 @@ document.getElementById('logout-btn').addEventListener('click', logout);
 window.addEventListener('load', () => {
   initGoogleAuth();
   
-  // 모바일 화면이면 기본적으로 사이드바 및 배경 접기
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
     const backdrop = document.getElementById('lnb-backdrop');
@@ -1301,7 +1355,6 @@ function toggleLnb() {
   
   const isCollapsed = lnb.classList.toggle('collapsed');
   
-  // 모바일인 경우 어두운 배경 같이 제어
   if (window.innerWidth <= 768 && backdrop) {
     if (isCollapsed) {
       backdrop.classList.remove('show');
@@ -1341,12 +1394,19 @@ function switchPage(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.lnb-item').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
+  
+  const tabBar = document.getElementById('board-tab-bar');
+  if (page === 'board') {
+    if (window.innerWidth <= 768) tabBar.style.display = 'flex';
+  } else {
+    tabBar.style.display = 'none';
+  }
+
   if (btn) btn.classList.add('active');
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
   if (page === 'trash') updateTrashFill();
 
-  // 모바일 환경에서는 메뉴 클릭 시 사이드바 자동 닫기
   if (window.innerWidth <= 768) {
     document.querySelector('.lnb').classList.add('collapsed');
     const backdrop = document.getElementById('lnb-backdrop');
@@ -1368,15 +1428,40 @@ function renderLnbCols() {
   });
 }
 
+// 모바일용 탭 바 렌더링 함수
+function renderMobileTabs() {
+  const tabBar = document.getElementById('board-tab-bar');
+  if (!tabBar) return;
+  tabBar.innerHTML = '';
+  
+  columns.forEach(col => {
+    const color = COLORS[col.colorIdx];
+    const tab = document.createElement('button');
+    tab.className = `board-tab ${col.id === activeMobileTabId ? 'active' : ''}`;
+    tab.innerHTML = `<span class="board-tab-dot" style="background:${color.dot}"></span>${esc(col.name)}`;
+    tab.onclick = () => {
+      activeMobileTabId = col.id;
+      render();
+    };
+    tabBar.appendChild(tab);
+  });
+}
+
 function render() {
   const board = document.getElementById('board');
   if (!board) return;
   board.innerHTML = '';
 
+  // 현재 모바일 활성 탭이 올바른지 유효성 검사
+  if (columns.length > 0 && !columns.some(c => c.id === activeMobileTabId)) {
+    activeMobileTabId = columns[0].id;
+  }
+
   columns.forEach(col => {
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
-    colEl.className = 'column';
+    // 모바일 활성화 클래스 분기 부여
+    colEl.className = 'column' + (col.id === activeMobileTabId ? ' active-tab' : '');
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
 
@@ -1430,6 +1515,7 @@ function render() {
   board.appendChild(ghost);
 
   renderLnbCols();
+  renderMobileTabs();
 }
 
 function renderCard(card, color, colName) {
