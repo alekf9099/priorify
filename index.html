@@ -1396,28 +1396,23 @@ MobileDragDrop.polyfill({
 let touchStartTarget = null;
 
 window.addEventListener('touchstart', function(e) {
-  // 터치된 타겟 저장
   touchStartTarget = e.target;
   
-  // 만약 버튼 그룹 내부를 터치했다면 드래그 및 잔상 유발을 방지하기 위해 드래그 ID 초기화
-  if (e.target.closest('.card-actions-group')) {
+  // 버튼 그룹 및 버튼 자체를 터치한 경우 드래그 중단 처리하여 잔상 원천 차단
+  if (e.target.closest('.card-actions-group') || e.target.closest('.card-btn')) {
     dragCardId = null;
   }
 }, {passive: true});
 
 window.addEventListener('touchmove', function(e) {
   if (dragCardId) {
-// 텍스트가 없는 카드 빈 영역(패딩)이나 버튼 뒤쪽 공백을 잡았을 때 스크롤이 씹히는 현상 방지
-// 실제로 카드의 '글자(card-text)'를 정확히 잡고 움직일 때만 카드 드래그를 허용
+    // 텍스트 영역(card-text)을 잡았을 때만 카드 드래그를 수행하고, 이외 공백이나 버튼 클릭 유도 시에는 브라우저 스크롤을 우선시함
     if (touchStartTarget && !touchStartTarget.classList.contains('card-text')) {
-// 글자 영역이 아니면 카드가 아니라 화면 스크롤이 되도록 드래그 상태를 해제
       const draggingEl = document.querySelector('.card.dragging');
       if (draggingEl) draggingEl.classList.remove('dragging');
       dragCardId = null;
       return; 
     }
-    
-    // 순수 글자 영역을 잡고 드래그할 때만 브라우저 기본 스크롤을 막아 줌
     e.preventDefault();
   }
 }, {passive: false});
@@ -1785,8 +1780,8 @@ function render() {
   renderLnbCols();
 }
 
-// 교정 포인트: 버튼 영역에 draggable="false"를 박고 touchstart/mousedown 차단하여 잔상 버그 원천 해결
 function renderCard(card, color, colId) {
+  // 교정 포인트: .card-actions-group 캡슐 영역에 draggable="false" 명시 및 mousedown, touchstart 차단으로 하위 레이어 전달 방지
   return `<div class="card" draggable="true" data-card-id="${card.id}">
     <div class="card-text">${esc(card.text)}</div>
     <div class="card-meta">
@@ -1900,8 +1895,8 @@ function clearDone() {
 }
 
 function onCardDragStart(e, cardId, colId) {
-  // 교정 포인트: 만약 버튼 캡슐이 어떻게든 비벼져서 이벤트가 들어왔을 때 유효성 검사 차단
-  if (e.target.closest('.card-actions-group')) {
+  // 교정 포인트: 드래그 시도 대상이 버튼 컴포넌트 내부라면 브라우저의 기본 DnD 타겟팅 무력화
+  if (e.target.closest('.card-actions-group') || e.target.closest('.card-btn')) {
     e.preventDefault();
     return;
   }
