@@ -553,8 +553,19 @@ header {
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS ── */
-.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; background: var(--surface) !important; }
+/* ── CARDS (하얀색 배경 고정) ── */
+.cards-list { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 8px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 7px; 
+  min-height: 60px; 
+  touch-action: pan-y; 
+  transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; 
+  background: var(--surface) !important; 
+}
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
@@ -582,7 +593,7 @@ header {
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
 
-/* 캘러그래피 플로팅 액션 그룹 디자인 커스텀 스타일링 */
+/* 캘러그래피 플로팅 액션 그룹 디자인 */
 .card-actions-group {
   display: flex;
   align-items: center;
@@ -979,6 +990,7 @@ header {
     padding: 8px !important;
   }
 
+  /* 모바일 화면 카드 내부 액션 버튼 가이드 */
   .card {
     padding: 12px 12px 46px 12px !important; 
     min-height: 96px !important; 
@@ -1315,7 +1327,6 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-// 인증 세션 스크립트 충돌 차단 완료
 const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
@@ -1491,8 +1502,6 @@ function showApp() {
 }
 
 function logout() {
-  if (!confirm('로그아웃 하시겠습니까?')) return;
-  
   currentUser = null;
   localStorage.removeItem('priorify_user');
   
@@ -1503,7 +1512,6 @@ function logout() {
   doneItems = [];
 }
 
-// 💡 로그인 먹통 버그 유발하던 cancelPrompt() 코드 완전 도려내어 정상화 완료
 document.getElementById('google-login-btn').addEventListener('click', () => {
   window.google.accounts.id.prompt();
 });
