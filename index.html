@@ -17,7 +17,7 @@
 :root {
   --bg: #F7F6F3;
   --surface: #FFFFFF;
-  --card-bg: #F3F4F6; /* 라이트모드 카드 배경 기본값 분리 */
+  --card-bg: #F3F4F6; 
   --border: rgba(0,0,0,0.07);
   --border-strong: rgba(0,0,0,0.13);
   --text-primary: #1A1A1A;
@@ -42,7 +42,7 @@ body {
 body.dark {
   --bg: #121212;
   --surface: #1E1E1E;
-  --card-bg: #2A2A2A; /* 다크모드 카드 시인성 대폭 개선 */
+  --card-bg: #2A2A2A; 
   --border: rgba(255,255,255,0.08);
   --border-strong: rgba(255,255,255,0.15);
   --text-primary: #E5E5E5;
@@ -414,7 +414,7 @@ header {
   pointer-events: auto;
 }
 
-/* ── BOARD PAGE (PC 버전 가로 칸반 레이아웃) ── */
+/* ── BOARD PAGE ── */
 #board-wrap {
   flex: 1;
   overflow-x: auto; 
@@ -595,7 +595,7 @@ header {
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
 
-/* 캘러그래피 플로팅 액션 그룹 디자인 */
+/* 플로팅 액션 그룹 */
 .card-actions-group {
   display: flex;
   align-items: center;
@@ -1388,14 +1388,13 @@ let selectedCalendarDateStr = null;
 let calendarCurrentYear = new Date().getFullYear();
 let calendarCurrentMonth = new Date().getMonth(); 
 
-// 모바일 드래그앤드롭 폴리필 활성화
 MobileDragDrop.polyfill({
   dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
 });
 
-// 피드백 1: 무조건적인 preventDefault를 제거하여 모바일에서의 일반 세로 스크롤 버그 교정
+// 터치이벤트 스크롤 제어 고도화
 window.addEventListener('touchmove', function(e) {
-  // 현재 드래그 중인 카드가 있는 경우에만 기본 스크롤 동작을 차단하여 안전성 확보
+  // 사용자가 일반 카드를 드래그할 때만 세로 스크롤을 막고, 아닐 땐 원활한 스크롤 보장
   if (dragCardId) {
     e.preventDefault();
   }
@@ -1764,12 +1763,15 @@ function render() {
   renderLnbCols();
 }
 
+// 교정 포인트: 버튼 영역에 draggable="false"를 박고 touchstart/mousedown 차단하여 잔상 버그 원천 해결
 function renderCard(card, color, colId) {
   return `<div class="card" draggable="true" data-card-id="${card.id}">
     <div class="card-text">${esc(card.text)}</div>
     <div class="card-meta">
       <span class="card-date">${card.date}</span>
-      <div class="card-actions-group">
+      <div class="card-actions-group" draggable="false" 
+           onmousedown="event.stopPropagation();" 
+           ontouchstart="event.stopPropagation();">
         <button class="card-btn" title="편집" onmousedown="openEditCardModal(event,'${card.id}')">
           <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
@@ -1876,6 +1878,11 @@ function clearDone() {
 }
 
 function onCardDragStart(e, cardId, colId) {
+  // 교정 포인트: 만약 버튼 캡슐이 어떻게든 비벼져서 이벤트가 들어왔을 때 유효성 검사 차단
+  if (e.target.closest('.card-actions-group')) {
+    e.preventDefault();
+    return;
+  }
   dragCardId = cardId; dragFromColId = colId;
   setTimeout(() => { const el = document.querySelector(`[data-card-id="${cardId}"]`); if (el) el.classList.add('dragging'); }, 0);
   e.dataTransfer.effectAllowed = 'move';
@@ -1978,7 +1985,6 @@ function openEditCardModal(e, cardId) {
   let sDate = getTodayYMD();
   let eDate = getTodayYMD();
   
-  // 피드백 4: 일반 텍스트가 섞여 유효하지 않은 포맷일 때 발생하는 크래시 방어 코드 보강
   if (card.date && card.date.includes('~')) {
     const parts = card.date.split('~').map(p => p.trim());
     sDate = convertMDtoYMD(parts[0]);
@@ -2005,7 +2011,6 @@ function convertMDtoYMD(mdStr) {
 function closeCardModal(e) { if (e.target === document.getElementById('card-modal-overlay')) closeCardModalDirect(); }
 function closeCardModalDirect() { document.getElementById('card-modal-overlay').classList.remove('open'); editingCardId = null; }
 
-// 피드백 2: 데이터 수정을 확실하게 선(先) 저장 후 후(後) 렌더링되도록 동기화 타이밍 교정
 function confirmCardEdit() {
   const text = document.getElementById('modal-card-text').value.trim();
   if (!text) { document.getElementById('modal-card-text').focus(); return; }
@@ -2031,8 +2036,8 @@ function confirmCardEdit() {
   });
   
   closeCardModalDirect();
-  saveData(); // 데이터를 우선 안전하게 보관한 후
-  render();   // 레이아웃 스크립트를 새로고침하여 화면 일치성 보장
+  saveData(); 
+  render();   
 }
 
 function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
@@ -2101,7 +2106,6 @@ function getTodayYMD() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// ── 캘린더 엔진 스크립트 ──
 function moveCalendarMonth(dir) {
   calendarCurrentMonth += dir;
   if (calendarCurrentMonth < 0) {
