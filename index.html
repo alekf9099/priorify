@@ -378,7 +378,7 @@ header {
   font-size: 13.5px;
   color: var(--text-secondary);
   cursor: pointer;
-  border: 1px dashed var(--border-strong);
+  border: 1px dashed var(--strong);
   background: none;
   width: 100%;
   text-align: left;
@@ -426,11 +426,9 @@ header {
   align-items: flex-start;
 }
 
+/* 💡 PC 웹 화면 전용 기본 화살표 아이콘 상태 정의 */
 .col-toggle-arrow {
-  display: inline-block;
-  font-size: 9px;
-  color: var(--text-tertiary);
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none; /* PC에서는 화살표 노출 안 함 */
 }
 
 /* ── DASHBOARD PAGE ── */
@@ -450,8 +448,8 @@ header {
   border-radius: var(--radius);
   padding: 18px 20px;
 }
-.dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
 .dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; }
+.dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
 
 .dash-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .dash-col-card {
@@ -510,40 +508,28 @@ header {
 }
 .danger-btn:hover { background: #FEE2E2; }
 
-/* ── COLUMNS ── */
-.column {
-  width: 280px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeUp 0.25s ease both;
-}
-.column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
-
-.col-header { padding: 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: all 0.22s; }
+/* ── PC 칸반 보드 스타일 가이드라인 (기본 상시 노출 구조) ── */
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
 .col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
 .col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
 
+/* PC 웹에서는 드롭다운처럼 보이지 않고 일반 라운드 배지 텍스트 형태처럼 정돈 */
 .col-dropdown-toggle-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
+  padding: 2px 8px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 20px;
-  cursor: pointer;
   font-family: 'DM Mono', monospace;
   font-size: 11px;
   color: var(--text-secondary);
-  transition: all 0.15s;
   flex-shrink: 0;
   user-select: none;
-}
-.col-dropdown-toggle-btn:hover {
-  border-color: var(--text-secondary);
-  color: var(--text-primary);
-  background: var(--surface);
+  pointer-events: none; /* PC 웹 브라우저에서는 클릭 비활성화 */
 }
 
 .col-desc-input { 
@@ -559,7 +545,6 @@ header {
   height: auto !important; 
   line-height: 1.4;        
   padding: 2px 0;         
-  transition: opacity 0.2s, max-height 0.2s;
 }
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
@@ -870,42 +855,7 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
-/* 💡 [완성형 하이딩 패치] 접힌 상태 구조 재튜닝 - 하위 요소를 깨끗하게 숨겨 잘림 현상 완벽 박멸 */
-.column.collapsed-col {
-  max-height: 48px !important; /* 타이틀 라인 높이로 완전히 잠금 */
-}
-.column.collapsed-col .col-header {
-  border-bottom: 1px solid transparent; 
-  padding: 12px 14px; 
-}
-/* 접혀있을 때는 설명 텍스트 인풋창을 화면에서 투명도 0과 공간 분리로 숨김 */
-.column.collapsed-col .col-desc-input {
-  opacity: 0 !important;
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  pointer-events: none;
-}
-.column.collapsed-col .cards-list {
-  max-height: 0 !important;
-  padding: 0 8px !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .add-card-area {
-  max-height: 0 !important;
-  padding: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .col-toggle-arrow {
-  transform: rotate(-90deg);
-}
-
-/* ───────── MOBILE RESPONSIVE ───────── */
+/* ───────── 💡 모바일 화면 전용 아코디언 스타일 최적화 (격리 분리수거 패치) ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
   .logo { font-size: 16px; }
@@ -966,6 +916,10 @@ header {
     overflow: hidden;
   }
 
+  .col-dropdown-toggle-btn {
+    pointer-events: auto; /* 모바일 전용 토글 작동 복원 */
+  }
+
   .cards-list {
     flex: 1;
     overflow-y: auto !important;
@@ -982,6 +936,43 @@ header {
     flex-shrink: 0; 
     background: var(--surface);
     border-top: 1px solid var(--border);
+  }
+
+  /* 💡 [핵심 버그 수정 패스] 아코디언 최대 보더 가이드라인을 모바일 미디어 쿼리 블록 내부로 완전 유폐 */
+  .column.collapsed-col {
+    max-height: 52px !important; 
+  }
+  .column.collapsed-col .col-header {
+    border-bottom: 1px solid transparent; 
+    padding: 12px 14px; 
+  }
+  .column.collapsed-col .col-desc-input {
+    opacity: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none;
+  }
+  .column.collapsed-col .cards-list {
+    max-height: 0 !important;
+    padding: 0 8px !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .column.collapsed-col .add-card-area {
+    max-height: 0 !important;
+    padding: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .col-toggle-arrow {
+    display: inline-block; /* 모바일에서만 회전 화살표 표기 */
+  }
+  .column.collapsed-col .col-toggle-arrow {
+    transform: rotate(-90deg);
   }
 
   .card-meta {
@@ -1451,10 +1442,11 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  // 앱 최초 진입 시 모든 드롭다운 상태를 항상 '닫힘(true)'으로 일관되게 초기 세팅
+  // 💡 앱 최초 진입 시, 모바일 해상도(768px 이하)일 때만 드롭다운 기본 접기(true) 세팅
+  const isMobile = window.innerWidth <= 768;
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = true; 
+      colCollapseStatus[col.id] = isMobile; 
     }
   });
   
@@ -1584,15 +1576,18 @@ function render() {
   if (!board) return;
   board.innerHTML = '';
 
+  const isMobile = window.innerWidth <= 768;
+
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = true; 
+      colCollapseStatus[col.id] = isMobile; 
     }
 
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
     
-    const isCollapsed = colCollapseStatus[col.id];
+    // 💡 모바일 환경일 때만 접힌 스타일 클래스 분기 적용
+    const isCollapsed = isMobile && colCollapseStatus[col.id];
     colEl.className = 'column' + (isCollapsed ? ' collapsed-col' : '');
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
@@ -1711,56 +1706,20 @@ function renderDashboard() {
   }).join('');
 }
 
-function markDone(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
+function markDone(cardId) {
+  let found = null, fromColName = '';
+  columns.forEach(col => {
+    const idx = col.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
+  });
 
-  const btn = e.target;
-  const rect = btn.getBoundingClientRect();
-  const startX = rect.left + rect.width / 2;
-  const startY = rect.top + rect.height / 2;
-
-  const flower = document.getElementById('flower-plant');
-  const fRect = flower.getBoundingClientRect();
-  const endX = fRect.left + fRect.width / 2;
-  const endY = fRect.top + fRect.height / 2;
-
-  const particle = document.createElement('div');
-  particle.className = 'done-particle';
-  particle.style.left = startX - 7 + 'px';
-  particle.style.top = startY - 7 + 'px';
-  document.body.appendChild(particle);
-
-  const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
-  if (cardEl) {
-    cardEl.style.transition = 'opacity 0.3s, transform 0.3s';
-    cardEl.style.opacity = '0';
-    cardEl.style.transform = 'scale(0.9)';
+  if (found) {
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    saveDone(); 
+    saveData(); 
+    render();
+    updateFlower();
   }
-
-  particle.getBoundingClientRect();
-
-  particle.style.left = endX - 7 + 'px';
-  particle.style.top = endY - 7 + 'px';
-  particle.style.transform = 'scale(0.3)';
-  particle.style.opacity = '0';
-
-  setTimeout(() => {
-    particle.remove();
-
-    let found = null, fromColName = '';
-    columns.forEach(col => {
-      const idx = col.cards.findIndex(c => c.id === cardId);
-      if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-    });
-
-    if (found) {
-      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-      saveDone(); 
-      saveData(); 
-      render();
-      updateFlower();
-    }
-  }, 600);
 }
 
 function renderDone() {
