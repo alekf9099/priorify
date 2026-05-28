@@ -198,8 +198,6 @@ header {
   color: var(--text-primary);
   text-decoration: none;
   transition: opacity 0.15s;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  flex-shrink: 0;
 }
 .logo:hover { opacity: 0.6; }
 .logo span { color: var(--text-tertiary); }
@@ -212,8 +210,6 @@ header {
   border: 1px solid var(--border-strong);
   border-radius: 20px;
   padding: 4px 12px;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  flex-shrink: 0;
 }
 
 .user-profile {
@@ -231,7 +227,6 @@ header {
   height: 32px;
   border-radius: 50%;
   border: 2px solid var(--border);
-  flex-shrink: 0;
 }
 
 .user-name {
@@ -255,8 +250,7 @@ header {
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'DM Sans', sans-serif;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  flex-shrink: 0;
+  white-space: nowrap; /* 글자 쪼개짐 방지 */
 }
 
 .login-btn:hover, .logout-btn:hover {
@@ -693,7 +687,7 @@ header {
 /* ── MODAL ── */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
-  z-index: 5000; opacity: 0; pointer-events: none; transition: opacity 0.2s; backdrop-filter: blur(2px);
+  z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s; backdrop-filter: blur(2px);
 }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
 .modal { background: var(--surface); width: 100%; max-width: 380px; border-radius: var(--radius); padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transform: scale(0.95); transition: transform 0.2s; max-height: 80vh; overflow-y: auto; }
@@ -746,22 +740,17 @@ header {
 
 /* ───────── MOBILE RESPONSIVE (MEDIA QUERIES) ───────── */
 @media (max-width: 768px) {
-  /* 헤더를 최상단에 고정하여 메뉴가 열려도 가려지지 않음 */
-  header { 
-    padding: 0 16px; 
-    height: 56px; 
-    z-index: 4000; /* LNB보다 높은 z-index */
-    background: var(--surface); /* 스크롤 시 배경 유지 */
-  }
+  header { padding: 0 16px; height: 50px; }
   .logo { font-size: 16px; }
   .user-name { display: none; } /* 프로필 이름 숨김 */
   .today-badge { font-size: 10px; padding: 3px 8px; }
+  .header-right { gap: 8px; } /* 마진 및 여백 조정으로 공간 확보 */
 
-  /* LNB 어두운 배경: 헤더 아래(56px)부터 덮음 */
+  /* LNB 어두운 배경 (서랍형 모달 효과) */
   .lnb-backdrop {
     display: block;
     position: fixed;
-    top: 56px; left: 0; width: 100vw; height: calc(100vh - 56px);
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.5);
     z-index: 2500;
     opacity: 0;
@@ -773,16 +762,19 @@ header {
     pointer-events: auto;
   }
 
-  /* 사이드바(LNB): 헤더 아래에서만 열림 */
+  /* 사이드바(LNB) 모바일 가림 현상 수정 */
   .lnb {
     position: fixed;
-    top: 56px; left: 0; height: calc(100vh - 56px);
+    top: 0; left: 0; 
+    height: 100vh;
+    width: 280px; /* 고정 너비를 주어 메인 콘텐츠 일정 박스를 확실하게 덮음 */
+    max-width: 80vw; /* 화면 비율 분할 케어 */
     z-index: 3000;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.25);
   }
   .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
 
-  /* 각 페이지 기본 여백 조정 */
+  /* 각 페이지 기본 여백 조정 (줄바꿈 방지) */
   #board-wrap { 
     padding: 16px; 
     scroll-snap-type: x mandatory; 
@@ -795,7 +787,7 @@ header {
   .column { width: 85vw; max-width: 320px; scroll-snap-align: center; }
   .add-col-ghost { width: 85vw; max-width: 320px; scroll-snap-align: center; }
 
-  /* 대시보드 박스 안쪽 여백 축소 */
+  /* 대시보드 박스 안쪽 여백 축소 (글자 안 깨지게) */
   .dash-card { padding: 12px 14px; }
   .dash-card-num { font-size: 24px; }
   .dash-col-card { padding: 12px 14px; }
@@ -813,20 +805,13 @@ header {
   /* 꽃 컨테이너 위치 미세 조정 */
   #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
   
-  /* 완료 목록 레이아웃 개선 */
+  /* 완료 목록 레이아웃 개선 (자연스러운 줄바꿈 유도) */
   .done-item { flex-wrap: wrap; }
   .done-item-text { min-width: 100%; margin-bottom: 4px; }
   .done-item-meta { margin-right: auto; }
 }
 
 @media (max-width: 480px) {
-  /* 아주 좁은 화면 최적화 (S23 울트라 등 여백 부족 해결) */
-  header { padding: 0 12px; }
-  .header-left { gap: 8px; }
-  .header-right { gap: 8px; }
-  .today-badge { display: none; } /* 공간 확보를 위해 모바일 좁은 화면에서 배지 숨김 */
-  .logout-btn { padding: 5px 10px; font-size: 12px; }
-  
   .dash-grid { grid-template-columns: 1fr; }
   .trash-bag-wrap { transform: scale(0.8); margin-bottom: 20px; }
   .trash-container { padding: 20px; }
@@ -1737,7 +1722,7 @@ function deleteCard(e, cardId) {
   saveData(); render();
 }
 function handleCardInput(e, colId, textarea) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addCardFromInput(colId, textarea); }
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); addCardFromInput(colId, textarea); }
   if (e.key === 'Escape') { textarea.value = ''; textarea.blur(); }
   textarea.style.height = 'auto';
   textarea.style.height = Math.min(textarea.scrollHeight, 88) + 'px';
