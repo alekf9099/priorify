@@ -224,9 +224,7 @@ header {
   font-weight: 500;
   color: var(--text-primary);
   max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 .login-btn, .logout-btn {
@@ -515,23 +513,18 @@ header {
 /* ── COLUMNS ── */
 .column {
   width: 280px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.25s ease-out; animation: fadeUp 0.25s ease both;
+  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeUp 0.25s ease both;
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; transition: padding 0.22s; }
 .col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
 .col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
 
-/* 통합 배지 토글 버튼 스타일 보정 */
+/* 수량 + 화살표 드롭다운 토글 통합 배지 버튼 */
 .col-dropdown-toggle-btn {
   display: flex;
   align-items: center;
@@ -564,7 +557,7 @@ header {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
-.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.25s ease-out, padding 0.25s, opacity 0.2s; }
+.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; }
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
@@ -595,7 +588,7 @@ header {
 .card:hover .card-actions { opacity: 1; }
 
 /* ── ADD CARD AREA ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.25s, opacity 0.25s, padding 0.25s; }
+.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
   border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
@@ -864,10 +857,14 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ───────── 💡 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
-/* 접힌 상태 레이아웃 패딩 최소화 및 잘림 방어 */
+/* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
+/* 💡 접힌 상태 레이아웃 구조 조정 - 자름 버그 원천 차단 */
 .column.collapsed-col {
-  max-height: 52px !important; /* 접혔을 때 높이를 타이트하게 고정 */
+  max-height: 52px !important; 
+}
+.column.collapsed-col .col-header {
+  border-bottom: 1px solid transparent; /* 접혔을 때는 헤더 내부 가름선 제거 */
+  padding: 14px 14px 12px; /* 텍스트 짓눌림을 케어하는 안전 여백 배치 */
 }
 .column.collapsed-col .cards-list {
   max-height: 0 !important;
@@ -883,7 +880,6 @@ header {
   overflow: hidden;
   pointer-events: none;
 }
-/* 접혔을 때 화살표 아이콘을 왼쪽으로 회전 */
 .column.collapsed-col .col-toggle-arrow {
   transform: rotate(-90deg);
 }
@@ -944,7 +940,7 @@ header {
   }
 
   .col-header {
-    padding: 12px 14px;
+    padding: 14px;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -1434,9 +1430,10 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  columns.forEach((col, idx) => {
+  // 💡 앱 최초 진입 시 Default 상태값을 전부 '닫힘(true)'으로 무조건 세팅
+  columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = idx !== 0;
+      colCollapseStatus[col.id] = true; 
     }
   });
   
@@ -1524,6 +1521,15 @@ function switchPage(page, btn) {
   if (btn) btn.classList.add('active');
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
+
+  // 💡 LNB 타 메뉴 클릭 이동 시 모바일 서랍 레이아웃이 무조건 자동으로 닫히도록 완벽 보정
+  if (window.innerWidth <= 768) {
+    const lnb = document.querySelector('.lnb');
+    const backdrop = document.getElementById('lnb-backdrop');
+    if (lnb) lnb.classList.add('collapsed');
+    if (backdrop) backdrop.classList.remove('show');
+    localStorage.setItem('priorify_lnb_collapsed', 'true');
+  }
 }
 
 function renderLnbCols() {
@@ -1546,10 +1552,9 @@ function toggleMobileCol(colId, event) {
   render();
 }
 
-// 💡 아코디언 헤더 우측 수량배지+화살표 버튼 전용 토글 이벤트 핸들러 고도화 (웹 버블링 디펜스 보완)
 function clickColDropdownBtn(colId, event) {
   event.preventDefault();
-  event.stopPropagation(); // 부모 헤더 클릭 이벤트 전파 완벽 차단
+  event.stopPropagation(); 
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
 }
@@ -1561,7 +1566,7 @@ function render() {
 
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = false;
+      colCollapseStatus[col.id] = true; // 대기값도 기본 닫힘으로 안정 가이드 고정
     }
 
     const color = COLORS[col.colorIdx];
@@ -1985,7 +1990,7 @@ function confirmModal() {
     if (col) { col.name = name; col.desc = desc; col.colorIdx = selectedColorIdx; }
   } else {
     const newId = genId();
-    colCollapseStatus[newId] = false; 
+    colCollapseStatus[newId] = true; // 새 컬럼 역시 Default는 닫힘 상태로 동적 생성 제어
     columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
