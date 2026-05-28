@@ -412,25 +412,23 @@ header {
   pointer-events: auto;
 }
 
-/* ── BOARD PAGE ── */
+/* ── BOARD PAGE (PC 버전 가로 정렬 고유 레이아웃 정의) ── */
 #board-wrap {
   flex: 1;
-  overflow-x: auto;
+  overflow-x: auto; 
   overflow-y: hidden;
   padding: 24px 28px 28px;
 }
 #board {
   display: flex;
+  flex-direction: row; 
   gap: 16px;
   min-height: 100%;
   align-items: flex-start;
 }
 
 .col-toggle-arrow {
-  display: inline-block;
-  font-size: 9px;
-  color: var(--text-tertiary);
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none; 
 }
 
 /* ── DASHBOARD PAGE ── */
@@ -517,8 +515,8 @@ header {
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-.col-header { padding: 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: all 0.22s; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; transition: padding 0.22s; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
@@ -546,21 +544,7 @@ header {
   background: var(--surface);
 }
 
-.col-desc-input { 
-  font-family: 'DM Sans', sans-serif; 
-  font-size: 11.5px; 
-  color: var(--text-tertiary); 
-  background: transparent; 
-  border: none; 
-  outline: none; 
-  width: 100%; 
-  cursor: text; 
-  resize: none; 
-  height: auto !important; 
-  line-height: 1.4;        
-  padding: 2px 0;         
-  transition: opacity 0.2s, max-height 0.2s;
-}
+.col-desc-input { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-tertiary); background: transparent; border: none; outline: none; width: 100%; cursor: text; resize: none; height: auto !important; line-height: 1.4; padding: 2px 0; }
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
 .col-header-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; margin-left: 4px; }
@@ -569,8 +553,19 @@ header {
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS ── */
-.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; }
+/* ── CARDS (💡 붉은 영역 안쪽 리스트 배경색을 새하얀 표면 컬러로 고정) ── */
+.cards-list { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 8px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 7px; 
+  min-height: 60px; 
+  touch-action: pan-y; 
+  transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; 
+  background: var(--surface) !important; /* 💡 회색 기운 없는 완전 하얀색으로 통일 */
+}
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
@@ -601,7 +596,7 @@ header {
 .card:hover .card-actions { opacity: 1; }
 
 /* ── ADD CARD AREA ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
+.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); background: var(--surface); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
   border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
@@ -870,41 +865,6 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
-/* 💡 [완성형 하이딩 패치] 접힌 상태 구조 재튜닝 - 하위 요소를 깨끗하게 숨겨 잘림 현상 완벽 박멸 */
-.column.collapsed-col {
-  max-height: 48px !important; /* 타이틀 라인 높이로 완전히 잠금 */
-}
-.column.collapsed-col .col-header {
-  border-bottom: 1px solid transparent; 
-  padding: 12px 14px; 
-}
-/* 접혀있을 때는 설명 텍스트 인풋창을 화면에서 투명도 0과 공간 분리로 숨김 */
-.column.collapsed-col .col-desc-input {
-  opacity: 0 !important;
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  pointer-events: none;
-}
-.column.collapsed-col .cards-list {
-  max-height: 0 !important;
-  padding: 0 8px !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .add-card-area {
-  max-height: 0 !important;
-  padding: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .col-toggle-arrow {
-  transform: rotate(-90deg);
-}
-
 /* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
@@ -951,10 +911,11 @@ header {
     padding-bottom: 100px;
   }
 
+  /* 💡 모바일 세로형 아코디언 접힘 버그 타파 코어 스타일 분기 */
   .column {
     width: 100% !important;
     max-width: none !important;
-    max-height: 480px !important; 
+    max-height: 480px !important; /* 펼쳐졌을 때의 최대 높이 제한 */
     min-height: auto !important;
     display: flex;
     flex-direction: column;
@@ -982,6 +943,46 @@ header {
     flex-shrink: 0; 
     background: var(--surface);
     border-top: 1px solid var(--border);
+  }
+
+  /* 💡 [공백 원천 삭제 패치] 접힌 상태일 때 컬럼 전체의 min-height를 0으로 뭉개서 공백 제거 */
+  .column.collapsed-col {
+    max-height: 48px !important; 
+    min-height: 0 !important; /* 하얗게 들뜨던 거대 공백 원천 봉쇄 */
+  }
+  .column.collapsed-col .col-header {
+    border-bottom: 1px solid transparent; 
+    padding: 12px 14px; 
+  }
+  .column.collapsed-col .col-desc-input {
+    opacity: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none;
+  }
+  .column.collapsed-col .cards-list {
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .column.collapsed-col .add-card-area {
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .col-toggle-arrow {
+    display: inline-block;
+  }
+  .column.collapsed-col .col-toggle-arrow {
+    transform: rotate(-90deg);
   }
 
   .card-meta {
@@ -1451,10 +1452,10 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  // 앱 최초 진입 시 모든 드롭다운 상태를 항상 '닫힘(true)'으로 일관되게 초기 세팅
+  const isMobile = window.innerWidth <= 768;
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = true; 
+      colCollapseStatus[col.id] = isMobile; 
     }
   });
   
@@ -1566,6 +1567,7 @@ function renderLnbCols() {
 }
 
 function toggleMobileCol(colId, event) {
+  if (window.innerWidth > 768) return;
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.col-dropdown-toggle-btn') || event.target.closest('.add-card-date-picker-wrap')) return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
@@ -1584,15 +1586,17 @@ function render() {
   if (!board) return;
   board.innerHTML = '';
 
+  const isMobile = window.innerWidth <= 768;
+
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = true; 
+      colCollapseStatus[col.id] = isMobile; 
     }
 
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
     
-    const isCollapsed = colCollapseStatus[col.id];
+    const isCollapsed = isMobile && colCollapseStatus[col.id];
     colEl.className = 'column' + (isCollapsed ? ' collapsed-col' : '');
     colEl.dataset.colId = col.id;
     colEl.style.borderColor = color.colBorder;
@@ -1711,56 +1715,20 @@ function renderDashboard() {
   }).join('');
 }
 
-function markDone(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
+function markDone(cardId) {
+  let found = null, fromColName = '';
+  columns.forEach(col => {
+    const idx = col.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
+  });
 
-  const btn = e.target;
-  const rect = btn.getBoundingClientRect();
-  const startX = rect.left + rect.width / 2;
-  const startY = rect.top + rect.height / 2;
-
-  const flower = document.getElementById('flower-plant');
-  const fRect = flower.getBoundingClientRect();
-  const endX = fRect.left + fRect.width / 2;
-  const endY = fRect.top + fRect.height / 2;
-
-  const particle = document.createElement('div');
-  particle.className = 'done-particle';
-  particle.style.left = startX - 7 + 'px';
-  particle.style.top = startY - 7 + 'px';
-  document.body.appendChild(particle);
-
-  const cardEl = document.querySelector(`[data-card-id="${cardId}"]`);
-  if (cardEl) {
-    cardEl.style.transition = 'opacity 0.3s, transform 0.3s';
-    cardEl.style.opacity = '0';
-    cardEl.style.transform = 'scale(0.9)';
+  if (found) {
+    doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
+    saveDone(); 
+    saveData(); 
+    render();
+    updateFlower();
   }
-
-  particle.getBoundingClientRect();
-
-  particle.style.left = endX - 7 + 'px';
-  particle.style.top = endY - 7 + 'px';
-  particle.style.transform = 'scale(0.3)';
-  particle.style.opacity = '0';
-
-  setTimeout(() => {
-    particle.remove();
-
-    let found = null, fromColName = '';
-    columns.forEach(col => {
-      const idx = col.cards.findIndex(c => c.id === cardId);
-      if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
-    });
-
-    if (found) {
-      doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
-      saveDone(); 
-      saveData(); 
-      render();
-      updateFlower();
-    }
-  }, 600);
 }
 
 function renderDone() {
