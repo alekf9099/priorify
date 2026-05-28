@@ -517,8 +517,8 @@ header {
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; transition: padding 0.22s; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.col-header { padding: 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: all 0.22s; }
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
@@ -546,7 +546,6 @@ header {
   background: var(--surface);
 }
 
-/* 💡 [설명 항목 잘림 패치] 고정 높이와 overflow: hidden을 파괴하고 자음/모음이 다 보이게 여백 가이드 부여 */
 .col-desc-input { 
   font-family: 'DM Sans', sans-serif; 
   font-size: 11.5px; 
@@ -557,9 +556,10 @@ header {
   width: 100%; 
   cursor: text; 
   resize: none; 
-  height: auto !important; /* 고정 높이 제거 */
-  line-height: 1.4;        /* 자음/모음 균형 맞춤 */
-  padding: 2px 0;         /* 위아래 안전 바퍼 설정 */
+  height: auto !important; 
+  line-height: 1.4;        
+  padding: 2px 0;         
+  transition: opacity 0.2s, max-height 0.2s;
 }
 .col-desc-input:focus { color: var(--text-secondary); }
 .col-desc-input::placeholder { color: var(--text-tertiary); font-style: italic; }
@@ -871,13 +871,21 @@ header {
 }
 
 /* ───────── 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
-/* 💡 [설명 항목 잘림 방어 패치 완성] 접혀있을 때 여백을 더 지능적으로 분리하여 충돌 박멸 */
+/* 💡 [완성형 하이딩 패치] 접힌 상태 구조 재튜닝 - 하위 요소를 깨끗하게 숨겨 잘림 현상 완벽 박멸 */
 .column.collapsed-col {
-  max-height: 52px !important; 
+  max-height: 48px !important; /* 타이틀 라인 높이로 완전히 잠금 */
 }
 .column.collapsed-col .col-header {
   border-bottom: 1px solid transparent; 
-  padding: 12px 14px 10px; /* 고정선과 부딪히지 않는 여유 비율로 마감 */
+  padding: 12px 14px; 
+}
+/* 접혀있을 때는 설명 텍스트 인풋창을 화면에서 투명도 0과 공간 분리로 숨김 */
+.column.collapsed-col .col-desc-input {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
 }
 .column.collapsed-col .cards-list {
   max-height: 0 !important;
@@ -1443,7 +1451,7 @@ function showApp() {
   columns = loadData();
   doneItems = loadDone();
 
-  // 앱 최초 진입 시 Default 상태값을 전부 '닫힘(true)'으로 세팅
+  // 앱 최초 진입 시 모든 드롭다운 상태를 항상 '닫힘(true)'으로 일관되게 초기 세팅
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
       colCollapseStatus[col.id] = true; 
@@ -1535,7 +1543,6 @@ function switchPage(page, btn) {
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
 
-  // LNB 타 메뉴 클릭 이동 시 모바일 서랍 레이아웃이 무조건 자동으로 닫히도록 완벽 보정
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
     const backdrop = document.getElementById('lnb-backdrop');
