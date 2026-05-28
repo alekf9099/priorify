@@ -412,7 +412,7 @@ header {
   pointer-events: auto;
 }
 
-/* ── BOARD PAGE (PC 버전 가로형 4단 정상 작동 고정) ── */
+/* ── BOARD PAGE (PC 버전 가로 칸반 레이아웃) ── */
 #board-wrap {
   flex: 1;
   overflow-x: auto; 
@@ -553,7 +553,7 @@ header {
 .col-icon-btn:hover { background: var(--bg); color: var(--text-secondary); }
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
-/* ── CARDS (배경 하얀색 통일) ── */
+/* ── CARDS ── */
 .cards-list { 
   flex: 1; 
   overflow-y: auto; 
@@ -593,7 +593,7 @@ header {
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
 
-/* 플로팅 알약 모양 고도화 버튼 레이아웃 */
+/* 캘러그래피 플로팅 액션 그룹 디자인 */
 .card-actions-group {
   display: flex;
   align-items: center;
@@ -661,40 +661,6 @@ header {
 }
 .add-card-input::placeholder { color: var(--text-tertiary); }
 .add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
-
-.add-card-date-picker-wrap {
-  display: none;
-  align-items: center;
-  flex-direction: row; 
-  gap: 8px;
-  margin-top: 8px;
-  padding: 2px 4px;
-}
-.add-card-area.focused-area .add-card-date-picker-wrap {
-  display: flex;
-}
-.add-card-date-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.add-card-date-input {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px;
-  padding: 5px 8px;
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text-primary);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  max-width: 115px;
-}
-.add-card-date-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
-}
 
 .add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 8px; }
 .add-card-area.focused-area .add-card-footer { display: flex; }
@@ -1024,7 +990,6 @@ header {
     padding: 8px !important;
   }
 
-  /* 모바일 화면 가이드 */
   .card {
     padding: 12px 12px 46px 12px !important; 
     min-height: 96px !important; 
@@ -1120,7 +1085,7 @@ header {
   <div class="login-box">
     <div class="login-logo">Priorify<span>.</span></div>
     <div class="login-subtitle">우선순위를 정리하는 가장 쉬운 방법</div>
-    <button class="google-login-btn" onclick="handleCustomLogin()">
+    <button class="google-login-btn" id="google-login-btn">
       <svg class="google-icon" viewBox="0 0 24 24">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -1360,8 +1325,8 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-// 💡 [에러 패치 완결] 본인의 실제 클라이언트 ID를 하단 가이드라인에 맞게 적용하세요!
-const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqffhr3.apps.googleusercontent.com"; 
+// 💡 방금 알려주신 오타 없는 진짜 구글 클라이언트 ID로 완벽 이식 완료!
+const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
 let doneItems = [];
@@ -1454,24 +1419,11 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// 💡 [해결] 명시적인 구글 계정 팝업 트리거 전용 API 바인딩 엔진 스크립트 로직 구현
-function handleCustomLogin() {
-  try {
-    window.google.accounts.id.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        console.log("프롬프트 차단 감지됨 - 브라우저 자체 계정 팝업으로 대체 작동");
-      }
-    });
-  } catch (err) {
-    console.error("구글 GIS 초기화 지연 발생:", err);
-  }
-}
-
 function initGoogleAuth() {
   window.google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleCredentialResponse,
-    auto_select: false
+    auto_select: false,
   });
   
   const savedUser = localStorage.getItem('priorify_user');
@@ -1549,13 +1501,91 @@ function showApp() {
 }
 
 function logout() {
-  if (!confirm('로그아웃 하시겠습니까?')) return;
   currentUser = null;
   localStorage.removeItem('priorify_user');
+  
   document.getElementById('app-container').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
+  
   columns = [];
   doneItems = [];
+}
+
+document.getElementById('google-login-btn').addEventListener('click', () => {
+  window.google.accounts.id.prompt();
+});
+
+document.getElementById('logout-btn').addEventListener('click', logout);
+
+window.addEventListener('load', () => {
+  initGoogleAuth();
+  
+  if (window.innerWidth <= 768) {
+    const lnb = document.querySelector('.lnb');
+    const backdrop = document.getElementById('lnb-backdrop');
+    if (lnb) lnb.classList.add('collapsed');
+    if (backdrop) backdrop.classList.remove('show');
+  } else {
+    const lnbCollapsed = localStorage.getItem('priorify_lnb_collapsed') === 'true';
+    if (lnbCollapsed) {
+      const lnb = document.querySelector('.lnb');
+      if (lnb) lnb.classList.add('collapsed');
+    }
+  }
+});
+
+function toggleLnb() {
+  const lnb = document.querySelector('.lnb');
+  const backdrop = document.getElementById('lnb-backdrop');
+  if (!lnb) return;
+  
+  const isCollapsed = lnb.classList.toggle('collapsed');
+  
+  if (window.innerWidth <= 768 && backdrop) {
+    if (isCollapsed) {
+      backdrop.classList.remove('show');
+    } else {
+      backdrop.classList.add('show');
+    }
+  }
+  localStorage.setItem('priorify_lnb_collapsed', isCollapsed ? 'true' : 'false');
+}
+
+function setTheme(t) {
+  document.body.classList.toggle('dark', t === 'dark');
+  document.getElementById('btn-light').classList.toggle('active', t === 'light');
+  document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+  localStorage.setItem('priorify_theme', t);
+}
+const savedTheme = localStorage.getItem('priorify_theme');
+if (savedTheme) setTheme(savedTheme);
+
+let toastTimer = null;
+function showToast() {
+  const t = document.getElementById('save-toast');
+  if(!t) return;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+function switchPage(page, btn) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.lnb-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+
+  if (btn) btn.classList.add('active');
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'done') renderDone();
+
+  if (window.innerWidth <= 768) {
+    const lnb = document.querySelector('.lnb');
+    const backdrop = document.getElementById('lnb-backdrop');
+    if (lnb) lnb.classList.add('collapsed');
+    if (backdrop) backdrop.classList.remove('show');
+    localStorage.setItem('priorify_lnb_collapsed', 'true');
+  }
 }
 
 function toggleMobileCol(colId, event) {
@@ -1832,7 +1862,20 @@ function addCardFromInput(colId, textarea) {
   const col = columns.find(c => c.id === colId); if (!col) return;
   
   const area = textarea.parentElement;
-  col.cards.push({ id: genId(), text, date: today() });
+  const startVal = area.querySelector('.start-date').value;
+  const endVal = area.querySelector('.end-date').value;
+  
+  let finalDateStr = today();
+  
+  if (startVal && endVal) {
+    const sD = new Date(startVal);
+    const eD = new Date(endVal);
+    const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
+    const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
+    finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
+  }
+
+  col.cards.push({ id: genId(), text, date: finalDateStr });
   textarea.value = ''; textarea.style.height = 'auto';
   textarea.parentElement.classList.remove('focused-area');
   saveData(); render();
@@ -1849,6 +1892,22 @@ function openEditCardModal(e, cardId) {
   if (!card) return;
   
   document.getElementById('modal-card-text').value = card.text;
+  
+  let sDate = getTodayYMD();
+  let eDate = getTodayYMD();
+  
+  if (card.date && card.date.includes('~')) {
+    const parts = card.date.split('~').map(p => p.trim());
+    sDate = convertMDtoYMD(parts[0]);
+    eDate = convertMDtoYMD(parts[1]);
+  } else if (card.date) {
+    sDate = convertMDtoYMD(card.date);
+    eDate = sDate;
+  }
+  
+  document.getElementById('modal-card-start-date').value = sDate;
+  document.getElementById('modal-card-end-date').value = eDate;
+  
   document.getElementById('card-modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('modal-card-text').focus(), 50);
 }
@@ -1867,9 +1926,24 @@ function confirmCardEdit() {
   const text = document.getElementById('modal-card-text').value.trim();
   if (!text) { document.getElementById('modal-card-text').focus(); return; }
   
+  const startVal = document.getElementById('modal-card-start-date').value;
+  const endVal = document.getElementById('modal-card-end-date').value;
+  
+  let finalDateStr = today();
+  if (startVal && endVal) {
+    const sD = new Date(startVal);
+    const eD = new Date(endVal);
+    const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
+    const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
+    finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
+  }
+
   columns.forEach(col => {
     const card = col.cards.find(c => c.id === editingCardId);
-    if (card) { card.text = text; }
+    if (card) { 
+      card.text = text; 
+      card.date = finalDateStr; 
+    }
   });
   
   closeCardModalDirect();
@@ -1943,7 +2017,7 @@ function getTodayYMD() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// ── 캘린더 엔진 스크립트 ──
+// ── 💡 캘린더 엔진 스크립트 ──
 function moveCalendarMonth(dir) {
   calendarCurrentMonth += dir;
   if (calendarCurrentMonth < 0) {
@@ -2122,11 +2196,6 @@ function updateFlower() {
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
-
-// 💡 [해결] DOM 로딩 타이밍 꼬임 방지를 위해 윈도우 완벽 준비 상태에서 구글 프롬프트 핸들러 연결
-window.onload = function () {
-  initGoogleAuth();
-};
 </script>
 </body>
 </html>
