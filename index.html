@@ -428,6 +428,13 @@ header {
   align-items: flex-start;
 }
 
+.col-toggle-arrow {
+  display: inline-block;
+  font-size: 9px;
+  color: var(--text-tertiary);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* ── DASHBOARD PAGE ── */
 #page-dashboard { padding: 28px 32px; overflow-y: auto; }
 .dash-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
@@ -508,7 +515,7 @@ header {
 /* ── COLUMNS ── */
 .column {
   width: 280px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; animation: fadeUp 0.25s ease both;
+  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.25s ease-out; animation: fadeUp 0.25s ease both;
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
@@ -517,14 +524,14 @@ header {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.col-header { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
 .col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
 .col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
 
-/* 💡 수량 노출 배지와 드롭다운 화살표를 단일 영역으로 이쁘게 병합한 통합 토글 스위치 버튼 */
+/* 통합 배지 토글 버튼 스타일 보정 */
 .col-dropdown-toggle-btn {
   display: flex;
   align-items: center;
@@ -546,12 +553,6 @@ header {
   color: var(--text-primary);
   background: var(--surface);
 }
-.col-toggle-arrow {
-  font-size: 9px;
-  color: var(--text-tertiary);
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-block;
-}
 
 .col-desc-input { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-tertiary); background: transparent; border: none; outline: none; width: 100%; cursor: text; resize: none; height: 17px; overflow: hidden; }
 .col-desc-input:focus { color: var(--text-secondary); }
@@ -563,7 +564,7 @@ header {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
-.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.25s ease-out, padding 0.25s; }
+.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.25s ease-out, padding 0.25s, opacity 0.2s; }
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
@@ -580,7 +581,6 @@ header {
 
 .card-tag { display: inline-block; font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* 💡 카드 글자 원천 노출 (잘림 완전 해결 보장 패스) */
 .card-text { 
   font-size: 13px; 
   line-height: 1.5; 
@@ -595,7 +595,7 @@ header {
 .card:hover .card-actions { opacity: 1; }
 
 /* ── ADD CARD AREA ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); }
+.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); transition: max-height 0.25s, opacity 0.25s, padding 0.25s; }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
   border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
@@ -864,6 +864,30 @@ header {
   box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ───────── 💡 데스크탑 및 모바일 공용 아코디언 스타일 최적화 ───────── */
+/* 접힌 상태 레이아웃 패딩 최소화 및 잘림 방어 */
+.column.collapsed-col {
+  max-height: 52px !important; /* 접혔을 때 높이를 타이트하게 고정 */
+}
+.column.collapsed-col .cards-list {
+  max-height: 0 !important;
+  padding: 0 8px !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.column.collapsed-col .add-card-area {
+  max-height: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* 접혔을 때 화살표 아이콘을 왼쪽으로 회전 */
+.column.collapsed-col .col-toggle-arrow {
+  transform: rotate(-90deg);
+}
+
 /* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
@@ -919,11 +943,9 @@ header {
     flex-direction: column;
   }
 
-  /* 💡 아코디언 접혔을 때 설명 텍스트 잘림 현상 제거 보정 패치 */
   .col-header {
     padding: 12px 14px;
     flex-shrink: 0;
-    height: auto !important; /* 가변 높이 보장 */
     overflow: hidden;
   }
 
@@ -943,27 +965,6 @@ header {
     flex-shrink: 0; 
     background: var(--surface);
     border-top: 1px solid var(--border);
-  }
-
-  /* 접힌 상태 레이아웃 패딩 최소화 및 잘림 방어 */
-  .column.collapsed-col {
-    max-height: 64px !important; /* 설명 텍스트 크기까지 고려하여 높이 미세 확장 */
-  }
-  .column.collapsed-col .cards-list {
-    max-height: 0 !important;
-    padding: 0 8px !important;
-    overflow: hidden;
-  }
-  .column.collapsed-col .add-card-area {
-    max-height: 0 !important;
-    padding: 0 !important;
-    opacity: 0;
-    overflow: hidden;
-  }
-  
-  /* 💡 화살표 아이콘 회전 각도 조정 */
-  .column.collapsed-col .col-toggle-arrow {
-    transform: rotate(-90deg);
   }
 
   .card-meta {
@@ -1539,16 +1540,16 @@ function renderLnbCols() {
 }
 
 function toggleMobileCol(colId, event) {
-  if (window.innerWidth > 768) return;
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.col-dropdown-toggle-btn') || event.target.closest('.add-card-date-picker-wrap')) return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
 }
 
-// 💡 아코디언 헤더 우측 수량배지+화살표 버튼 전용 토글 이벤트 핸들러
+// 💡 아코디언 헤더 우측 수량배지+화살표 버튼 전용 토글 이벤트 핸들러 고도화 (웹 버블링 디펜스 보완)
 function clickColDropdownBtn(colId, event) {
-  event.stopPropagation(); // 부모 헤더 클릭 이벤트 전파 차단
+  event.preventDefault();
+  event.stopPropagation(); // 부모 헤더 클릭 이벤트 전파 완벽 차단
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
 }
@@ -2085,7 +2086,6 @@ function selectCalendarDate(dateStr) {
   openCalendarModal();
 }
 
-// 연속 마감 범위 크로스 체크 매칭 함수
 function isDateInRange(year, month, date, cardDateStr) {
   if (!cardDateStr) return false;
   const loopTime = new Date(year, month - 1, date).getTime();
