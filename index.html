@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Priorify — 일정 관리</title>
+<link rel="manifest" href="app-manifest.json">
+<meta name="theme-color" content="#6366F1">
+<link rel="apple-touch-icon" href="app-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -281,6 +284,9 @@ header {
   overflow: hidden;
   position: relative;
 }
+
+/* ───────── LNB BACKDROP (모바일 전용 어두운 배경) ───────── */
+.lnb-backdrop { display: none; }
 
 /* ───────── LNB ───────── */
 .lnb {
@@ -738,41 +744,48 @@ header {
   .user-name { display: none; } /* 프로필 이름 숨김 */
   .today-badge { font-size: 10px; padding: 3px 8px; }
 
-  /* 사이드바(LNB)를 오버레이(Overlay) 메뉴로 변경 */
+  /* LNB 어두운 배경 (서랍형 모달 효과) */
+  .lnb-backdrop {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 2500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .lnb-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 사이드바(LNB)를 화면 위로 덮는(Overlay) 메뉴로 변경 */
   .lnb {
-    position: absolute;
-    top: 0; left: 0; bottom: 0; height: 100%;
-    z-index: 300;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0; left: 0; height: 100vh;
+    z-index: 3000;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
   }
   .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
 
-  /* 각 페이지 기본 여백 축소 */
+  /* 각 페이지 기본 여백 조정 (줄바꿈 방지) */
   #board-wrap { 
     padding: 16px; 
     scroll-snap-type: x mandatory; 
-    -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+    -webkit-overflow-scrolling: touch;
   }
-  #page-dashboard, #page-done, #page-settings { padding: 20px 16px !important; }
+  #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
   
-  /* 보드 페이지 가로 스와이프 (Trello 스타일 최적화) */
-  #board { 
-    gap: 12px; 
-    padding-bottom: 20px; 
-    padding-right: 16px; /* 끝부분 여백 */
-  }
-  .column { 
-    width: 85vw; /* 화면의 85% 차지 (다음 컬럼이 살짝 보임) */
-    max-width: 320px; 
-    scroll-snap-align: center; /* 스와이프 시 가운데 정렬 */
-  }
-  .add-col-ghost { 
-    width: 85vw; 
-    max-width: 320px; 
-    scroll-snap-align: center; 
-  }
+  /* 보드 페이지 가로 스와이프 다듬기 */
+  #board { gap: 12px; padding-bottom: 20px; padding-right: 16px; }
+  .column { width: 85vw; max-width: 320px; scroll-snap-align: center; }
+  .add-col-ghost { width: 85vw; max-width: 320px; scroll-snap-align: center; }
 
-  /* 대시보드 2열 그리드 */
+  /* 대시보드 박스 안쪽 여백 축소 (글자 안 깨지게) */
+  .dash-card { padding: 12px 14px; }
+  .dash-card-num { font-size: 24px; }
+  .dash-col-card { padding: 12px 14px; }
   .dash-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .dash-cols { grid-template-columns: 1fr; }
 
@@ -787,13 +800,13 @@ header {
   /* 꽃 컨테이너 위치 미세 조정 */
   #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
   
-  /* 완료 목록 레이아웃 개선 */
+  /* 완료 목록 레이아웃 개선 (자연스러운 줄바꿈 유도) */
   .done-item { flex-wrap: wrap; }
-  .done-restore { margin-left: auto; }
+  .done-item-text { min-width: 100%; margin-bottom: 4px; }
+  .done-item-meta { margin-right: auto; }
 }
 
 @media (max-width: 480px) {
-  /* 작은 폰에서는 대시보드를 1열로 변경 */
   .dash-grid { grid-template-columns: 1fr; }
   .trash-bag-wrap { transform: scale(0.8); margin-bottom: 20px; }
   .trash-container { padding: 20px; }
@@ -846,6 +859,8 @@ header {
 </header>
 
 <div class="layout">
+  <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
+  
   <nav class="lnb">
     <span class="lnb-section-label">메인</span>
     <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
@@ -1259,10 +1274,12 @@ document.getElementById('logout-btn').addEventListener('click', logout);
 window.addEventListener('load', () => {
   initGoogleAuth();
   
-  // 모바일 화면이면 기본적으로 사이드바 접기
+  // 모바일 화면이면 기본적으로 사이드바 및 배경 접기
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
+    const backdrop = document.getElementById('lnb-backdrop');
     if (lnb) lnb.classList.add('collapsed');
+    if (backdrop) backdrop.classList.remove('show');
   } else {
     const lnbCollapsed = localStorage.getItem('priorify_lnb_collapsed') === 'true';
     if (lnbCollapsed) {
@@ -1274,8 +1291,19 @@ window.addEventListener('load', () => {
 
 function toggleLnb() {
   const lnb = document.querySelector('.lnb');
+  const backdrop = document.getElementById('lnb-backdrop');
   if (!lnb) return;
+  
   const isCollapsed = lnb.classList.toggle('collapsed');
+  
+  // 모바일인 경우 어두운 배경 같이 제어
+  if (window.innerWidth <= 768 && backdrop) {
+    if (isCollapsed) {
+      backdrop.classList.remove('show');
+    } else {
+      backdrop.classList.add('show');
+    }
+  }
   localStorage.setItem('priorify_lnb_collapsed', isCollapsed ? 'true' : 'false');
 }
 
@@ -1316,6 +1344,8 @@ function switchPage(page, btn) {
   // 모바일 환경에서는 메뉴 클릭 시 사이드바 자동 닫기
   if (window.innerWidth <= 768) {
     document.querySelector('.lnb').classList.add('collapsed');
+    const backdrop = document.getElementById('lnb-backdrop');
+    if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
 }
