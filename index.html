@@ -257,7 +257,6 @@ header {
   display: block;
 }
 
-/* LNB 토글 버튼 스타일 커스텀 */
 .lnb-toggle-btn {
   background: none;
   border: 1px solid var(--border-strong);
@@ -561,7 +560,7 @@ header {
 .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.1s; pointer-events: auto; }
 .card:hover .card-actions { opacity: 1; }
 
-/* ── ADD CARD AREA (💡 가로 배치 정렬 및 커스텀 디자인 날짜 선택기 적용) ── */
+/* ── ADD CARD AREA ── */
 .add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); }
 .add-card-input {
   width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
@@ -571,7 +570,6 @@ header {
 .add-card-input::placeholder { color: var(--text-tertiary); }
 .add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
 
-/* 💡 세로 스택형에서 깔끔하게 떨어지는 가로형(row) 레이아웃으로 변경 */
 .add-card-date-picker-wrap {
   display: none;
   align-items: center;
@@ -580,7 +578,6 @@ header {
   margin-top: 8px;
   padding: 2px 4px;
 }
-/* 복합 유연 선택 제어 기법 */
 .add-card-area.focused-area .add-card-date-picker-wrap {
   display: flex;
 }
@@ -590,7 +587,6 @@ header {
   color: var(--text-secondary);
 }
 
-/* 💡 피커 내부 인풋박스를 Priorify 배색에 맞는 커스텀 모던 UI 스타일로 튜닝 */
 .add-card-date-input {
   font-family: 'DM Sans', sans-serif;
   font-size: 11.5px;
@@ -875,27 +871,49 @@ header {
   #board {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 12px;
     min-height: auto;
-    padding-bottom: 90px;
+    padding-bottom: 100px;
   }
 
+  /* 💡 모바일 세로 아코디언 컴포넌트 유연 스크롤 고도화 설계 */
   .column {
     width: 100% !important;
     max-width: none !important;
-    max-height: none !important;
+    max-height: 480px !important; /* 💡 컬럼 하나의 최대 높이를 제한하여 내부 스크롤 유도 */
     min-height: auto !important;
+    display: flex;
+    flex-direction: column;
   }
 
   .col-header {
     cursor: pointer;
     padding: 14px;
+    flex-shrink: 0;
+  }
+
+  /* 💡 카드 리스트 영역에만 가변 스크롤 범위를 주어 추가 영역 잘림 완벽 방어 */
+  .cards-list {
+    flex: 1;
+    overflow-y: auto !important;
+    max-height: 260px; 
+    padding: 8px !important;
+  }
+
+  .add-card-area {
+    flex-shrink: 0; /* 💡 일정 추가 창이 아래로 밀려 찌그러지거나 잘리지 않도록 고정 */
+    background: var(--surface);
+    border-top: 1px solid var(--border);
   }
 
   .col-toggle-arrow {
     display: inline-block;
   }
 
+  /* 접힌 상태 레이아웃 공백 케어 */
+  .column.collapsed-col {
+    max-height: 52px !important; /* 헤더 부분 높이만 남김 */
+  }
   .column.collapsed-col .cards-list {
     max-height: 0 !important;
     padding: 0 8px !important;
@@ -903,19 +921,45 @@ header {
   }
   .column.collapsed-col .add-card-area {
     max-height: 0 !important;
-    padding: 0 8px !important;
+    padding: 0 !important;
     opacity: 0;
     overflow: hidden;
-    border-top-color: transparent;
   }
   .column.collapsed-col .col-toggle-arrow {
     transform: rotate(-90deg);
+  }
+
+  /* 💡 모바일 환경에서 카드 내 액션 버튼 배치 시인성 튜닝 */
+  .card {
+    padding: 12px 12px 38px 12px !important; /* 아래쪽에 버튼이 들어갈 넉넉한 공간 부여 */
+  }
+  .card-meta {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 24px);
+  }
+  .card-actions {
+    opacity: 1 !important; /* 모바일은 항시 노출 */
+    display: flex;
+    gap: 6px;
+  }
+  .card-btn {
+    padding: 4px 8px !important;
+    background: var(--border);
+    border-radius: 4px;
+    font-size: 12px !important;
   }
 
   .add-col-ghost {
     width: 100% !important;
     min-height: 50px !important;
     margin-top: 4px;
+    flex-shrink: 0;
   }
 
   #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
@@ -1463,7 +1507,6 @@ function renderLnbCols() {
 
 function toggleMobileCol(colId, event) {
   if (window.innerWidth > 768) return;
-  // 인풋, 버튼, 텍스트에리어 및 날짜 피커 컨테이너 내부 터치 시 아코디언이 접히는 오작동 차단
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.add-card-date-picker-wrap')) return;
   
   colCollapseStatus[colId] = !colCollapseStatus[colId];
@@ -1720,13 +1763,11 @@ function deleteCard(e, cardId) {
   saveData(); render();
 }
 
-/* ── 💡 인풋 포커스 유실 버그 방어막 제어 함수군 ── */
 function focusCardInput(textarea) {
   textarea.parentElement.classList.add('focused-area');
 }
 
 function blurCardInput(e, textarea) {
-  // 사용자가 날짜 피커 인풋을 터치하여 포커스를 옮긴 것이라면 입력창을 닫지 않고 차단함
   setTimeout(() => {
     if (document.activeElement && (document.activeElement.classList.contains('add-card-date-input') || document.activeElement.classList.contains('add-card-input'))) {
       return; 
@@ -1777,7 +1818,6 @@ function addCardFromInput(colId, textarea) {
   saveData(); render();
 }
 
-// 💡 할 일 편집 모달 오픈 스크립트 (기존 등록 날짜 파싱하여 모달 인풋에 주입)
 function openEditCardModal(e, cardId) {
   e.preventDefault(); e.stopPropagation();
   editingCardId = cardId;
@@ -1790,7 +1830,6 @@ function openEditCardModal(e, cardId) {
   
   document.getElementById('modal-card-text').value = card.text;
   
-  // 기존 일정을 분석해서 날짜 피커 디폴트값 주입
   let sDate = getTodayYMD();
   let eDate = getTodayYMD();
   
@@ -1810,18 +1849,16 @@ function openEditCardModal(e, cardId) {
   setTimeout(() => document.getElementById('modal-card-text').focus(), 50);
 }
 
-// "5/28" 포맷팅을 "2026-05-28" 인풋 밸류용 데이터로 파싱 변환해주는 헬퍼 스크립트
 function convertMDtoYMD(mdStr) {
   const parts = mdStr.split('/').map(Number);
   if(parts.length !== 2) return getTodayYMD();
-  const year = calendarCurrentYear; // 현재 다이어리 조율 연도 기준 연동
+  const year = calendarCurrentYear; 
   return `${year}-${String(parts[0]).padStart(2,'0')}-${String(parts[1]).padStart(2,'0')}`;
 }
 
 function closeCardModal(e) { if (e.target === document.getElementById('card-modal-overlay')) closeCardModalDirect(); }
 function closeCardModalDirect() { document.getElementById('card-modal-overlay').classList.remove('open'); editingCardId = null; }
 
-// 💡 카드 저장 컨펌 스크립트 (모달 내부에서 수정된 신규 날짜/기간 정보 파싱 연동 처리)
 function confirmCardEdit() {
   const text = document.getElementById('modal-card-text').value.trim();
   if (!text) { document.getElementById('modal-card-text').focus(); return; }
@@ -1842,7 +1879,7 @@ function confirmCardEdit() {
     const card = col.cards.find(c => c.id === editingCardId);
     if (card) { 
       card.text = text; 
-      card.date = finalDateStr; // 수정 모달의 날짜 동기화
+      card.date = finalDateStr; 
     }
   });
   
