@@ -202,16 +202,6 @@ header {
 .logo:hover { opacity: 0.6; }
 .logo span { color: var(--text-tertiary); }
 
-.today-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--text-secondary);
-  background: var(--bg);
-  border: 1px solid var(--border-strong);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-
 .user-profile {
   display: none;
   align-items: center;
@@ -415,7 +405,6 @@ header {
   align-items: flex-start;
 }
 
-/* 모바일 접기/펼치기 화살표 기호용 아이콘 */
 .col-toggle-arrow {
   display: none;
   font-size: 10px;
@@ -455,108 +444,6 @@ header {
 .dash-col-bar-wrap { background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
 .dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-
-/* ── EMOTION TRASH PAGE ── */
-#page-trash {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  background: linear-gradient(180deg, #FFF5F9 0%, #FFEBF0 100%);
-  overflow: hidden;
-  z-index: 1;
-}
-.trash-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-
-.trash-bag-wrap { position: relative; width: 200px; height: 280px; margin-bottom: 40px; z-index: 1; }
-.trash-bag {
-  position: relative; width: 160px; height: 200px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 50%, #FFB6D9 100%);
-  border-radius: 40px 40px 50px 50px; border: 3px solid #FF99C8; z-index: 2; overflow: visible;
-  box-shadow: 0 10px 30px rgba(255, 150, 200, 0.3), inset -5px -5px 15px rgba(255, 255, 255, 0.5), inset 5px 5px 15px rgba(255, 150, 200, 0.2);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex; align-items: center; justify-content: center;
-}
-
-.trash-bag::before {
-  content: ''; position: absolute; width: 20px; height: 20px; background: #333; border-radius: 50%;
-  top: 50px; left: 35px; box-shadow: 60px 0 0 #333, 8px 8px 0 2px white, 68px 8px 0 2px white; pointer-events: none; z-index: 3;
-}
-.trash-bag::after {
-  content: ''; position: absolute; width: 40px; height: 20px; border: 2px solid #333; border-top: none;
-  border-radius: 0 0 20px 20px; bottom: 40px; left: 60px; pointer-events: none; z-index: 3;
-}
-.trash-bag-handle {
-  position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 80px; height: 30px;
-  background: linear-gradient(135deg, #FFB6D9 0%, #FFC7E0 100%); border: 2px solid #FF99C8; border-radius: 50% 50% 0 0;
-  z-index: 4; box-shadow: 0 -5px 10px rgba(255, 150, 200, 0.2);
-}
-.trash-fill {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
-  background: linear-gradient(to top, #FFD4E5 0%, #FFE0ED 100%);
-  opacity: 0.8; transition: height 0.5s ease; border-radius: 0 0 47px 47px; z-index: 1;
-}
-
-.trash-bag.expanding { animation: bagExpand 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-@keyframes bagExpand {
-  0% { transform: scaleY(1) scaleX(1); }
-  50% { transform: scaleY(1.1) scaleX(1.15); }
-  100% { transform: scaleY(1) scaleX(1.12); }
-}
-
-.trash-bag.overflow { animation: bagOverflow 0.5s ease-in-out infinite; }
-@keyframes bagOverflow {
-  0%, 100% { transform: scaleY(1) scaleX(1.12) rotate(0deg); }
-  25% { transform: scaleY(1.02) scaleX(1.14) rotate(-1.5deg); }
-  75% { transform: scaleY(1.02) scaleX(1.14) rotate(1.5deg); }
-}
-
-.trash-chat-wrap { width: 100%; max-width: 500px; z-index: 10; padding: 0 16px; }
-.trash-input-box {
-  display: flex; gap: 10px; background: var(--surface); padding: 12px 16px; border-radius: 30px;
-  border: 1px solid var(--border-strong); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-.trash-input {
-  flex: 1; border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text-primary);
-}
-.trash-send-btn {
-  background: #FFB6D9; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: transform 0.2s, background 0.2s; font-weight: bold;
-}
-.trash-send-btn:hover { transform: scale(1.1); background: #FF99C8; }
-
-.emotion-ball {
-  position: fixed; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FFB6D9, #FFC7E0); color: white;
-  font-size: 10px; display: flex; align-items: center; justify-content: center; padding: 5px; text-align: center; pointer-events: none;
-  z-index: 5; box-shadow: 0 4px 10px rgba(255, 150, 200, 0.3); word-break: break-all; overflow: hidden; will-change: transform;
-}
-
-.trash-actions { margin-top: 20px; display: flex; gap: 10px; }
-.btn-empty {
-  padding: 10px 24px; border-radius: 25px; border: none; background: linear-gradient(135deg, #FFB6D9, #FF99C8); color: white; cursor: pointer;
-  font-size: 13px; font-weight: 500; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
-}
-.btn-empty:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 150, 200, 0.3); }
-.btn-empty:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.trash-count { font-size: 12px; color: var(--text-secondary); margin-top: 12px; }
-
-@keyframes throwToTrash {
-  0% { transform: translate(0, 0) scale(1); opacity: 1; }
-  50% { transform: translate(var(--tx), -100px) scale(1.2); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
-}
 
 /* ── DONE PAGE ── */
 #page-done { padding: 28px 32px; overflow-y: auto; }
@@ -717,15 +604,6 @@ header {
 
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
 
-.trash-items-list { background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; max-height: 300px; overflow-y: auto; }
-.trash-item-preview { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
-.trash-item-preview:last-child { margin-bottom: 0; }
-
-/* LNB Toggle Button Styles */
-.lnb-toggle-btn { background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-sm); transition: background 0.15s, color 0.15s; }
-.lnb-toggle-btn:hover { background: var(--bg); color: var(--text-primary); }
-.lnb-toggle-icon { width: 18px; height: 18px; }
-
 /* ── FLOWER ANIMATION ── */
 #flower-pot { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
 .flower-level { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 20px; padding: 4px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.3s; }
@@ -736,26 +614,90 @@ header {
 .flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
 .flower-plant.stage-3 { font-size: 60px; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6)); animation: bloom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-@keyframes bloom {
-  0% { transform: scale(0.5) rotate(-15deg); }
-  50% { transform: scale(1.2) rotate(10deg); }
-  100% { transform: scale(1) rotate(0deg); }
+/* ── 💡 FLOATING CALENDAR BUTTON (우측 최하단 고정) ── */
+.cal-floating-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cal-btn-trigger {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.cal-btn-trigger:hover {
+  transform: scale(1.05);
+  background: var(--bg);
+}
+.cal-btn-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-primary);
 }
 
-.done-particle {
-  position: fixed; width: 14px; height: 14px; background: #10B981; border-radius: 50%;
-  box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* ── 💡 PRIORIFY CUSTOM CALENDAR MODAL ── */
+.cal-grid-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.cal-grid-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cal-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  border-radius: 8px;
+  position: relative;
+  color: var(--text-primary);
+}
+.cal-day-cell.empty { pointer-events: none; }
+.cal-day-cell.today-cell {
+  background: var(--accent);
+  color: #FFFFFF !important;
+  font-weight: 500;
+}
+.cal-day-dot {
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+.cal-day-cell.today-cell .cal-day-dot {
+  background: #FFFFFF;
 }
 
-/* ───────── MOBILE RESPONSIVE (MEDIA QUERIES) ───────── */
+/* ───────── MOBILE RESPONSIVE ───────── */
 @media (max-width: 768px) {
   header { padding: 0 16px; height: 50px; }
   .logo { font-size: 16px; }
   .user-name { display: none; }
-  .today-badge { font-size: 10px; padding: 3px 8px; }
   .header-right { gap: 8px; }
 
-  /* LNB 어두운 배경 */
   .lnb-backdrop {
     display: block;
     position: fixed;
@@ -768,7 +710,6 @@ header {
   }
   .lnb-backdrop.show { opacity: 1; pointer-events: auto; }
 
-  /* 사이드바(LNB) 모바일 구조 고정 */
   .lnb {
     position: fixed;
     top: 0; left: 0; height: 100vh;
@@ -779,19 +720,18 @@ header {
   }
   .lnb.collapsed { transform: translateX(-100%); opacity: 1; }
 
-  /* 💡 모바일 세로 아코디언(Accordion) 스택 구조 튜닝 */
   #board-wrap { 
     padding: 12px;
-    overflow-x: hidden; /* 불편한 좌우 가로 스크롤 완전 제거 */
-    overflow-y: auto;   /* 시원한 세로형 스크롤 부여 */
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   #board {
-    flex-direction: column; /* 컬럼들을 위에서 아래로 층층이 적층 */
+    flex-direction: column;
     align-items: stretch;
     gap: 10px;
     min-height: auto;
-    padding-bottom: 80px; /* 꽃 공간 확보 */
+    padding-bottom: 90px;
   }
 
   .column {
@@ -802,15 +742,14 @@ header {
   }
 
   .col-header {
-    cursor: pointer; /* 터치해서 열고 닫을 수 있음을 암시 */
+    cursor: pointer;
     padding: 14px;
   }
 
   .col-toggle-arrow {
-    display: inline-block; /* 모바일에서 화살표 기호 활성화 */
+    display: inline-block;
   }
 
-  /* 접힌 상태의 애니메이션 및 숨김 처리 디테일 */
   .column.collapsed-col .cards-list {
     max-height: 0 !important;
     padding: 0 8px !important;
@@ -824,7 +763,7 @@ header {
     border-top-color: transparent;
   }
   .column.collapsed-col .col-toggle-arrow {
-    transform: rotate(-90deg); /* 접혔을 때 화살표 회전 */
+    transform: rotate(-90deg);
   }
 
   .add-col-ghost {
@@ -833,7 +772,6 @@ header {
     margin-top: 4px;
   }
 
-  /* 대시보드 및 기타 세팅 */
   #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
   .dash-card { padding: 12px 14px; }
   .dash-card-num { font-size: 24px; }
@@ -845,17 +783,13 @@ header {
   .theme-btns { align-self: flex-end; }
   .danger-btn { align-self: flex-end; }
   .modal { padding: 20px 16px; width: 92%; }
-  #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
   
-  .done-item { flex-wrap: wrap; }
-  .done-item-text { min-width: 100%; margin-bottom: 4px; }
-  .done-item-meta { margin-right: auto; }
+  #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
+  .cal-floating-container { bottom: 16px; right: 16px; }
 }
 
 @media (max-width: 480px) {
   .dash-grid { grid-template-columns: 1fr; }
-  .trash-bag-wrap { transform: scale(0.8); margin-bottom: 20px; }
-  .trash-container { padding: 20px; }
 }
 </style>
 </head>
@@ -893,7 +827,6 @@ header {
       </svg>
     </button>
     <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
-    <div class="today-badge" id="today-badge"></div>
   </div>
   <div class="header-right">
     <div class="user-profile" id="user-profile">
@@ -931,16 +864,6 @@ header {
         <path d="M6 9 L8 11 L12 7"/>
       </svg>
       완료 목록
-    </button>
-
-    <div class="lnb-divider"></div>
-    <span class="lnb-section-label">감정 관리</span>
-
-    <button class="lnb-item" data-page="trash" onclick="switchPage('trash', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 6h12M5 6v10a2 2 0 002 2h4a2 2 0 002-2V6M8 6V4a2 2 0 012-2h0a2 2 0 012 2v2"/>
-      </svg>
-      감정 쓰레기통
     </button>
 
     <div class="lnb-divider"></div>
@@ -985,33 +908,6 @@ header {
         <div class="dash-sub">전체 할 일 현황을 한눈에 확인하세요</div>
         <div class="dash-grid" id="dash-grid"></div>
         <div class="dash-cols" id="dash-cols"></div>
-      </div>
-    </div>
-
-    <div id="page-trash" class="page">
-      <div class="trash-container">
-        <div class="dash-title" style="margin-bottom: 8px;">감정 쓰레기통</div>
-        <div class="dash-sub" style="margin-bottom: 40px;">부정적인 생각, 스트레스, 고민들을 모두 여기에 던져버리세요.</div>
-        
-        <div class="trash-bag-wrap">
-          <div class="trash-bag-handle"></div>
-          <div class="trash-bag" id="trash-bag">
-            <div class="trash-fill" id="trash-fill"></div>
-          </div>
-        </div>
-
-        <div class="trash-chat-wrap">
-          <div class="trash-input-box">
-            <input type="text" class="trash-input" id="trash-input" placeholder="지금 어떤 감정을 버리고 싶나요?" onkeydown="if(event.key==='Enter' && !event.isComposing) { event.preventDefault(); throwEmotion(); }">
-            <button type="button" class="trash-send-btn" onclick="throwEmotion()">↓</button>
-          </div>
-        </div>
-
-        <div class="trash-count" id="trash-count">버린 감정: 0개</div>
-
-        <div class="trash-actions">
-          <button class="btn-empty" id="btn-empty-trash" onclick="openTrashReviewModal()" disabled>쓰레기통 비우기</button>
-        </div>
       </div>
     </div>
 
@@ -1067,6 +963,17 @@ header {
 
 </div>
 
+<div class="cal-floating-container" id="cal-floating-container" style="display: none;">
+  <button class="cal-btn-trigger" onclick="openCalendarModal()" title="캘린더 확인">
+    <svg class="cal-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="18" y2="10"></line>
+    </svg>
+  </button>
+</div>
+
 <div id="save-toast">저장됨 ✓</div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
@@ -1105,14 +1012,15 @@ header {
   </div>
 </div>
 
-<div class="modal-overlay" id="trash-review-modal" onclick="closeTrashReviewModal(event)">
+<div class="modal-overlay" id="calendar-modal-overlay" onclick="closeCalendarModal(event)">
   <div class="modal">
-    <div class="modal-title">쓰레기통 비우기</div>
-    <div class="modal-label" style="margin-bottom: 12px;">버린 감정들 (총 <span id="trash-review-count">0</span>개)</div>
-    <div class="trash-items-list" id="trash-items-list"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeTrashReviewModal()">취소</button>
-      <button class="btn-save" onclick="emptyTrash()">비우기</button>
+    <div class="modal-title" id="calendar-modal-title">0000년 00월</div>
+    <div class="cal-grid-header">
+      <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+    </div>
+    <div class="cal-grid-body" id="calendar-grid-body"></div>
+    <div class="modal-actions" style="margin-top: 20px;">
+      <button class="btn-cancel" onclick="closeCalendarModalDirect()">닫기</button>
     </div>
   </div>
 </div>
@@ -1123,13 +1031,10 @@ header {
 <script>
 let columns = [];
 let doneItems = [];
-let trashItems = [];
 let nextId = 5000;
 let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
-
-// 모바일 보드 내 컬럼들의 열림/닫힘 상태를 추적할 객체 (key: colId, value: boolean)
 let colCollapseStatus = {};
 
 MobileDragDrop.polyfill({
@@ -1164,10 +1069,6 @@ const DEFAULT_COLUMNS = [
   ]},
 ];
 
-// ── GOOGLE AUTH ──
-let currentUser = null;
-const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
-
 function getStorageKey(key) {
   if (!currentUser) return key;
   return `${key}_${currentUser.sub}`;
@@ -1189,14 +1090,6 @@ function loadDone() {
   return [];
 }
 
-function loadTrash() {
-  try { 
-    const s = localStorage.getItem(getStorageKey('priorify_trash')); 
-    if (s) return JSON.parse(s); 
-  } catch(e) {}
-  return [];
-}
-
 function saveData() {
   try { 
     localStorage.setItem(getStorageKey('priorify_columns'), JSON.stringify(columns)); 
@@ -1207,13 +1100,6 @@ function saveData() {
 function saveDone() {
   try { 
     localStorage.setItem(getStorageKey('priorify_done'), JSON.stringify(doneItems)); 
-  } catch(e) {}
-}
-
-function saveTrash() {
-  try { 
-    localStorage.setItem(getStorageKey('priorify_trash'), JSON.stringify(trashItems)); 
-    updateTrashFill(); 
   } catch(e) {}
 }
 
@@ -1284,6 +1170,7 @@ function showApp() {
   document.getElementById('loading-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-container').style.display = 'flex';
+  document.getElementById('cal-floating-container').style.display = 'flex';
   
   document.getElementById('user-avatar').src = currentUser.picture;
   document.getElementById('user-name').textContent = currentUser.name;
@@ -1292,17 +1179,14 @@ function showApp() {
   
   columns = loadData();
   doneItems = loadDone();
-  trashItems = loadTrash();
 
-  // 초기 모바일 아코디언 상태값 설정 (기본적으로 첫번째 컬럼만 열어둠)
   columns.forEach((col, idx) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = idx !== 0; // true가 접힌 상태
+      colCollapseStatus[col.id] = idx !== 0;
     }
   });
   
   render();
-  updateTrashFill();
   updateFlower();
 }
 
@@ -1313,11 +1197,11 @@ function logout() {
   localStorage.removeItem('priorify_user');
   
   document.getElementById('app-container').style.display = 'none';
+  document.getElementById('cal-floating-container').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
   
   columns = [];
   doneItems = [];
-  trashItems = [];
 }
 
 document.getElementById('google-login-btn').addEventListener('click', () => {
@@ -1360,12 +1244,6 @@ function toggleLnb() {
   localStorage.setItem('priorify_lnb_collapsed', isCollapsed ? 'true' : 'false');
 }
 
-document.getElementById('today-badge').textContent = (() => {
-  const d = new Date();
-  const days = ['일','월','화','수','목','금','토'];
-  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${days[d.getDay()]}요일`;
-})();
-
 function setTheme(t) {
   document.body.classList.toggle('dark', t === 'dark');
   document.getElementById('btn-light').classList.toggle('active', t === 'light');
@@ -1393,7 +1271,6 @@ function switchPage(page, btn) {
   if (btn) btn.classList.add('active');
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
-  if (page === 'trash') updateTrashFill();
 
   if (window.innerWidth <= 768) {
     document.querySelector('.lnb').classList.add('collapsed');
@@ -1416,9 +1293,7 @@ function renderLnbCols() {
   });
 }
 
-// 모바일 아코디언 토글 함수
 function toggleMobileCol(colId, event) {
-  // 인풋박스나 버튼 클릭 시에는 작동 안함
   if (window.innerWidth > 768) return;
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON') return;
   
@@ -1439,7 +1314,6 @@ function render() {
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
     
-    // 접힘(collapsed-col) 클래스를 상태값 기반으로 가변 부여
     const isCollapsed = colCollapseStatus[col.id];
     colEl.className = 'column' + (isCollapsed ? ' collapsed-col' : '');
     colEl.dataset.colId = col.id;
@@ -1511,125 +1385,6 @@ function renderCard(card, color, colName) {
       </div>
     </div>
   </div>`;
-}
-
-function updateTrashFill() {
-  const fill = document.getElementById('trash-fill');
-  const bag = document.getElementById('trash-bag');
-  const count = trashItems.length;
-  
-  if(!fill || !bag) return;
-  
-  const level = Math.min(count * 10, 100);
-  fill.style.height = level + '%';
-  
-  const countEl = document.getElementById('trash-count');
-  if(countEl) countEl.textContent = `버린 감정: ${count}개`;
-  
-  const btn = document.getElementById('btn-empty-trash');
-  if(btn) btn.disabled = count === 0;
-  
-  if (count >= 10) {
-    bag.classList.add('overflow');
-    if (count === 10) {
-      alert('⚠️ 감정 쓰레기통이 가득 찼습니다!\n\n10개 이상의 감정이 쌓여있습니다. 마음을 비우고 새로 시작해 보세요.');
-    }
-  } else {
-    bag.classList.remove('overflow');
-  }
-}
-
-function throwEmotion() {
-  const input = document.getElementById('trash-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  const bag = document.getElementById('trash-bag');
-  
-  bag.classList.add('expanding');
-  setTimeout(() => bag.classList.remove('expanding'), 600);
-  
-  const ball = document.createElement('div');
-  ball.className = 'emotion-ball';
-  ball.textContent = text.length > 10 ? text.substring(0, 10) + '...' : text;
-  
-  const inputRect = document.getElementById('trash-input').getBoundingClientRect();
-  const bagRect = bag.getBoundingClientRect();
-  
-  const startX = inputRect.left + inputRect.width / 2 - 20;
-  const startY = inputRect.top - 20;
-  const endX = bagRect.left + bagRect.width / 2 - 20;
-  const endY = bagRect.top + bagRect.height / 2 - 20;
-  
-  ball.style.left = startX + 'px';
-  ball.style.top = startY + 'px';
-  
-  const tx = endX - startX;
-  const ty = endY - startY;
-  
-  ball.style.setProperty('--tx', tx + 'px');
-  ball.style.setProperty('--ty', ty + 'px');
-  ball.style.animation = 'throwToTrash 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards';
-  
-  document.body.appendChild(ball);
-  
-  trashItems.push({ text, date: new Date().toISOString() });
-  saveTrash();
-  
-  input.value = '';
-  
-  setTimeout(() => ball.remove(), 800);
-}
-
-function openTrashReviewModal() {
-  if (trashItems.length === 0) return;
-  
-  const list = document.getElementById('trash-items-list');
-  list.innerHTML = trashItems.map((item, i) => 
-    `<div class="trash-item-preview">${esc(item.text)}</div>`
-  ).join('');
-  
-  document.getElementById('trash-review-count').textContent = trashItems.length;
-  document.getElementById('trash-review-modal').classList.add('open');
-}
-
-function closeTrashReviewModal(e) {
-  if (e && e.target !== document.getElementById('trash-review-modal')) return;
-  document.getElementById('trash-review-modal').classList.remove('open');
-}
-
-function emptyTrash() {
-  const keywords = analyzeKeywords(trashItems);
-  const evaluation = generateEvaluation(keywords);
-  
-  alert(`✨ 마음 청소 완료!\n\n📊 당신의 감정 분석:\n${keywords.join(', ')}\n\n💡 위로의 말:\n${evaluation}`);
-  
-  trashItems = [];
-  saveTrash();
-  closeTrashReviewModal();
-}
-
-function analyzeKeywords(items) {
-  const commonKeywords = ['업무', '인간관계', '미래', '불안', '짜증', '피곤', '슬픔', '후회', '스트레스', '외로움', '답답함'];
-  const found = [];
-  const allText = items.map(i => i.text).join(' ');
-  
-  commonKeywords.forEach(k => {
-    if (allText.includes(k)) found.push(k);
-  });
-  
-  if (found.length === 0) found.push('일상적인 고민');
-  return found.slice(0, 3);
-}
-
-function generateEvaluation(keywords) {
-  const evals = [
-    "무거운 마음을 여기까지 가져오느라 고생 많으셨어요. 버려진 감정들은 이제 당신을 괴롭히지 못할 거예요.",
-    "힘든 순간들을 잘 견뎌내고 계시네요. 감정을 쏟아내는 것만으로도 마음의 짐이 훨씬 가벼워질 수 있습니다.",
-    "당신은 생각보다 훨씬 강한 사람이에요. 오늘 버린 이 고민들이 내일의 당신을 더 성장하게 만들 거예요.",
-    "가끔은 쉬어가도 괜찮아요. 모든 것을 완벽하게 해내려 하지 마세요. 당신은 존재만으로도 충분합니다."
-  ];
-  return evals[Math.floor(Math.random() * evals.length)];
 }
 
 function renderDashboard() {
@@ -1897,7 +1652,7 @@ function confirmModal() {
     if (col) { col.name = name; col.desc = desc; col.colorIdx = selectedColorIdx; }
   } else {
     const newId = genId();
-    colCollapseStatus[newId] = false; // 새 컬럼은 기본적으로 모바일에서 열린 상태로 생성
+    colCollapseStatus[newId] = false; 
     columns.push({ id: newId, name, desc, colorIdx: selectedColorIdx, cards: [] });
   }
   closeModalDirect(); saveData(); render();
@@ -1905,11 +1660,75 @@ function confirmModal() {
 function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
 function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); editingColId = null; }
 
+// ── 💡 CALENDAR JAVASCRIPT FUNCTIONS ──
+function openCalendarModal() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0-11
+  
+  document.getElementById('calendar-modal-title').textContent = `${year}년 ${month + 1}월`;
+  
+  const gridBody = document.getElementById('calendar-grid-body');
+  gridBody.innerHTML = '';
+  
+  // 이번달의 1일 날짜 객체 및 말일 정보 계산
+  const firstDayIdx = new Date(year, month, 1).getDay(); // 시작 요일 인덱스 (0: 일요일 ~ 6: 토요일)
+  const lastDate = new Date(year, month + 1, 0).getDate(); // 이번 달 총 일 수
+  
+  // 1일 시작 전 공백 셀 채우기
+  for (let i = 0; i < firstDayIdx; i++) {
+    const emptyCell = document.createElement('div');
+    emptyCell.className = 'cal-day-cell empty';
+    gridBody.appendChild(emptyCell);
+  }
+  
+  // 1일부터 말일까지 셀 생성
+  for (let date = 1; date <= lastDate; date++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-day-cell';
+    cell.textContent = date;
+    
+    // 오늘 날짜 하이라이트 확인
+    if (date === now.getDate()) {
+      cell.classList.add('today-cell');
+    }
+    
+    // 이 날짜 문자열 포맷 매칭용 생성 (예: "5/28")
+    const matchDateStr = `${month + 1}/${date}`;
+    
+    // 해당 날짜에 마감인 카드가 몇 개 있는지 취합
+    let matchCount = 0;
+    columns.forEach(col => {
+      col.cards.forEach(card => {
+        if (card.date === matchDateStr) matchCount++;
+      });
+    });
+    
+    // 일정이 있는 날이면 하단에 미니 점(Dot)을 찍어줌
+    if (matchCount > 0) {
+      const dot = document.createElement('div');
+      dot.className = 'cal-day-dot';
+      cell.appendChild(dot);
+    }
+    
+    gridBody.appendChild(cell);
+  }
+  
+  document.getElementById('calendar-modal-overlay').classList.add('open');
+}
+
+function closeCalendarModal(e) {
+  if (e.target === document.getElementById('calendar-modal-overlay')) closeCalendarModalDirect();
+}
+function closeCalendarModalDirect() {
+  document.getElementById('calendar-modal-overlay').classList.remove('open');
+}
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModalDirect();
     closeCardModalDirect();
-    closeTrashReviewModal();
+    closeCalendarModalDirect();
   }
   if (e.key === 'Enter') {
     if (document.getElementById('modal-overlay').classList.contains('open') && document.activeElement.tagName !== 'TEXTAREA') confirmModal();
