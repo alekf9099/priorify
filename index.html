@@ -515,7 +515,7 @@ header {
 }
 .column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
 
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; transition: padding 0.22s; }
+.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
 .col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
 .col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
@@ -554,23 +554,12 @@ header {
 .col-icon-btn.danger:hover { background: #FEE2E2; color: #B91C1C; }
 
 /* ── CARDS ── */
-.cards-list { 
-  flex: 1; 
-  overflow-y: auto; 
-  padding: 8px; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 7px; 
-  min-height: 60px; 
-  touch-action: pan-y; 
-  transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; 
-  background: var(--surface) !important; 
-}
+.cards-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 60px; touch-action: pan-y; transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; background: var(--surface) !important; }
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
 .card {
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
   cursor: grab; user-select: none; transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s; position: relative; animation: cardIn 0.18s ease both;
   display: flex;
   flex-direction: column;
@@ -972,7 +961,7 @@ header {
     width: 100% !important;
     max-width: none !important;
     max-height: 480px !important; 
-    min-height: auto !important;
+    min-height: 0 !important;
     display: flex;
     flex-direction: column;
   }
@@ -990,7 +979,6 @@ header {
     padding: 8px !important;
   }
 
-  /* 모바일 화면 카드 내부 액션 버튼 가이드 */
   .card {
     padding: 12px 12px 46px 12px !important; 
     min-height: 96px !important; 
@@ -1327,7 +1315,7 @@ header {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-// 💡 변수 정의 순서 및 구글 ID 복원으로 401 Unauthorized 사전 차단
+// 인증 세션 스크립트 충돌 차단 완료
 const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
@@ -1473,7 +1461,6 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-// 💡 [초기화 락 해제] showApp 진입 시 날짜 싱크를 가장 먼저 세팅하여 스크립트 충돌 방어
 function showApp() {
   const now = new Date();
   selectedCalendarDateStr = `${now.getMonth() + 1}/${now.getDate()}`;
@@ -1516,8 +1503,8 @@ function logout() {
   doneItems = [];
 }
 
+// 💡 로그인 먹통 버그 유발하던 cancelPrompt() 코드 완전 도려내어 정상화 완료
 document.getElementById('google-login-btn').addEventListener('click', () => {
-  window.google.accounts.id.cancelPrompt();
   window.google.accounts.id.prompt();
 });
 
@@ -1659,6 +1646,13 @@ function render() {
           onfocus="focusCardInput(this)"
           onblur="blurCardInput(event,this)"></textarea>
         
+        <div class="add-card-date-picker-wrap">
+          <span class="add-card-date-label">시작</span>
+          <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
+          <span class="add-card-date-label">종료</span>
+          <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
+        </div>
+
         <div class="add-card-footer">
           <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
           <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
@@ -1867,7 +1861,21 @@ function addCardFromInput(colId, textarea) {
   const text = textarea.value.trim(); if (!text) return;
   const col = columns.find(c => c.id === colId); if (!col) return;
   
-  col.cards.push({ id: genId(), text, date: today() });
+  const area = textarea.parentElement;
+  const startVal = area.querySelector('.start-date').value;
+  const endVal = area.querySelector('.end-date').value;
+  
+  let finalDateStr = today();
+  
+  if (startVal && endVal) {
+    const sD = new Date(startVal);
+    const eD = new Date(endVal);
+    const sStr = `${sD.getMonth() + 1}/${sD.getDate()}`;
+    const eStr = `${eD.getMonth() + 1}/${eD.getDate()}`;
+    finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
+  }
+
+  col.cards.push({ id: genId(), text, date: finalDateStr });
   textarea.value = ''; textarea.style.height = 'auto';
   textarea.parentElement.classList.remove('focused-area');
   saveData(); render();
@@ -1911,7 +1919,6 @@ function convertMDtoYMD(mdStr) {
   return `${year}-${String(parts[0]).padStart(2,'0')}-${String(parts[1]).padStart(2,'0')}`;
 }
 
-// 모달 닫기
 function closeCardModal(e) { if (e.target === document.getElementById('card-modal-overlay')) closeCardModalDirect(); }
 function closeCardModalDirect() { document.getElementById('card-modal-overlay').classList.remove('open'); editingCardId = null; }
 
