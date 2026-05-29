@@ -3,6 +3,8 @@
     "short_name": "Priorify",
     "description": "우선순위를 정리하는 가장 쉬운 방법",
     "id": "com.priorify.app",
+    "lang": "ko",
+    "dir": "ltr",
     "orientation": "portrait",
     "categories": ["productivity", "utilities"],
     "prefer_related_applications": false,
