@@ -1651,13 +1651,13 @@ function showApp() {
   
   render();
   updateFlower();
-  history.pushState(null, '', location.href); // ← 추가
   requestNotificationPermission(); // ← 추가
 
   const notifSetting = localStorage.getItem('priorify_notification');
   if (notifSetting === null || notifSetting === 'on') {
     scheduleDeadlineCheck();
   }        // ← 추가
+  history.pushState(null, '', location.href); // ← 추가
 }
 
 function logout() {
