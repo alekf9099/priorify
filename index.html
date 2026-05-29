@@ -2387,7 +2387,31 @@ function closeConfirmModalDirect() {
   document.getElementById('confirm-modal-overlay').classList.remove('open');
   confirmCallback = null;
 }
+
+history.pushState(null, '', location.href);
+window.addEventListener('popstate', function() {
+  history.pushState(null, '', location.href);
   
+  // 열려있는 모달 있으면 모달 닫기
+  if (document.getElementById('modal-overlay').classList.contains('open')) {
+    closeModalDirect(); return;
+  }
+  if (document.getElementById('card-modal-overlay').classList.contains('open')) {
+    closeCardModalDirect(); return;
+  }
+  if (document.getElementById('calendar-modal-overlay').classList.contains('open')) {
+    closeCalendarModalDirect(); return;
+  }
+  if (document.getElementById('confirm-modal-overlay').classList.contains('open')) {
+    closeConfirmModalDirect(); return;
+  }
+  
+  // 모달 없으면 종료 확인
+  showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
+    history.go(-2);
+  });
+});  
+
 </script>
 </body>
 </html>
