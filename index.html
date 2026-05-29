@@ -2375,8 +2375,8 @@ function showConfirm(title, desc, callback) {
 }
 
 function confirmModalOk() {
-  closeConfirmModalDirect();
   if (confirmCallback) confirmCallback();
+  closeConfirmModalDirect();
 }
 
 function closeConfirmModal(e) {
