@@ -14,19 +14,31 @@
     "background_color": "#F7F6F3",
     "theme_color": "#6366F1",
     "screenshots": [
-        {
-            "src": "screenshot1.png",
-            "sizes": "746x1600",
-            "type": "image/png",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "screenshot2.png",
-            "sizes": "746x1600",
-            "type": "image/png",
-            "form_factor": "narrow"
-        }
-    ],
+    {
+        "src": "screenshot1.png",
+        "sizes": "746x1600",
+        "type": "image/png",
+        "form_factor": "narrow"
+    },
+    {
+        "src": "screenshot2.png",
+        "sizes": "746x1600",
+        "type": "image/png",
+        "form_factor": "narrow"
+    },
+    {
+        "src": "screenshot-wide1.png",
+        "sizes": "1900x910",
+        "type": "image/png",
+        "form_factor": "wide"
+    },
+    {
+        "src": "screenshot-wide2.png",
+        "sizes": "1905x906",
+        "type": "image/png",
+        "form_factor": "wide"
+    }
+],
     "icons": [
         {
             "src": "app-icon-192.png",
