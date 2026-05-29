@@ -515,6 +515,22 @@ body {
 const sections = document.querySelectorAll('.section[id]');
 const tocBtns = document.querySelectorAll('.toc-btn');
 
+// TOC 버튼 클릭 시 스크롤
+tocBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = btn.getAttribute('href').replace('#', '');
+    const target = document.getElementById(targetId);
+    if (target) {
+      const headerHeight = document.querySelector('.header').offsetHeight;
+      const tocHeight = document.querySelector('.toc').offsetHeight;
+      const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - tocHeight - 12;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+// 스크롤 시 TOC 활성화
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
