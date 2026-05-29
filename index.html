@@ -472,7 +472,13 @@ header {
 .done-empty { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
 .done-list { display: flex; flex-direction: column; gap: 8px; }
 .done-item {
-  display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
 }
 .done-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .done-item-text { flex: 1; font-size: 13.5px; }
@@ -1865,14 +1871,18 @@ function renderDone() {
     const col = columns.find(c => c.name === item.colName);
     const color = col ? COLORS[col.colorIdx] : COLORS[7];
     return `<div class="done-item">
-      <div class="done-item-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${color.dot}"></div>
-      <div class="done-item-text">${esc(item.text)}</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+    <div class="done-item-dot" style="background:${color.dot}"></div>
+    <div class="done-item-text">${esc(item.text)}</div>
+  </div>
+  <div style="display:flex; align-items:center; justify-content:space-between; padding-left:16px;">
+    <div style="display:flex; align-items:center; gap:6px;">
       <span class="done-item-col">${esc(item.colName)}</span>
-      <span class="done-item-meta">${item.doneAt}</span>
-      <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
-    </div>`;
-  }).join('') + '</div>';
-}
+      <span class="done-item-meta">기간 : ${item.date || item.doneAt}</span>
+    </div>
+    <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
+  </div>
+</div>`;
 
 function restoreDone(i) {
   const item = doneItems.splice(i, 1)[0];
