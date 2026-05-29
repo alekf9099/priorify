@@ -2482,7 +2482,7 @@ window.addEventListener('popstate', function() {
   
   // 모달 없으면 종료 확인
   showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
-    history.go(-2);
+    history.go(-(history.length));
   });
 });  
 
