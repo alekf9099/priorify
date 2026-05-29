@@ -2504,6 +2504,9 @@ function scheduleDeadlineCheck() {
 }
 
 function sendDeadlineCheck() {
+  const notifSetting = localStorage.getItem('priorify_notification');
+  if (notifSetting === 'off') return; // ← 추가
+
   const allCards = [];
   columns.forEach(col => col.cards.forEach(card => allCards.push(card)));
   
