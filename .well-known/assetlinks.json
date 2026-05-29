@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.priorify.app",
+        "sha256_cert_fingerprints": ["38:A8:28:55:7D:5C:86:50:E0:D1:E5:C4:6D:0A:CA:AC:0A:F1:70:A1:E3:22:AC:74:BB:34:39:5B:0C:70:B5:84"]
+      }
+    }]
