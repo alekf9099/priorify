@@ -1883,7 +1883,9 @@ function renderDone() {
     <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
   </div>
 </div>`;
-
+  }).join('') + '</div>';  // ← 이 줄이 빠진 거예요
+}
+  
 function restoreDone(i) {
   const item = doneItems.splice(i, 1)[0];
   const col = columns.find(c => c.name === item.colName) || columns[0];
