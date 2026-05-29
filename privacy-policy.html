@@ -356,15 +356,15 @@ body {
 </div>
 
 <div class="toc">
-  <div class="toc-inner">
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s1">수집 항목</a>
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s2">수집 목적</a>
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s3">보유 기간</a>
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s4">제3자 제공</a>
-    <a class="toc-btn active" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s5">이용자 권리</a>
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s6">보안</a>
-    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s7">문의</a>
-  </div>
+<div class="toc-inner">
+  <button class="toc-btn" data-target="s1">수집 항목</button>
+  <button class="toc-btn" data-target="s2">수집 목적</button>
+  <button class="toc-btn" data-target="s3">보유 기간</button>
+  <button class="toc-btn" data-target="s4">제3자 제공</button>
+  <button class="toc-btn" data-target="s5">이용자 권리</button>
+  <button class="toc-btn" data-target="s6">보안</button>
+  <button class="toc-btn" data-target="s7">문의</button>
+</div>
 </div>
 
 <div class="content">
@@ -512,14 +512,13 @@ body {
 
 <script>
 // TOC 활성화
+<script>
 const sections = document.querySelectorAll('.section[id]');
 const tocBtns = document.querySelectorAll('.toc-btn');
 
-// TOC 버튼 클릭 시 스크롤
 tocBtns.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = btn.getAttribute('href').replace('#', '');
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-target');
     const target = document.getElementById(targetId);
     if (target) {
       const headerHeight = document.querySelector('.header').offsetHeight;
@@ -530,12 +529,11 @@ tocBtns.forEach(btn => {
   });
 });
 
-// 스크롤 시 TOC 활성화
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       tocBtns.forEach(btn => btn.classList.remove('active'));
-      const active = document.querySelector(`.toc-btn[href="#${entry.target.id}"]`);
+      const active = document.querySelector(`.toc-btn[data-target="${entry.target.id}"]`);
       if (active) {
         active.classList.add('active');
         active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
