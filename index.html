@@ -2078,6 +2078,16 @@ function resetData() {
 }
 
 function openAddColModal() {
+  function openAddColModal() {
+  // 모바일이면 LNB 먼저 닫기
+  if (window.innerWidth <= 768) {
+    const lnb = document.querySelector('.lnb');
+    const backdrop = document.getElementById('lnb-backdrop');
+    if (lnb) lnb.classList.add('collapsed');
+    if (backdrop) backdrop.classList.remove('show');
+    localStorage.setItem('priorify_lnb_collapsed', 'true');
+  }
+    
   editingColId = null;
   document.getElementById('modal-title').textContent = '새 컬럼 추가';
   document.getElementById('modal-confirm-btn').textContent = '추가';
