@@ -3,6 +3,13 @@
     "short_name": "Priorify",
     "description": "우선순위를 정리하는 가장 쉬운 방법",
     "id": "com.priorify.app",
+    "shortcuts": [
+    {
+        "name": "보드",
+        "url": "/",
+        "description": "할 일 보드로 바로 이동"
+    }
+    ],
     "lang": "ko",
     "dir": "ltr",
     "orientation": "portrait",
