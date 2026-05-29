@@ -4,6 +4,7 @@
     "description": "우선순위를 정리하는 가장 쉬운 방법",
     "id": "com.priorify.app",
     "orientation": "portrait",
+    "categories": ["productivity", "utilities"],
     "start_url": ".",
     "display": "standalone",
     "background_color": "#F7F6F3",
