@@ -1400,6 +1400,7 @@ let dragCardId = null, dragFromColId = null;
 let editingColId = null, editingCardId = null, selectedColorIdx = 0;
 let currentPage = 'board';
 let colCollapseStatus = {};
+let confirmCallback = null;
 
 let selectedCalendarDateStr = null;
 let calendarCurrentYear = new Date().getFullYear();
@@ -2365,8 +2366,6 @@ function updateFlower() {
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
 }
-
-let confirmCallback = null;
 
 function showConfirm(title, desc, callback) {
   confirmCallback = callback;
