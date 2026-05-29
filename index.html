@@ -515,6 +515,48 @@ header {
   color: #B91C1C; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s;
 }
 .danger-btn:hover { background: #FEE2E2; }
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--border-strong);
+  border-radius: 24px;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
 
 /* ── COLUMNS ── */
 .column {
@@ -1265,9 +1307,23 @@ body.dark .card-actions-group {
             </div>
           </div>
         </div>
-        
+
+<div class="settings-section">
+  <div class="settings-section-title">알림</div>
+  <div class="settings-row">
+    <div>
+      <div class="settings-row-label">마감일 알림</div>
+      <div class="settings-row-desc">종료일 당일 자정에 알림을 보냅니다</div>
+    </div>
+    <label class="toggle-switch">
+      <input type="checkbox" id="notification-toggle" onchange="toggleNotification(this.checked)">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+</div>
 <div class="settings-section">
   <div class="settings-section-title">약관</div>
+  
   <div class="settings-row">
     <div>
       <div class="settings-row-label">개인정보처리방침</div>
@@ -1596,7 +1652,11 @@ function showApp() {
   render();
   updateFlower();
   requestNotificationPermission(); // ← 추가
-  scheduleDeadlineCheck();         // ← 추가
+  requestNotificationPermission();
+  const notifSetting = localStorage.getItem('priorify_notification');
+  if (notifSetting === null || notifSetting === 'on') {
+    scheduleDeadlineCheck();
+  }        // ← 추가
 }
 
 function logout() {
@@ -1677,6 +1737,7 @@ function switchPage(page, btn) {
   if (btn) btn.classList.add('active');
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
+  if (page === 'settings') initNotificationToggle(); // ← 추가
 
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
@@ -2459,6 +2520,27 @@ if ('serviceWorker' in navigator) {
     console.log('SW 등록됨', reg);
   });
 }
+  
+function toggleNotification(enabled) {
+  localStorage.setItem('priorify_notification', enabled ? 'on' : 'off');
+  if (enabled) {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+    scheduleDeadlineCheck();
+  }
+}
+
+function initNotificationToggle() {
+  const saved = localStorage.getItem('priorify_notification');
+  const toggle = document.getElementById('notification-toggle');
+  if (!toggle) return;
+  
+  // 기본값 on
+  const isOn = saved === null ? true : saved === 'on';
+  toggle.checked = isOn;
+}
+  
 </script>
 </body>
 </html>
