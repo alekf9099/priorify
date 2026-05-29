@@ -5,6 +5,7 @@
     "id": "com.priorify.app",
     "orientation": "portrait",
     "categories": ["productivity", "utilities"],
+    "prefer_related_applications": false,
     "start_url": ".",
     "display": "standalone",
     "background_color": "#F7F6F3",
