@@ -1388,9 +1388,11 @@ let selectedCalendarDateStr = null;
 let calendarCurrentYear = new Date().getFullYear();
 let calendarCurrentMonth = new Date().getMonth(); 
 
-MobileDragDrop.polyfill({
-  dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
-});
+if (window.innerWidth > 768) {
+  MobileDragDrop.polyfill({
+    dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
+  });
+}
 
 // ───────── 모바일 터치 간섭 및 잔상 버그 완벽 방어 ─────────
 let touchStartTarget = null;
@@ -1405,14 +1407,8 @@ window.addEventListener('touchstart', function(e) {
 }, {passive: true});
 
 window.addEventListener('touchmove', function(e) {
-  if (dragCardId) {
-    // 텍스트 영역(card-text)을 잡았을 때만 카드 드래그를 수행하고, 이외 공백이나 버튼 클릭 유도 시에는 브라우저 스크롤을 우선시함
-    if (touchStartTarget && !touchStartTarget.classList.contains('card-text')) {
-      const draggingEl = document.querySelector('.card.dragging');
-      if (draggingEl) draggingEl.classList.remove('dragging');
-      dragCardId = null;
-      return; 
-    }
+  // 모바일에서는 드래그 자체를 안 하므로 preventDefault 안 함
+  if (dragCardId && window.innerWidth > 768) {
     e.preventDefault();
   }
 }, {passive: false});
@@ -1779,10 +1775,9 @@ function render() {
 
   renderLnbCols();
 }
-
 function renderCard(card, color, colId) {
-  // 교정 포인트: .card-actions-group 캡슐 영역에 draggable="false" 명시 및 mousedown, touchstart 차단으로 하위 레이어 전달 방지
-  return `<div class="card" draggable="true" data-card-id="${card.id}">
+  const isMobile = window.innerWidth <= 768;
+  return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}">
     <div class="card-text">${esc(card.text)}</div>
     <div class="card-meta">
       <span class="card-date">${card.date}</span>
@@ -1808,7 +1803,7 @@ function renderCard(card, color, colId) {
     </div>
   </div>`;
 }
-
+  
 function renderDashboard() {
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const grid = document.getElementById('dash-grid');
