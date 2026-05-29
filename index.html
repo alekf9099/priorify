@@ -1651,8 +1651,9 @@ function showApp() {
   
   render();
   updateFlower();
+  history.pushState(null, '', location.href); // ← 추가
   requestNotificationPermission(); // ← 추가
-  requestNotificationPermission();
+
   const notifSetting = localStorage.getItem('priorify_notification');
   if (notifSetting === null || notifSetting === 'on') {
     scheduleDeadlineCheck();
@@ -2466,7 +2467,6 @@ history.pushState(null, '', location.href);
 window.addEventListener('popstate', function() {
   history.pushState(null, '', location.href);
   
-  // 열려있는 모달 있으면 모달 닫기
   if (document.getElementById('modal-overlay').classList.contains('open')) {
     closeModalDirect(); return;
   }
@@ -2480,11 +2480,14 @@ window.addEventListener('popstate', function() {
     closeConfirmModalDirect(); return;
   }
   
-  // 모달 없으면 종료 확인
   showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
-    history.go(-(history.length));
+    window.close();
+    // window.close() 안되면 앱 최소화
+    if (navigator.app) {
+      navigator.app.exitApp();
+    }
   });
-});  
+});
 
 function requestNotificationPermission() {
   if ('Notification' in window && Notification.permission === 'default') {
