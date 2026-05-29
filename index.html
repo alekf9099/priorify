@@ -1595,6 +1595,8 @@ function showApp() {
   
   render();
   updateFlower();
+  requestNotificationPermission(); // ← 추가
+  scheduleDeadlineCheck();         // ← 추가
 }
 
 function logout() {
@@ -2423,6 +2425,40 @@ window.addEventListener('popstate', function() {
   });
 });  
 
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function scheduleDeadlineCheck() {
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  const msUntilMidnight = midnight - now;
+
+  setTimeout(() => {
+    sendDeadlineCheck();
+    setInterval(sendDeadlineCheck, 24 * 60 * 60 * 1000);
+  }, msUntilMidnight);
+}
+
+function sendDeadlineCheck() {
+  const allCards = [];
+  columns.forEach(col => col.cards.forEach(card => allCards.push(card)));
+  
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'SCHEDULE_CHECK',
+      cards: allCards
+    });
+  }
+}
+  
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    console.log('SW 등록됨', reg);
+  });
+}
 </script>
 </body>
 </html>
