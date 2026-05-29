@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s4 -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보처리방침 — Priorify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./개인정보처리방침 — Priorify_files/css2" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.07);
+  --border-strong: rgba(0,0,0,0.13);
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #A8A8A8;
+  --accent: #6366F1;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(247, 246, 243, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.logo span { color: var(--text-tertiary); }
+
+.header-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border-strong);
+}
+
+.header-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 36px 20px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--accent);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 20px;
+  padding: 4px 10px;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
+
+.hero-title {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.hero-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-meta-label {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 500;
+}
+
+.hero-meta-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+/* ── TOC ── */
+.toc {
+  padding: 16px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.toc::-webkit-scrollbar { display: none; }
+
+.toc-inner {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.toc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.toc-btn:hover, .toc-btn.active {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+/* ── CONTENT ── */
+.content {
+  padding: 0 20px;
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.section-body {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.section-body p {
+  margin-bottom: 12px;
+}
+
+.section-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── INFO CARD ── */
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  min-width: 80px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.65;
+}
+
+.highlight-box strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── LIST ── */
+.privacy-list {
+  list-style: none;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.privacy-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.privacy-list li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 28px 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.footer-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.footer-logo span { color: var(--text-tertiary); }
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#" class="logo">Priorify<span>.</span></a>
+  <div class="header-divider"></div>
+  <span class="header-label">개인정보처리방침</span>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">PRIVACY POLICY</div>
+  <div class="hero-title">개인정보<br>처리방침</div>
+  <div class="hero-desc">Priorify는 이용자의 개인정보를 소중히 여기며, 관련 법령을 준수합니다.</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">시행일</span>
+      <span class="hero-meta-value">2025.01.01</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">최종 수정</span>
+      <span class="hero-meta-value">2025.05.29</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">버전</span>
+      <span class="hero-meta-value">v1.0</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-inner">
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s1">수집 항목</a>
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s2">수집 목적</a>
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s3">보유 기간</a>
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s4">제3자 제공</a>
+    <a class="toc-btn active" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s5">이용자 권리</a>
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s6">보안</a>
+    <a class="toc-btn" href="file:///C:/Users/Muhayu/Downloads/privacy-policy.html#s7">문의</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section" id="s1">
+    <div class="section-num">01</div>
+    <div class="section-title">수집하는 개인정보 항목</div>
+    <div class="section-body">
+      <p>Priorify는 Google 소셜 로그인을 통해 서비스를 제공하며, 다음과 같은 정보를 수집합니다.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">이름</span>
+        <span class="info-value">Google 계정에 등록된 이름</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">이메일</span>
+        <span class="info-value">Google 계정 이메일 주소</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">프로필 사진</span>
+        <span class="info-value">Google 계정 프로필 이미지 URL</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">고유 식별자</span>
+        <span class="info-value">Google 계정 고유 ID (sub)</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">앱 데이터</span>
+        <span class="info-value">이용자가 직접 입력한 할 일, 컬럼 데이터 (기기 로컬 저장)</span>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <strong>참고:</strong> 앱에서 작성하는 할 일 데이터는 이용자의 기기 내 로컬 스토리지에만 저장되며, 별도 서버로 전송되지 않습니다.
+    </div>
+  </div>
+
+  <div class="section" id="s2">
+    <div class="section-num">02</div>
+    <div class="section-title">개인정보 수집 및 이용 목적</div>
+    <div class="section-body">
+      <p>수집한 개인정보는 다음의 목적으로만 이용됩니다.</p>
+    </div>
+    <ul class="privacy-list">
+      <li>Google 계정을 통한 본인 확인 및 로그인 서비스 제공</li>
+      <li>이용자별 데이터 분리 저장 (다중 계정 지원)</li>
+      <li>프로필 이미지 및 이름 표시 (UI 개인화)</li>
+      <li>서비스 이용 통계 및 품질 개선 (비식별 처리)</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s3">
+    <div class="section-num">03</div>
+    <div class="section-title">개인정보 보유 및 이용 기간</div>
+    <div class="section-body">
+      <p>개인정보는 이용자가 서비스를 이용하는 동안 보유하며, 다음의 경우 즉시 삭제됩니다.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">로그아웃 시</span>
+        <span class="info-value">기기 내 저장된 로그인 정보 즉시 삭제</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">데이터 초기화</span>
+        <span class="info-value">설정 내 초기화 시 모든 앱 데이터 삭제</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">앱 삭제</span>
+        <span class="info-value">앱 삭제 시 로컬 저장 데이터 모두 삭제</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <div class="section-num">04</div>
+    <div class="section-title">개인정보의 제3자 제공</div>
+    <div class="section-body">
+      <p>Priorify는 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 단, 아래의 경우에는 예외로 합니다.</p>
+    </div>
+    <ul class="privacy-list">
+      <li>이용자가 사전에 동의한 경우</li>
+      <li>법령의 규정에 의거하거나, 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우</li>
+    </ul>
+    <div class="highlight-box">
+      <strong>Google 로그인:</strong> Google OAuth 2.0을 통한 인증 과정에서 Google의 개인정보처리방침이 적용됩니다. 자세한 내용은 <strong>Google 개인정보처리방침</strong>을 참고하세요.
+    </div>
+  </div>
+
+  <div class="section" id="s5">
+    <div class="section-num">05</div>
+    <div class="section-title">이용자의 권리</div>
+    <div class="section-body">
+      <p>이용자는 언제든지 다음의 권리를 행사할 수 있습니다.</p>
+    </div>
+    <ul class="privacy-list">
+      <li>개인정보 열람 요청</li>
+      <li>개인정보 수정 및 삭제 요청</li>
+      <li>개인정보 처리 정지 요청</li>
+      <li>서비스 탈퇴 및 데이터 삭제 (설정 → 데이터 초기화 후 로그아웃)</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s6">
+    <div class="section-num">06</div>
+    <div class="section-title">개인정보 보호를 위한 기술적 조치</div>
+    <div class="section-body">
+      <p>Priorify는 개인정보 보호를 위해 다음과 같은 조치를 취하고 있습니다.</p>
+    </div>
+    <ul class="privacy-list">
+      <li>HTTPS를 통한 암호화된 통신</li>
+      <li>Google OAuth 2.0 표준 인증 방식 사용</li>
+      <li>서버 미저장 — 모든 데이터는 이용자 기기에만 저장</li>
+      <li>비밀번호 등 민감정보 미수집</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s7">
+    <div class="section-num">07</div>
+    <div class="section-title">개인정보 처리방침 문의</div>
+    <div class="section-body">
+      <p>개인정보 처리방침에 관한 문의사항이 있으시면 아래로 연락해 주세요.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">서비스명</span>
+        <span class="info-value">Priorify</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">개발자</span>
+        <span class="info-value">개인 개발자</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">이메일</span>
+        <span class="info-value">alekf9099@naver.com</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">Priorify<span>.</span></div>
+  <div class="footer-text">본 방침은 2025년 1월 1일부터 시행됩니다.<br>변경 시 앱 내 공지를 통해 안내드립니다.</div>
+</div>
+
+<script>
+// TOC 활성화
+const sections = document.querySelectorAll('.section[id]');
+const tocBtns = document.querySelectorAll('.toc-btn');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocBtns.forEach(btn => btn.classList.remove('active'));
+      const active = document.querySelector(`.toc-btn[href="#${entry.target.id}"]`);
+      if (active) {
+        active.classList.add('active');
+        active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  });
+}, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+
+</body></html>
