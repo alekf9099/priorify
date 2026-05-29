@@ -8,6 +8,20 @@
     "display": "standalone",
     "background_color": "#F7F6F3",
     "theme_color": "#6366F1",
+    "screenshots": [
+        {
+            "src": "screenshot1.png",
+            "sizes": "1080x1920",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "screenshot2.png",
+            "sizes": "1080x1920",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ],
     "icons": [
         {
             "src": "app-icon.png",
