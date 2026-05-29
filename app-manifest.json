@@ -3,15 +3,7 @@
     "short_name": "Priorify",
     "description": "우선순위를 정리하는 가장 쉬운 방법",
     "id": "com.priorify.app",
-    "shortcuts": [
     "lang": "ko",
-    "shortcuts": [
-    {
-        "name": "보드",
-        "url": "/",
-        "description": "할 일 보드로 바로 이동"
-    }
-],
     "dir": "ltr",
     "orientation": "portrait",
     "categories": ["productivity", "utilities"],
@@ -23,32 +15,39 @@
     "display": "standalone",
     "background_color": "#F7F6F3",
     "theme_color": "#6366F1",
+    "shortcuts": [
+        {
+            "name": "보드",
+            "url": "/",
+            "description": "할 일 보드로 바로 이동"
+        }
+    ],
     "screenshots": [
-    {
-        "src": "screenshot1.png",
-        "sizes": "746x1600",
-        "type": "image/png",
-        "form_factor": "narrow"
-    },
-    {
-        "src": "screenshot2.png",
-        "sizes": "746x1600",
-        "type": "image/png",
-        "form_factor": "narrow"
-    },
-    {
-        "src": "screenshot-wide1.png",
-        "sizes": "1900x910",
-        "type": "image/png",
-        "form_factor": "wide"
-    },
-    {
-        "src": "screenshot-wide2.png",
-        "sizes": "1905x906",
-        "type": "image/png",
-        "form_factor": "wide"
-    }
-],
+        {
+            "src": "screenshot1.png",
+            "sizes": "746x1600",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "screenshot2.png",
+            "sizes": "746x1600",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "screenshot-wide1.png",
+            "sizes": "1900x910",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "screenshot-wide2.png",
+            "sizes": "1905x906",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+    ],
     "icons": [
         {
             "src": "app-icon-192.png",
