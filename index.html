@@ -1161,6 +1161,35 @@ body.dark .card-actions-group {
 @media (max-width: 480px) {
   .dash-grid { grid-template-columns: 1fr; }
 }
+
+/* ───────── FOCUS WIDGET STYLES (Added by Super Planner) ───────── */
+.focus-widget {
+  position: fixed; bottom: 85px; right: 24px; z-index: 850;
+  width: 280px; background: var(--surface); border: 1px solid var(--border-strong);
+  border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.focus-widget.collapsed { width: 52px; height: 52px; border-radius: 26px; transform: translateY(0); }
+.focus-widget-header {
+  padding: 14px 18px; background: #EF4444; color: white; display: flex;
+  align-items: center; justify-content: space-between; cursor: pointer;
+  flex-shrink: 0; height: 52px;
+}
+.focus-widget.collapsed .focus-widget-header { padding: 0; justify-content: center; }
+.focus-widget-title { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+.focus-widget-toggle { font-size: 10px; opacity: 0.9; transition: transform 0.3s; }
+.focus-widget.collapsed .focus-widget-toggle { display: none; }
+.focus-widget-content { padding: 12px; display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; background: var(--bg); }
+.focus-widget.collapsed .focus-widget-content { display: none; }
+.focus-item {
+  padding: 10px 12px; background: var(--surface); border-radius: 10px; font-size: 13px;
+  border-left: 4px solid #EF4444; display: flex; align-items: flex-start; gap: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); }
+.focus-empty { text-align: center; padding: 30px 10px; font-size: 12.5px; color: var(--text-tertiary); line-height: 1.6; }
+
 </style>
 </head>
 <body>
@@ -2647,6 +2676,59 @@ function renderGarden() {
   }).join('');
 }
   
+
+// ───────── FOCUS WIDGET LOGIC (Added by Super Planner) ─────────
+function toggleFocusWidget() {
+  const widget = document.getElementById('focus-widget');
+  const label = document.getElementById('focus-text-label');
+  const toggleIcon = document.getElementById('focus-toggle-icon');
+  
+  const isCollapsed = widget.classList.toggle('collapsed');
+  label.style.display = isCollapsed ? 'none' : 'block';
+  toggleIcon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+  
+  if (!isCollapsed) updateFocusWidget();
+}
+
+function updateFocusWidget() {
+  const list = document.getElementById('focus-widget-list');
+  if (!list) return;
+  
+  // 'critical' ID를 가진 컬럼 찾기 (아이젠하워 매트릭스의 '중요&급함')
+  const criticalCol = columns.find(c => c.id === 'critical' || c.name.includes('중요') && c.name.includes('급함'));
+  
+  if (!criticalCol || criticalCol.cards.length === 0) {
+    list.innerHTML = '<div class="focus-empty">🔥<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
+    return;
+  }
+  
+  list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
+    <div class="focus-item">
+      <div class="focus-item-text">${esc(card.text)}</div>
+    </div>
+  `).join('');
+}
+
+// 기존 render 함수에 위젯 업데이트 연결
+const originalRender = render;
+render = function() {
+  if (typeof originalRender === 'function') originalRender();
+  updateFocusWidget();
+};
+
 </script>
+
+  <!-- Focus Widget (Added by Super Planner) -->
+  <div id="focus-widget" class="focus-widget collapsed">
+    <div class="focus-widget-header" onclick="toggleFocusWidget()">
+      <div class="focus-widget-title">
+        <span id="focus-icon" style="font-size: 18px;">🔥</span>
+        <span id="focus-text-label" style="display:none;">오늘의 핵심 집중</span>
+      </div>
+      <div class="focus-widget-toggle" id="focus-toggle-icon">▲</div>
+    </div>
+    <div class="focus-widget-content" id="focus-widget-list"></div>
+  </div>
+
 </body>
 </html>
