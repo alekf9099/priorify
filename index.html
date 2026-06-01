@@ -2646,16 +2646,13 @@ function saveGarden(collectedIds) {
 }
 
 function checkAndAddToGarden() {
-  const count = doneItems.length;
-  if (count > 0 && count % 9 === 0) {
-    const flowerSet = getTodayFlowerSet();
-    const flower = FLOWER_COLLECTION.find(f => f.set === FLOWER_SETS.indexOf(flowerSet));
-    if (flower) {
-      const collected = loadGarden();
-      if (!collected.includes(flower.id)) {
-        collected.push(flower.id);
-        saveGarden(collected);
-      }
+  const flowerSet = getFlowerSet();
+  const flower = FLOWER_COLLECTION.find(f => f.set === FLOWER_SETS.indexOf(flowerSet));
+  if (flower) {
+    const collected = loadGarden();
+    if (!collected.includes(flower.id)) {
+      collected.push(flower.id);
+      saveGarden(collected);
     }
   }
 }
