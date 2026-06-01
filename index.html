@@ -1432,8 +1432,6 @@ body.dark .focus-widget {
 
 </div>
 
-<div id="save-toast">저장됨 ✓</div>
-
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-title" id="modal-title">새 컬럼 추가</div>
@@ -1784,10 +1782,6 @@ if (savedTheme) setTheme(savedTheme);
 let toastTimer = null;
 function showToast() {
   const t = document.getElementById('save-toast');
-  if(!t) return;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
 }
 
 function switchPage(page, btn) {
