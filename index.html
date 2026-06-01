@@ -1425,6 +1425,14 @@ body.dark .focus-widget {
           </div>
         </div>
 
+        <div id="page-myGarden" class="page">
+          <div style="padding:28px 32px;overflow-y:auto;flex:1">
+            <div class="done-title">정원 꾸미기</div>
+            <div class="done-sub">수집한 식물로 나만의 정원을 꾸며보세요 🌿</div>
+            <div id="my-garden-wrap"></div>
+        </div>
+      </div>
+
       </main>
     </div>
   </div>
@@ -2826,6 +2834,119 @@ function updateWaterBtn() {
     btn.style.cursor = 'default';
   }
 }
+
+function loadMyGardenLayout() {
+  try {
+    const s = localStorage.getItem(getStorageKey('priorify_my_garden'));
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {};
+}
+
+function saveMyGardenLayout(layout) {
+  try {
+    localStorage.setItem(getStorageKey('priorify_my_garden'), JSON.stringify(layout));
+  } catch(e) {}
+}
+
+function renderMyGarden() {
+  const wrap = document.getElementById('my-garden-wrap');
+  if (!wrap) return;
+  
+  const collected = loadGarden();
+  const layout = loadMyGardenLayout();
+  const GRID_SIZE = 16; // 4x4
+  
+  let html = `
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:24px;">
+  `;
+  
+  for (let i = 0; i < GRID_SIZE; i++) {
+    const flowerId = layout[i];
+    const flower = flowerId ? FLOWER_COLLECTION.find(f => f.id === flowerId) : null;
+    
+    html += `
+      <div class="garden-cell" data-index="${i}" onclick="selectGardenCell(${i})" style="
+        aspect-ratio: 1;
+        background: ${flower ? 'rgba(99,102,241,0.05)' : 'var(--bg)'};
+        border: 1.5px ${flower ? 'solid var(--accent)' : 'dashed var(--border-strong)'};
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        cursor: pointer;
+        transition: all 0.2s;
+      ">
+        ${flower ? flower.emoji : ''}
+      </div>
+    `;
+  }
+  
+  html += `</div>`;
+  
+  // 수집한 꽃 팔레트
+  html += `
+    <div style="margin-top:8px;">
+      <div style="font-size:12px; font-weight:500; color:var(--text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.6px;">보유 식물</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+  `;
+  
+  if (collected.length === 0) {
+    html += `<div style="font-size:13px; color:var(--text-tertiary);">아직 수집한 식물이 없어요 🌱</div>`;
+  } else {
+    FLOWER_COLLECTION.forEach(flower => {
+      if (collected.includes(flower.id)) {
+        html += `
+          <div class="garden-palette-item" data-flower-id="${flower.id}" onclick="selectPaletteFlower('${flower.id}')" style="
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:4px;
+            padding:10px 14px;
+            background:var(--surface);
+            border:1.5px solid var(--border);
+            border-radius:var(--radius);
+            cursor:pointer;
+            transition:all 0.15s;
+          ">
+            <span style="font-size:28px;">${flower.emoji}</span>
+            <span style="font-size:11px; color:var(--text-secondary);">${flower.name}</span>
+          </div>
+        `;
+      }
+    });
+  }
+  
+  html += `</div></div>`;
+  wrap.innerHTML = html;
+}
+
+let selectedFlowerId = null;
+
+function selectPaletteFlower(flowerId) {
+  selectedFlowerId = flowerId;
+  document.querySelectorAll('.garden-palette-item').forEach(el => {
+    el.style.borderColor = el.dataset.flowerId === flowerId ? 'var(--accent)' : 'var(--border)';
+    el.style.background = el.dataset.flowerId === flowerId ? 'rgba(99,102,241,0.08)' : 'var(--surface)';
+  });
+}
+
+function selectGardenCell(index) {
+  const layout = loadMyGardenLayout();
+  
+  if (selectedFlowerId) {
+    // 선택된 꽃 배치
+    layout[index] = selectedFlowerId;
+  } else if (layout[index]) {
+    // 꽃 제거
+    delete layout[index];
+  }
+  
+  saveMyGardenLayout(layout);
+  renderMyGarden();
+}
+  
 </script>
 </body>
 </html>
