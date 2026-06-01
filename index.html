@@ -1251,6 +1251,7 @@ body.dark .focus-widget {
   </div>
 </header>
 
+<div class="app-layout visible">
 <div class="layout">
   <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
   
@@ -1428,7 +1429,7 @@ body.dark .focus-widget {
     </div>
 
   </main>
-
+</div>
 <div class="cal-floating-container" id="cal-floating-container">
   <button class="cal-btn-trigger" onclick="openCalendarModal()" title="캘린더 확인">
     <svg class="cal-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2521,7 +2522,6 @@ function updateFlower() {
   updateWaterBtn(); // ← 여기
 }
   
- 
 function showConfirm(title, desc, callback) {
   confirmCallback = callback;
   document.getElementById('confirm-modal-title').textContent = title;
