@@ -2385,43 +2385,73 @@ document.addEventListener('keydown', e => {
   }
 });
 
+const FLOWER_SETS = [
+  { stage0: '🌱', stage1: '🌿', stage2: '🌷', stage3: '🌸' }, // 분홍 벚꽃
+  { stage0: '🌱', stage1: '🌿', stage2: '🌻', stage3: '🌻' }, // 해바라기
+  { stage0: '🌱', stage1: '🌿', stage2: '🌹', stage3: '🌹' }, // 장미
+  { stage0: '🌱', stage1: '🌿', stage2: '💐', stage3: '💐' }, // 꽃다발
+  { stage0: '🌱', stage1: '🌿', stage2: '🪷', stage3: '🪷' }, // 연꽃
+];
+
+function getFlowerSet() {
+  if (!currentUser) return FLOWER_SETS[0];
+  
+  // 계정 sub로 고정 배정 (로그인할 때마다 같은 꽃)
+  const idx = parseInt(currentUser.sub.slice(-1)) % FLOWER_SETS.length;
+  return FLOWER_SETS[idx];
+}
+
+function getTodayFlowerSet() {
+  if (!currentUser) return FLOWER_SETS[0];
+  
+  // max 달성 후 다음날 다른 꽃 (날짜 + 계정으로 랜덤)
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${today.getMonth()}${today.getDate()}`;
+  const seed = parseInt(currentUser.sub.slice(-3)) + parseInt(dateStr);
+  return FLOWER_SETS[seed % FLOWER_SETS.length];
+}
+
 function updateFlower() {
   const plant = document.getElementById('flower-plant');
   const levelEl = document.getElementById('flower-level');
   if (!plant || !levelEl) return;
 
   const count = doneItems.length;
+  
+  // max 달성 여부에 따라 꽃 세트 선택
+  const isMaxAchieved = count > 0 && count % 9 === 0;
+  const flowerSet = isMaxAchieved ? getTodayFlowerSet() : getFlowerSet();
 
-  let emoji = '🌱';
+  let emoji = flowerSet.stage0;
   let stageClass = 'stage-0';
   let text = '0/3';
 
   if (count === 0) {
-    emoji = '🌱';
+    emoji = flowerSet.stage0;
     stageClass = 'stage-0';
     text = '0/3';
     levelEl.classList.remove('max');
   } else if (count % 9 === 0) {
-    emoji = '🌸';
+    emoji = flowerSet.stage3;
     stageClass = 'stage-3';
     text = 'MAX!';
     levelEl.classList.add('max');
   } else {
     levelEl.classList.remove('max');
-    const currentCycle = count % 9; 
-    const stage = Math.floor(currentCycle / 3); 
-    const progress = currentCycle % 3; 
-    
+    const currentCycle = count % 9;
+    const stage = Math.floor(currentCycle / 3);
+    const progress = currentCycle % 3;
+
     text = `${progress}/3`;
-    
+
     if (stage === 0) {
-      emoji = '🌱';
+      emoji = flowerSet.stage0;
       stageClass = 'stage-0';
     } else if (stage === 1) {
-      emoji = '🌿';
+      emoji = flowerSet.stage1;
       stageClass = 'stage-1';
     } else if (stage === 2) {
-      emoji = '🌷';
+      emoji = flowerSet.stage2;
       stageClass = 'stage-2';
     }
   }
