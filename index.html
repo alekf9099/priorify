@@ -2509,15 +2509,17 @@ function updateFlower() {
     levelEl.textContent = 'MAX! 🌸';
   }
 
-  if (level < 3) levelEl.classList.remove('max');
-
+if (level < 3) levelEl.classList.remove('max');
   plant.className = 'flower-plant ' + stageClass;
   plant.textContent = emoji;
-  levelEl.textContent = `💧 ${drops}`;
-
+  if (level < 3) {
+    levelEl.textContent = `💧 ${drops}`;
+  } else {
+    levelEl.textContent = 'MAX! 🌸';
+  }
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
-  updateWaterBtn(); 
+  updateWaterBtn();
 }
   
 function showConfirm(title, desc, callback) {
