@@ -1162,8 +1162,7 @@ body.dark .card-actions-group {
   .dash-grid { grid-template-columns: 1fr; }
 }
 
-
-/* ───────── PREMIUM FOCUS WIDGET (Enhanced by Super Planner) ───────── */
+/* ───────── PREMIUM FOCUS WIDGET (Super Planner) ───────── */
 .focus-widget {
   position: fixed; bottom: 85px; right: 24px; z-index: 850;
   width: 280px; background: rgba(255, 255, 255, 0.85);
@@ -1185,68 +1184,25 @@ body.dark .focus-widget {
 .focus-widget-header {
   padding: 0 20px; background: var(--accent); color: white; display: flex;
   align-items: center; justify-content: space-between; cursor: pointer;
-  flex-shrink: 0; height: 56px; transition: background 0.3s;
+  flex-shrink: 0; height: 56px;
 }
 .focus-widget.collapsed .focus-widget-header { padding: 0; justify-content: center; }
 .focus-widget-title { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; display: flex; align-items: center; gap: 10px; }
 .focus-widget-toggle { font-size: 12px; opacity: 0.8; transition: transform 0.4s; }
 .focus-widget-content { 
-  padding: 0; /* Changed to 0 to control internal padding via items */
-  max-height: 0; /* Start with 0 for smooth opening */
-  overflow: hidden; 
+  padding: 0; max-height: 0; overflow: hidden; 
   transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s;
-  background: transparent;
 }
 .focus-widget:not(.collapsed) .focus-widget-content { 
-  max-height: 400px; 
-  padding: 14px;
+  max-height: 400px; padding: 14px;
 }
 .focus-item {
   padding: 12px 14px; background: var(--surface); border-radius: 12px; font-size: 13.5px;
   border-left: 4px solid var(--accent); display: flex; align-items: flex-start; gap: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 8px;
-  transform: translateY(10px); opacity: 0;
-  transition: all 0.4s ease;
 }
-.focus-widget:not(.collapsed) .focus-item {
-  transform: translateY(0); opacity: 1;
-}
-/* Staggered animation for items */
-.focus-item:nth-child(1) { transition-delay: 0.1s; }
-.focus-item:nth-child(2) { transition-delay: 0.15s; }
-.focus-item:nth-child(3) { transition-delay: 0.2s; }
-.focus-item:nth-child(4) { transition-delay: 0.25s; }
-.focus-item:nth-child(5) { transition-delay: 0.3s; }
-
 .focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); font-weight: 500; }
 .focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: var(--text-tertiary); line-height: 1.6; }
-
-.focus-widget {
-  position: fixed; bottom: 85px; right: 24px; z-index: 850;
-  width: 280px; background: var(--surface); border: 1px solid var(--border-strong);
-  border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-  overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex; flex-direction: column;
-}
-.focus-widget.collapsed { width: 52px; height: 52px; border-radius: 26px; transform: translateY(0); }
-.focus-widget-header {
-  padding: 14px 18px; background: #EF4444; color: white; display: flex;
-  align-items: center; justify-content: space-between; cursor: pointer;
-  flex-shrink: 0; height: 52px;
-}
-.focus-widget.collapsed .focus-widget-header { padding: 0; justify-content: center; }
-.focus-widget-title { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-.focus-widget-toggle { font-size: 10px; opacity: 0.9; transition: transform 0.3s; }
-.focus-widget.collapsed .focus-widget-toggle { display: none; }
-.focus-widget-content { padding: 12px; display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; background: var(--bg); }
-.focus-widget.collapsed .focus-widget-content { display: none; }
-.focus-item {
-  padding: 10px 12px; background: var(--surface); border-radius: 10px; font-size: 13px;
-  border-left: 4px solid #EF4444; display: flex; align-items: flex-start; gap: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
-.focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); }
-.focus-empty { text-align: center; padding: 30px 10px; font-size: 12.5px; color: var(--text-tertiary); line-height: 1.6; }
 
 </style>
 </head>
@@ -1258,7 +1214,7 @@ body.dark .focus-widget {
 
 <div class="login-screen hidden" id="login-screen">
   <div class="login-box">
-    <div class="login-logo">Priorify<span>.</span><button class="google-login-btn" style="margin-top:12px; background:#f0f0f0; border-color:#ddd;" onclick="loginAsGuest()">게스트로 시작하기 (테스트용)</button></div>
+    <div class="login-logo">Priorify<span>.</span></div>
     <div class="login-subtitle">우선순위를 정리하는 가장 쉬운 방법</div>
     <button class="google-login-btn" id="google-login-btn">
       <svg class="google-icon" viewBox="0 0 24 24">
@@ -1269,6 +1225,7 @@ body.dark .focus-widget {
       </svg>
       구글로 로그인
     </button>
+<button class="google-login-btn" style="margin-top:12px; background:#f5f5f5;" onclick="loginAsGuest()">게스트로 체험하기</button>
   </div>
 </div>
 
@@ -1559,22 +1516,6 @@ body.dark .focus-widget {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
-
-// ───────── FAIL-SAFE LOADING (Added by Super Planner) ─────────
-// Any reason, if loading screen stays more than 1.5s, force hide it.
-setTimeout(() => {
-  const loader = document.getElementById('loading-screen');
-  if (loader && !loader.classList.contains('hidden')) {
-    console.warn("Loading took too long, forcing app start...");
-    loader.classList.add('hidden');
-    // If user not loaded, at least show login
-    const loginScreen = document.getElementById('login-screen');
-    if (loginScreen && loginScreen.classList.contains('hidden') && !currentUser) {
-      loginScreen.classList.remove('hidden');
-    }
-  }
-}, 1500);
-
 const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
@@ -1680,62 +1621,12 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-
-
 function initGoogleAuth() {
-  console.log("Initializing Auth...");
-  try {
-    if (window.google && window.google.accounts && window.google.accounts.id) {
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-        auto_select: false,
-      });
-      console.log("Google Auth initialized.");
-    }
-  } catch (e) {
-    console.error("Auth init error:", e);
-  }
-  
-  // Always proceed to check local user regardless of Google library status
-  const savedUser = localStorage.getItem('priorify_user');
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      showApp();
-      return;
-    } catch(e) {
-      localStorage.removeItem('priorify_user');
-    }
-  }
-  showLogin();
-}
-);
-    } else {
-      console.warn("Google Auth library not loaded, enabling guest mode.");
-    }
-  } catch (e) {
-    console.error("Auth init error:", e);
-  }
-  
-  const savedUser = localStorage.getItem('priorify_user');
-  
-  setTimeout(() => {
-    if (savedUser) {
-      try {
-        currentUser = JSON.parse(savedUser);
-        showApp();
-      } catch(e) {
-        localStorage.removeItem('priorify_user');
-        showLogin();
-      }
-    } else {
-      // If no saved user, show login screen (which now has a guest button)
-      showLogin();
-    }
-  }, 400); 
-}
-);
+  window.google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: false,
+  });
   
   const savedUser = localStorage.getItem('priorify_user');
   
@@ -1755,7 +1646,7 @@ function initGoogleAuth() {
 }
 
 function showLogin() {
-  const ls = document.getElementById('loading-screen'); if(ls) ls.classList.add('hidden');
+  document.getElementById('loading-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
 }
 
@@ -1788,7 +1679,7 @@ function showApp() {
   calendarCurrentYear = now.getFullYear();
   calendarCurrentMonth = now.getMonth();
 
-  const ls = document.getElementById('loading-screen'); if(ls) ls.classList.add('hidden');
+  document.getElementById('loading-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-container').style.display = 'flex';
   
@@ -2801,93 +2692,72 @@ function renderGarden() {
 }
   
 
-
-// ───────── PREMIUM FOCUS WIDGET LOGIC (Enhanced by Super Planner) ─────────
+// ───────── PREMIUM WIDGET LOGIC ─────────
 function toggleFocusWidget() {
   const widget = document.getElementById('focus-widget');
   const label = document.getElementById('focus-text-label');
   const toggleIcon = document.getElementById('focus-toggle-icon');
+  if(!widget || !label || !toggleIcon) return;
   
   const isCollapsed = widget.classList.toggle('collapsed');
-  
-  if (isCollapsed) {
-    label.style.opacity = '0';
-    setTimeout(() => { label.style.display = 'none'; }, 300);
-    toggleIcon.style.transform = 'rotate(0deg)';
-  } else {
-    label.style.display = 'block';
-    setTimeout(() => { label.style.opacity = '1'; }, 10);
-    toggleIcon.style.transform = 'rotate(180deg)';
-    updateFocusWidget();
-  }
+  label.style.display = isCollapsed ? 'none' : 'block';
+  toggleIcon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+  if (!isCollapsed) updateFocusWidget();
 }
 
 function updateFocusWidget() {
   const list = document.getElementById('focus-widget-list');
-  if (!list) return;
-  
-  const criticalCol = columns.find(c => c.id === 'critical' || (c.name.includes('중요') && c.name.includes('급함')));
-  
-  if (!criticalCol || criticalCol.cards.length === 0) {
-    list.innerHTML = `
-      <div class="focus-empty">
-        <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.5;">✨</div>
-        지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?
-      </div>`;
+  if (!list || typeof columns === 'undefined') return;
+  const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
+  if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
+    list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
     return;
   }
-  
   list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
     <div class="focus-item">
-      <div class="focus-item-text">${esc(card.text)}</div>
+      <div class="focus-item-text">${typeof esc !== 'undefined' ? esc(card.text) : card.text}</div>
     </div>
   `).join('');
 }
 
-// Ensure widget updates when data changes
-const originalRender = render;
-render = function() {
-  if (typeof originalRender === 'function') originalRender();
-  updateFocusWidget();
-};
+// Fail-safe for loading
+setTimeout(() => {
+  const loader = document.getElementById('loading-screen');
+  if (loader && !loader.classList.contains('hidden')) {
+    loader.classList.add('hidden');
+    const login = document.getElementById('login-screen');
+    if (login && login.classList.contains('hidden') && typeof currentUser === 'undefined') {
+      login.classList.remove('hidden');
+    }
+  }
+}, 2000);
 
-const originalRender = render;
-render = function() {
-  if (typeof originalRender === 'function') originalRender();
-  updateFocusWidget();
-};
-
-
+// Guest login support
 function loginAsGuest() {
-  currentUser = {
-    sub: 'guest_123',
-    email: 'guest@example.com',
-    name: '멋진 게스트',
-    picture: 'https://ui-avatars.com/api/?name=Guest&background=random'
-  };
+  currentUser = { sub:'guest', email:'guest@example.com', name:'게스트', picture:'https://ui-avatars.com/api/?name=Guest' };
   localStorage.setItem('priorify_user', JSON.stringify(currentUser));
-  showApp();
+  if(typeof showApp === 'function') showApp();
 }
+
+// Hook into existing render
+const originalRender = typeof render === 'function' ? render : null;
+window.render = function() {
+  if (originalRender) originalRender();
+  updateFocusWidget();
+};
 
 </script>
 
-  
-  <!-- Premium Focus Widget (Added by Super Planner) -->
   <div id="focus-widget" class="focus-widget collapsed">
     <div class="focus-widget-header" onclick="toggleFocusWidget()">
       <div class="focus-widget-title">
-        <div id="focus-icon-wrap" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
-          <svg id="focus-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
           </svg>
         </div>
-        <span id="focus-text-label" style="display:none; opacity: 0; transition: opacity 0.3s;">오늘의 핵심 집중</span>
+        <span id="focus-text-label" style="display:none;">오늘의 핵심 집중</span>
       </div>
-      <div class="focus-widget-toggle" id="focus-toggle-icon">▲</div>
-    </div>
-    <div class="focus-widget-content" id="focus-widget-list"></div>
-  </div>
-
       <div class="focus-widget-toggle" id="focus-toggle-icon">▲</div>
     </div>
     <div class="focus-widget-content" id="focus-widget-list"></div>
