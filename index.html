@@ -1511,19 +1511,10 @@ const COLORS = [
 ];
 
 const DEFAULT_COLUMNS = [
-  { id:'critical', name:'중요 & 급함', desc:'즉시 처리 필요', colorIdx:0, cards:[
-    { id:'c1', text:'오늘 마감 보고서 제출', date:today() },
-    { id:'c2', text:'클라이언트 미팅 준비', date:today() },
-  ]},
-  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:3, cards:[
-    { id:'c3', text:'장기 목표 로드맵 작성', date:today() },
-  ]},
-  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:1, cards:[
-    { id:'c4', text:'이메일 답장 처리', date:today() },
-  ]},
-  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:7, cards:[
-    { id:'c5', text:'읽을 아티클 정리', date:today() },
-  ]},
+  { id:'critical', name:'중요 & 급함', desc:'즉시 처리 필요', colorIdx:0, cards:[]},
+  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:3, cards:[]},
+  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:1, cards:[]},
+  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:7, cards:[]},
 ];
 
 let currentUser = null;
