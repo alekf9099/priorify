@@ -1289,6 +1289,16 @@ body.dark .focus-widget {
           식물 도감
         </button>
         
+        <button class="lnb-item" data-page="myGarden" onclick="switchPage('myGarden', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="14" height="14" rx="2"/>
+            <path d="M2 7h14M7 2v14"/>
+          </svg>
+          정원 꾸미기
+        </button>
+
+        <div class="lnb-divider"></div>
+        <span class="lnb-section-label">컬럼</span>
         <div class="lnb-divider"></div>
         <span class="lnb-section-label">컬럼</span>
 
@@ -1804,6 +1814,7 @@ function switchPage(page, btn) {
   if (page === 'done') renderDone();
   if (page === 'settings') initNotificationToggle(); 
   if (page === 'garden') renderGarden();
+  if (page === 'myGarden') renderMyGarden();
 
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
