@@ -801,7 +801,7 @@ body.dark .card-actions-group {
 #flower-pot { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
 .flower-level { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 20px; padding: 4px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.3s; }
 .flower-level.max { background: #FCE7F3; color: #9D174D; border-color: #FBCFE8; }
-.flower-plant { font-size: 32px; line-height: 1; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s; will-change: transform; }
+.flower-plant { font-size: 32px; line-height: 1; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s; will-change: transform; cursor: pointer; pointer-events: auto; }
 .flower-plant.stage-0 { font-size: 32px; filter: grayscale(0.8); }
 .flower-plant.stage-1 { font-size: 40px; filter: grayscale(0.4); }
 .flower-plant.stage-2 { font-size: 48px; filter: grayscale(0.1); }
@@ -1142,7 +1142,7 @@ body.dark .card-actions-group {
     flex-shrink: 0;
   }
 
-  #page-dashboard, #page-done, #page-settings { padding: 16px !important; }
+  #page-dashboard, #page-done, #page-settings, #page-garden { padding: 16px !important; }
   .dash-card { padding: 12px 14px; }
   .dash-card-num { font-size: 24px; }
   .dash-col-card { padding: 12px 14px; }
@@ -1225,223 +1225,214 @@ body.dark .focus-widget {
       </svg>
       구글로 로그인
     </button>
-<button class="google-login-btn" style="margin-top:12px; background:#f5f5f5;" onclick="loginAsGuest()">게스트로 체험하기</button>
+    <button class="google-login-btn" style="margin-top:12px; background:#f5f5f5;" onclick="loginAsGuest()">게스트로 체험하기</button>
   </div>
 </div>
 
 <div id="app-container" style="display: none; flex: 1; overflow: hidden; flex-direction: column;">
 
-<header>
-  <div class="header-left">
-    <button class="lnb-toggle-btn" id="lnb-toggle-btn" onclick="toggleLnb()" title="사이드바 접기/펼치기" style="margin-right: -4px;">
-      <svg class="lnb-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square">
-        <line x1="4" y1="5" x2="20" y2="5"></line>
-        <line x1="4" y1="12" x2="20" y2="12"></line>
-        <line x1="4" y1="19" x2="20" y2="19"></line>
-      </svg>
-    </button>
-    <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
-  </div>
-  <div class="header-right">
-    <div class="user-profile" id="user-profile">
-      <img class="user-avatar" id="user-avatar" src="" alt="프로필">
-      <span class="user-name" id="user-name"></span>
+  <header>
+    <div class="header-left">
+      <button class="lnb-toggle-btn" id="lnb-toggle-btn" onclick="toggleLnb()" title="사이드바 접기/펼치기" style="margin-right: -4px;">
+        <svg class="lnb-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square">
+          <line x1="4" y1="5" x2="20" y2="5"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="19" x2="20" y2="19"></line>
+        </svg>
+      </button>
+      <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
     </div>
-    <button class="logout-btn" id="logout-btn">로그아웃</button>
-  </div>
-</header>
-
-<div class="app-layout visible">
-<div class="layout">
-  <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
-  
-  <nav class="lnb">
-    <span class="lnb-section-label">메인</span>
-    <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="14" height="12" rx="2"/>
-        <path d="M6 3v12M12 3v12"/>
-      </svg>
-      보드
-    </button>
-
-    <button class="lnb-item" data-page="dashboard" onclick="switchPage('dashboard', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 13 L6 8 L9 11 L13 5 L16 8"/>
-        <path d="M2 16 L16 16"/>
-      </svg>
-      대시보드
-    </button>
-
-    <button class="lnb-item" data-page="done" onclick="switchPage('done', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="9" cy="9" r="7"/>
-        <path d="M6 9 L8 11 L12 7"/>
-      </svg>
-      완료 목록
-    </button>
-
-    <button class="lnb-item" data-page="garden" onclick="switchPage('garden', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 2C9 2 4 6 4 10a5 5 0 0 0 10 0C14 6 9 2 9 2z"/>
-        <path d="M9 12 L9 17"/>
-      </svg>
-    식물 도감
-  </button>
-    
-    <div class="lnb-divider"></div>
-    <span class="lnb-section-label">컬럼</span>
-
-    <button class="lnb-new-col" onclick="openAddColModal()">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/>
-      </svg>
-      새 컬럼 추가
-    </button>
-
-    <div id="lnb-col-list"></div>
-
-    <div class="lnb-divider" style="margin-top:auto"></div>
-
-    <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
-      <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="9" cy="9" r="2.5"/>
-        <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
-      </svg>
-      설정
-    </button>
-  </nav>
-
-  <main class="main">
-
-    <div id="page-board" class="page active" style="position: relative;">
-      <div id="board-wrap">
-        <div id="board"></div>
+    <div class="header-right">
+      <div class="user-profile" id="user-profile">
+        <img class="user-avatar" id="user-avatar" src="" alt="프로필">
+        <span class="user-name" id="user-name"></span>
       </div>
+      <button class="logout-btn" id="logout-btn">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="app-layout visible" style="display: flex; flex: 1; overflow: hidden;">
+    <div class="layout" style="display: flex; flex: 1; overflow: hidden; width: 100%;">
+      <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
       
- <div id="flower-pot">
-  <div class="flower-level" id="flower-level">💧 0</div>
-  <div class="flower-plant stage-0" id="flower-plant" onclick="waterPlant()">🌱</div>
-  <button id="water-btn" onclick="waterPlant()" style="
-    display: none;
-    margin-top: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 6px 16px;
-    background: #60A5FA;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-  ">💧 물 주기</button>
-</div>
+      <nav class="lnb">
+        <span class="lnb-section-label">메인</span>
+        <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="14" height="12" rx="2"/>
+            <path d="M6 3v12M12 3v12"/>
+          </svg>
+          보드
+        </button>
 
-    <div id="page-dashboard" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
-        <div class="dash-title">대시보드</div>
-        <div class="dash-sub">전체 할 일 현황을 한눈에 확인하세요</div>
-        <div class="dash-grid" id="dash-grid"></div>
-        <div class="dash-cols" id="dash-cols"></div>
-      </div>
-    </div>
+        <button class="lnb-item" data-page="dashboard" onclick="switchPage('dashboard', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 13 L6 8 L9 11 L13 5 L16 8"/>
+            <path d="M2 16 L16 16"/>
+          </svg>
+          대시보드
+        </button>
 
-    <div id="page-done" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
-        <div class="done-title">완료 목록</div>
-        <div class="done-sub">완료 처리한 항목들이 여기 모입니다</div>
-        <div id="done-list-wrap"></div>
-      </div>
-    </div>
+        <button class="lnb-item" data-page="done" onclick="switchPage('done', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M6 9 L8 11 L12 7"/>
+          </svg>
+          완료 목록
+        </button>
 
-    <div id="page-settings" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
-        <div class="settings-title">설정</div>
-        <div class="settings-sub">앱 환경을 취향에 맞게 조정하세요</div>
+        <button class="lnb-item" data-page="garden" onclick="switchPage('garden', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2C9 2 4 6 4 10a5 5 0 0 0 10 0C14 6 9 2 9 2z"/>
+            <path d="M9 12 L9 17"/>
+          </svg>
+          식물 도감
+        </button>
+        
+        <div class="lnb-divider"></div>
+        <span class="lnb-section-label">컬럼</span>
 
-        <div class="settings-section">
-          <div class="settings-section-title">테마</div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">화면 모드</div>
-              <div class="settings-row-desc">밝거나 어두운 테마를 선택하세요</div>
+        <button class="lnb-new-col" onclick="openAddColModal()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/>
+          </svg>
+          새 컬럼 추가
+        </button>
+
+        <div id="lnb-col-list"></div>
+
+        <div class="lnb-divider" style="margin-top:auto"></div>
+
+        <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="9" r="2.5"/>
+            <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
+          </svg>
+          설정
+        </button>
+      </nav>
+
+      <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
+
+        <div id="page-board" class="page active">
+          <div id="board-wrap">
+            <div id="board"></div>
+          </div>
+          
+          <div id="flower-pot">
+            <div class="flower-level" id="flower-level">💧 0</div>
+            <div class="flower-plant stage-0" id="flower-plant" onclick="waterPlant()">🌱</div>
+            <button id="water-btn" onclick="waterPlant()" style="display: none; margin-top: 8px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 6px 16px; background: #60A5FA; color: white; border: none; border-radius: 20px; cursor: pointer; transition: all 0.2s;">💧 물 주기</button>
+          </div>
+        </div>
+
+        <div id="page-dashboard" class="page">
+          <div style="padding:28px 32px; overflow-y:auto; flex:1; width:100%;">
+            <div class="dash-title">대시보드</div>
+            <div class="dash-sub">전체 할 일 현황을 한눈에 확인하세요</div>
+            <div class="dash-grid" id="dash-grid"></div>
+            <div class="dash-cols" id="dash-cols"></div>
+          </div>
+        </div>
+
+        <div id="page-done" class="page">
+          <div style="padding:28px 32px; overflow-y:auto; flex:1; width:100%;">
+            <div class="done-title">완료 목록</div>
+            <div class="done-sub">완료 처리한 항목들이 여기 모입니다</div>
+            <div id="done-list-wrap"></div>
+          </div>
+        </div>
+
+        <div id="page-settings" class="page">
+          <div style="padding:28px 32px; overflow-y:auto; flex:1; width:100%;">
+            <div class="settings-title">설정</div>
+            <div class="settings-sub">앱 환경을 취향에 맞게 조정하세요</div>
+
+            <div class="settings-section">
+              <div class="settings-section-title">테마</div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">화면 모드</div>
+                  <div class="settings-row-desc">밝거나 어두운 테마를 선택하세요</div>
+                </div>
+                <div class="theme-btns">
+                  <button class="theme-btn active" id="btn-light" onclick="setTheme('light')">라이트</button>
+                  <button class="theme-btn" id="btn-dark" onclick="setTheme('dark')">다크</button>
+                </div>
+              </div>
             </div>
-            <div class="theme-btns">
-              <button class="theme-btn active" id="btn-light" onclick="setTheme('light')">라이트</button>
-              <button class="theme-btn" id="btn-dark" onclick="setTheme('dark')">다크</button>
+      
+            <div class="settings-section">
+              <div class="settings-section-title">알림</div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">마감일 알림</div>
+                  <div class="settings-row-desc">종료일 당일 자정에 알림을 보냅니다</div>
+                </div>
+                <label class="toggle-switch" style="align-self: flex-end;">
+                  <input type="checkbox" id="notification-toggle" onchange="toggleNotification(this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="settings-section">
+              <div class="settings-section-title">약관</div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">개인정보처리방침</div>
+                  <div class="settings-row-desc">수집 항목, 이용 목적 등을 확인하세요</div>
+                </div>
+                <button class="theme-btn" style="align-self: flex-end;" onclick="window.open('https://priorify-eight.vercel.app/privacy-policy.html', '_blank')">보기</button>
+              </div>
+            </div>
+            
+            <div class="settings-section">
+              <div class="settings-section-title">데이터</div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">데이터 초기화</div>
+                  <div class="settings-row-desc">모든 컬럼과 카드가 삭제됩니다</div>
+                </div>
+                <button class="danger-btn" onclick="resetData()">초기화</button>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-label">완료 목록 비우기</div>
+                  <div class="settings-row-desc">완료된 항목을 모두 삭제합니다</div>
+                </div>
+                <button class="danger-btn" onclick="clearDone()">비우기</button>
+              </div>
             </div>
           </div>
         </div>
-  
-<div class="settings-section">
-  <div class="settings-section-title">알림</div>
-  <div class="settings-row">
-    <div>
-      <div class="settings-row-label">마감일 알림</div>
-      <div class="settings-row-desc">종료일 당일 자정에 알림을 보냅니다</div>
-    </div>
-    <label class="toggle-switch" style="align-self: flex-end;">
-      <input type="checkbox" id="notification-toggle" onchange="toggleNotification(this.checked)">
-      <span class="toggle-slider"></span>
-    </label>
-  </div>
-</div>
         
-<div class="settings-section">
-  <div class="settings-section-title">약관</div>
-  
-  <div class="settings-row">
-    <div>
-      <div class="settings-row-label">개인정보처리방침</div>
-      <div class="settings-row-desc">수집 항목, 이용 목적 등을 확인하세요</div>
-    </div>
-    <button class="theme-btn" style="align-self: flex-end;" onclick="window.open('https://priorify-eight.vercel.app/privacy-policy.html', '_blank')">보기</button>
-  </div>
-</div>
-        
-        <div class="settings-section">
-          <div class="settings-section-title">데이터</div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">데이터 초기화</div>
-              <div class="settings-row-desc">모든 컬럼과 카드가 삭제됩니다</div>
-            </div>
-            <button class="danger-btn" onclick="resetData()">초기화</button>
-          </div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">완료 목록 비우기</div>
-              <div class="settings-row-desc">완료된 항목을 모두 삭제합니다</div>
-            </div>
-            <button class="danger-btn" onclick="clearDone()">비우기</button>
+        <div id="page-garden" class="page">
+          <div style="padding:28px 32px; overflow-y:auto; flex:1; width:100%;">
+            <div class="done-title">식물 도감</div>
+            <div class="done-sub">완료한 할 일로 식물을 수집하세요 🌱</div>
+            <div id="garden-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:8px;"></div>
           </div>
         </div>
-      </div>
-    </div>
-    
-<div id="page-garden" class="page">
-      <div style="padding:28px 32px;overflow-y:auto;flex:1">
-        <div class="done-title">식물 도감</div>
-        <div class="done-sub">완료한 할 일로 식물을 수집하세요 🌱</div>
-        <div id="garden-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:8px;"></div>
-      </div>
-    </div>
 
-  </main>
-</div>
-<div class="cal-floating-container" id="cal-floating-container">
-  <button class="cal-btn-trigger" onclick="openCalendarModal()" title="캘린더 확인">
-    <svg class="cal-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="16" y1="2" x2="16" y2="6"></line>
-      <line x1="8" y1="2" x2="8" y2="6"></line>
-      <line x1="3" y1="10" x2="18" y2="10"></line>
-    </svg>
-  </button>
-</div>
+      </main>
+    </div>
+  </div>
+
+  <div class="cal-floating-container" id="cal-floating-container">
+    <button class="cal-btn-trigger" onclick="openCalendarModal()" title="캘린더 확인">
+      <svg class="cal-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="18" y2="10"></line>
+      </svg>
+    </button>
+  </div>
 
 </div>
+
+<div id="save-toast">저장됨 ✓</div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
@@ -1526,6 +1517,21 @@ body.dark .focus-widget {
   </div>
 </div>
 
+<div id="focus-widget" class="focus-widget collapsed">
+  <div class="focus-widget-header" onclick="toggleFocusWidget()">
+    <div class="focus-widget-title">
+      <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+        </svg>
+      </div>
+      <span id="focus-text-label" style="display:none;">오늘의 핵심 집중</span>
+    </div>
+    <div class="focus-widget-toggle" id="focus-toggle-icon">▲</div>
+  </div>
+  <div class="focus-widget-content" id="focus-widget-list"></div>
+</div>
+
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
@@ -1556,15 +1562,12 @@ let touchStartTarget = null;
 
 window.addEventListener('touchstart', function(e) {
   touchStartTarget = e.target;
-  
-  // 버튼 그룹 및 버튼 자체를 터치한 경우 드래그 중단 처리하여 잔상 원천 차단
   if (e.target.closest('.card-actions-group') || e.target.closest('.card-btn')) {
     dragCardId = null;
   }
 }, {passive: true});
 
 window.addEventListener('touchmove', function(e) {
-  // 모바일에서는 드래그 자체를 안 하므로 preventDefault 안 함
   if (dragCardId && window.innerWidth > 768) {
     e.preventDefault();
   }
@@ -1631,6 +1634,7 @@ function today() {
 
 function genId() { return 'id' + (nextId++); }
 
+// HTML 엔티티 이스케이프 함수
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -1666,14 +1670,12 @@ function showLogin() {
 
 function handleCredentialResponse(response) {
   const userObject = parseJwt(response.credential);
-  
   currentUser = {
     sub: userObject.sub,
     email: userObject.email,
     name: userObject.name,
     picture: userObject.picture,
   };
-  
   localStorage.setItem('priorify_user', JSON.stringify(currentUser));
   showApp();
 }
@@ -1714,22 +1716,20 @@ function showApp() {
   
   render();
   updateFlower();
-  requestNotificationPermission(); // ← 추가
+  requestNotificationPermission();
 
   const notifSetting = localStorage.getItem('priorify_notification');
   if (notifSetting === null || notifSetting === 'on') {
     scheduleDeadlineCheck();
-  }        // ← 추가
-  history.pushState(null, '', location.href); // ← 추가
+  }
+  history.pushState(null, '', location.href);
 }
 
 function logout() {
   currentUser = null;
   localStorage.removeItem('priorify_user');
-  
   document.getElementById('app-container').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
-  
   columns = [];
   doneItems = [];
 }
@@ -1742,7 +1742,6 @@ document.getElementById('logout-btn').addEventListener('click', logout);
 
 window.addEventListener('load', () => {
   initGoogleAuth();
-  
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
     const backdrop = document.getElementById('lnb-backdrop');
@@ -1761,7 +1760,6 @@ function toggleLnb() {
   const lnb = document.querySelector('.lnb');
   const backdrop = document.getElementById('lnb-backdrop');
   if (!lnb) return;
-  
   const isCollapsed = lnb.classList.toggle('collapsed');
   
   if (window.innerWidth <= 768 && backdrop) {
@@ -1785,18 +1783,31 @@ if (savedTheme) setTheme(savedTheme);
 
 let toastTimer = null;
 function showToast() {
+  const t = document.getElementById('save-toast');
+  if(!t) return;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
 }
 
 function switchPage(page, btn) {
   currentPage = page;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.lnb-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+  
+  const targetPage = document.getElementById('page-' + page);
+  if (targetPage) targetPage.classList.add('active');
 
-  if (btn) btn.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    const menuBtn = document.querySelector(`.lnb-item[data-page="${page}"]`);
+    if (menuBtn) menuBtn.classList.add('active');
+  }
+
   if (page === 'dashboard') renderDashboard();
   if (page === 'done') renderDone();
-  if (page === 'settings') initNotificationToggle(); // ← 추가
+  if (page === 'settings') initNotificationToggle(); 
   if (page === 'garden') renderGarden();
 
   if (window.innerWidth <= 768) {
@@ -1806,12 +1817,12 @@ function switchPage(page, btn) {
     if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
+  updateFocusWidget();
 }
 
 function toggleMobileCol(colId, event) {
   if (window.innerWidth > 768) return;
   if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.closest('.col-dropdown-toggle-btn') || event.target.closest('.add-card-date-picker-wrap')) return;
-  
   colCollapseStatus[colId] = !colCollapseStatus[colId];
   render();
 }
@@ -1847,17 +1858,14 @@ function render() {
   const board = document.getElementById('board');
   if (!board) return;
   board.innerHTML = '';
-
   const isMobile = window.innerWidth <= 768;
 
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
       colCollapseStatus[col.id] = isMobile; 
     }
-
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
-    
     const isCollapsed = isMobile && colCollapseStatus[col.id];
     colEl.className = 'column' + (isCollapsed ? ' collapsed-col' : '');
     colEl.dataset.colId = col.id;
@@ -1892,14 +1900,12 @@ function render() {
           onkeydown="handleCardInput(event,'${col.id}',this)"
           onfocus="focusCardInput(this)"
           onblur="blurCardInput(event,this)"></textarea>
-        
         <div class="add-card-date-picker-wrap">
           <span class="add-card-date-label">시작</span>
           <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
           <span class="add-card-date-label">종료</span>
           <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
         </div>
-
         <div class="add-card-footer">
           <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
           <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
@@ -1926,7 +1932,9 @@ function render() {
   board.appendChild(ghost);
 
   renderLnbCols();
+  updateFocusWidget();
 }
+
 function renderCard(card, color, colId) {
   const isMobile = window.innerWidth <= 768;
   return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}">
@@ -1999,14 +2007,11 @@ function markDone(e, cardId) {
     if (idx !== -1) { found = col.cards.splice(idx, 1)[0]; fromColName = col.name; }
   });
   
-if (found) {
+  if (found) {
     doneItems.unshift({ ...found, colName: fromColName, doneAt: today() });
     saveDone(); saveData(); render();
-    
-    // 물방울 1개 추가
     const drops = loadDrops() + 1;
     saveDrops(drops);
-    
     updateFlower();
     checkAndAddToGarden();
   }
@@ -2023,19 +2028,19 @@ function renderDone() {
     const col = columns.find(c => c.name === item.colName);
     const color = col ? COLORS[col.colorIdx] : COLORS[7];
     return `<div class="done-item">
-    <div style="display:flex; align-items:center; gap:8px;">
-    <div class="done-item-dot" style="background:${color.dot}"></div>
-    <div class="done-item-text">${esc(item.text)}</div>
-  </div>
-  <div style="display:flex; align-items:center; justify-content:space-between; padding-left:16px;">
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span class="done-item-col">${esc(item.colName)}</span>
-      <span class="done-item-meta">기간 : ${item.date || item.doneAt}</span>
-    </div>
-    <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
-  </div>
-</div>`;
-  }).join('') + '</div>';  // ← 이 줄이 빠진 거예요
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="done-item-dot" style="background:${color.dot}"></div>
+        <div class="done-item-text">${esc(item.text)}</div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; padding-left:16px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="done-item-col">${esc(item.colName)}</span>
+          <span class="done-item-meta">기간 : ${item.date || item.doneAt}</span>
+        </div>
+        <button class="done-restore" onclick="restoreDone(${i})">되돌리기</button>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
 }
   
 function restoreDone(i) {
@@ -2055,7 +2060,6 @@ function clearDone() {
 }
 
 function onCardDragStart(e, cardId, colId) {
-  // 교정 포인트: 드래그 시도 대상이 버튼 컴포넌트 내부라면 브라우저의 기본 DnD 타겟팅 무력화
   if (e.target.closest('.card-actions-group') || e.target.closest('.card-btn')) {
     e.preventDefault();
     return;
@@ -2064,16 +2068,19 @@ function onCardDragStart(e, cardId, colId) {
   setTimeout(() => { const el = document.querySelector(`[data-card-id="${cardId}"]`); if (el) el.classList.add('dragging'); }, 0);
   e.dataTransfer.effectAllowed = 'move';
 }
+
 function onCardDragEnd() {
   dragCardId = null; dragFromColId = null;
   document.querySelectorAll('.card.dragging').forEach(el => el.classList.remove('dragging'));
   document.querySelectorAll('.column.drag-target').forEach(el => el.classList.remove('drag-target'));
 }
+
 function onCardDragOver(e, colId) {
   if (!dragCardId) return; e.preventDefault();
   const colEl = document.querySelector(`[data-col-id="${colId}"]`);
   if (colEl) colEl.classList.add('drag-target');
 }
+
 function onCardDrop(e, targetColId) {
   e.preventDefault(); if (!dragCardId) return;
   if (dragFromColId === targetColId) { onCardDragEnd(); return; }
@@ -2219,6 +2226,7 @@ function confirmCardEdit() {
 
 function renameCol(colId, name) { const c = columns.find(c => c.id === colId); if (c) { c.name = name; saveData(); renderLnbCols(); } }
 function editColDesc(colId, desc) { const c = columns.find(c => c.id === colId); if (c) { c.desc = desc; saveData(); } }
+
 function deleteCol(colId) {
   showConfirm('컬럼 삭제', '이 컬럼을 삭제할까요? 되돌릴 수 없습니다.', () => {
     columns = columns.filter(c => c.id !== colId);
@@ -2234,7 +2242,6 @@ function resetData() {
 }
 
 function openAddColModal() {
-  // 모바일이면 LNB 먼저 닫기
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
     const backdrop = document.getElementById('lnb-backdrop');
@@ -2252,6 +2259,7 @@ function openAddColModal() {
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('modal-col-name').focus(), 50);
 }
+
 function openEditColModal(colId) {
   editingColId = colId;
   const col = columns.find(c => c.id === colId); if (!col) return;
@@ -2263,6 +2271,7 @@ function openEditColModal(colId) {
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('modal-col-name').focus(), 50);
 }
+
 function renderColorPicker() {
   const picker = document.getElementById('color-picker'); picker.innerHTML = '';
   COLORS.forEach((c, i) => {
@@ -2273,6 +2282,7 @@ function renderColorPicker() {
     picker.appendChild(sw);
   });
 }
+
 function confirmModal() {
   const name = document.getElementById('modal-col-name').value.trim();
   if (!name) { document.getElementById('modal-col-name').focus(); return; }
@@ -2287,6 +2297,7 @@ function confirmModal() {
   }
   closeModalDirect(); saveData(); render();
 }
+
 function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
 function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); editingColId = null; }
 
@@ -2318,7 +2329,6 @@ function returnCalendarToToday() {
 
 function openCalendarModal() {
   const now = new Date();
-  
   if (!selectedCalendarDateStr) {
     selectedCalendarDateStr = `${now.getMonth() + 1}/${now.getDate()}`;
     calendarCurrentYear = now.getFullYear();
@@ -2326,7 +2336,6 @@ function openCalendarModal() {
   }
 
   document.getElementById('calendar-modal-title').textContent = `${calendarCurrentYear}년 ${calendarCurrentMonth + 1}월`;
-  
   const gridBody = document.getElementById('calendar-grid-body');
   gridBody.innerHTML = '';
   
@@ -2343,13 +2352,11 @@ function openCalendarModal() {
     const cell = document.createElement('div');
     cell.className = 'cal-day-cell';
     cell.textContent = date;
-    
     const currentLoopDateStr = `${calendarCurrentMonth + 1}/${date}`;
 
     if (calendarCurrentYear === now.getFullYear() && calendarCurrentMonth === now.getMonth() && date === now.getDate()) {
       cell.classList.add('today-cell');
     }
-    
     if (currentLoopDateStr === selectedCalendarDateStr) {
       cell.classList.add('selected-day-cell');
     }
@@ -2389,15 +2396,12 @@ function isDateInRange(year, month, date, cardDateStr) {
   if (cardDateStr.includes('~')) {
     const parts = cardDateStr.split('~').map(p => p.trim());
     if (parts.length !== 2) return false;
-    
     const sParts = parts[0].split('/').map(Number);
     const eParts = parts[1].split('/').map(Number);
-    
     if(isNaN(sParts[0]) || isNaN(eParts[0])) return false;
 
     const startTime = new Date(year, sParts[0] - 1, sParts[1]).getTime();
     const endTime = new Date(year, eParts[0] - 1, eParts[1]).getTime();
-    
     return loopTime >= startTime && loopTime <= endTime;
   } 
   
@@ -2459,28 +2463,26 @@ document.addEventListener('keydown', e => {
 });
 
 const FLOWER_SETS = [
-  { stage0: '🌱', stage1: '🌿', stage2: '🌷', stage3: '🌸' }, // 분홍 벚꽃
-  { stage0: '🌱', stage1: '🌿', stage2: '🌻', stage3: '🌻' }, // 해바라기
-  { stage0: '🌱', stage1: '🌿', stage2: '🌹', stage3: '🌹' }, // 장미
-  { stage0: '🌱', stage1: '🌿', stage2: '💐', stage3: '💐' }, // 꽃다발
-  { stage0: '🌱', stage1: '🌿', stage2: '🪷', stage3: '🪷' }, // 연꽃
+  { stage0: '🌱', stage1: '🌿', stage2: '🌷', stage3: '🌸' }, 
+  { stage0: '🌱', stage1: '🌿', stage2: '🌻', stage3: '🌻' }, 
+  { stage0: '🌱', stage1: '🌿', stage2: '🌹', stage3: '🌹' }, 
+  { stage0: '🌱', stage1: '🌿', stage2: '💐', stage3: '💐' }, 
+  { stage0: '🌱', stage1: '🌿', stage2: '🪷', stage3: '🪷' }, 
 ];
 
 function getFlowerSet() {
   if (!currentUser) return FLOWER_SETS[0];
-  
-  // 계정 sub로 고정 배정 (로그인할 때마다 같은 꽃)
   const idx = parseInt(currentUser.sub.slice(-1)) % FLOWER_SETS.length;
-  return FLOWER_SETS[idx];
+  return isNaN(idx) ? FLOWER_SETS[0] : FLOWER_SETS[idx];
 }
 
 function getTodayFlowerSet() {
   if (!currentUser) return FLOWER_SETS[0];
-  
-  // max 달성 후 다음날 다른 꽃 (날짜 + 계정으로 랜덤)
   const today = new Date();
   const dateStr = `${today.getFullYear()}${today.getMonth()}${today.getDate()}`;
-  const seed = parseInt(currentUser.sub.slice(-3)) + parseInt(dateStr);
+  let subId = currentUser.sub.slice(-3);
+  if(isNaN(parseInt(subId))) subId = "0";
+  const seed = parseInt(subId) + parseInt(dateStr);
   return FLOWER_SETS[seed % FLOWER_SETS.length];
 }
 
@@ -2519,7 +2521,7 @@ function updateFlower() {
 
   plant.style.transform = 'scale(1.2)';
   setTimeout(() => plant.style.transform = 'scale(1)', 200);
-  updateWaterBtn(); // ← 여기
+  updateWaterBtn(); 
 }
   
 function showConfirm(title, desc, callback) {
@@ -2562,7 +2564,6 @@ window.addEventListener('popstate', function() {
   
   showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
     window.close();
-    // window.close() 안되면 앱 최소화
     if (navigator.app) {
       navigator.app.exitApp();
     }
@@ -2588,12 +2589,12 @@ function scheduleDeadlineCheck() {
 
 function sendDeadlineCheck() {
   const notifSetting = localStorage.getItem('priorify_notification');
-  if (notifSetting === 'off') return; // ← 추가
+  if (notifSetting === 'off') return;
 
   const allCards = [];
   columns.forEach(col => col.cards.forEach(card => allCards.push(card)));
   
-  if (navigator.serviceWorker.controller) {
+  if (navigator.serviceWorker && navigator.serviceWorker.controller) {
     navigator.serviceWorker.controller.postMessage({
       type: 'SCHEDULE_CHECK',
       cards: allCards
@@ -2604,6 +2605,8 @@ function sendDeadlineCheck() {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
     console.log('SW 등록됨', reg);
+  }).catch(err => {
+    console.log('SW 등록 실패', err);
   });
 }
   
@@ -2621,8 +2624,6 @@ function initNotificationToggle() {
   const saved = localStorage.getItem('priorify_notification');
   const toggle = document.getElementById('notification-toggle');
   if (!toggle) return;
-  
-  // 기본값 on
   const isOn = saved === null ? true : saved === 'on';
   toggle.checked = isOn;
 }
@@ -2667,7 +2668,6 @@ function checkAndAddToGarden() {
 function renderGarden() {
   const grid = document.getElementById('garden-grid');
   if (!grid) return;
-  
   const collected = loadGarden();
   
   grid.innerHTML = FLOWER_COLLECTION.map(flower => {
@@ -2695,7 +2695,6 @@ function renderGarden() {
   }).join('');
 }
   
-
 // ───────── PREMIUM WIDGET LOGIC ─────────
 function toggleFocusWidget() {
   const widget = document.getElementById('focus-widget');
@@ -2711,7 +2710,7 @@ function toggleFocusWidget() {
 
 function updateFocusWidget() {
   const list = document.getElementById('focus-widget-list');
-  if (!list || typeof columns === 'undefined') return;
+  if (!list || typeof columns === 'undefined' || columns.length === 0) return;
   const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
     list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
@@ -2719,31 +2718,29 @@ function updateFocusWidget() {
   }
   list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
     <div class="focus-item">
-      <div class="focus-item-text">${typeof esc !== 'undefined' ? esc(card.text) : card.text}</div>
+      <div class="focus-item-text">${esc(card.text)}</div>
     </div>
   `).join('');
 }
 
-// Fail-safe for loading
 setTimeout(() => {
   const loader = document.getElementById('loading-screen');
   if (loader && !loader.classList.contains('hidden')) {
     loader.classList.add('hidden');
     const login = document.getElementById('login-screen');
-    if (login && login.classList.contains('hidden') && typeof currentUser === 'undefined') {
+    if (login && login.classList.contains('hidden') && !currentUser) {
       login.classList.remove('hidden');
     }
   }
 }, 2000);
 
-// Guest login support
 function loginAsGuest() {
   currentUser = { sub:'guest', email:'guest@example.com', name:'게스트', picture:'https://ui-avatars.com/api/?name=Guest' };
   localStorage.setItem('priorify_user', JSON.stringify(currentUser));
-  if(typeof showApp === 'function') showApp();
+  showApp();
 }
 
-// Hook into existing render
+// 기존 render 가로채기 훅
 const originalRender = typeof render === 'function' ? render : null;
 window.render = function() {
   if (originalRender) originalRender();
@@ -2781,31 +2778,22 @@ function saveFlowerLevel(level) {
 function waterPlant() {
   const drops = loadDrops();
   const level = loadFlowerLevel();
-  
-  if (level >= 3) {
-    // 이미 MAX
-    return;
-  }
-  
+  if (level >= 3) return;
   if (drops < 3) {
-    // 물방울 부족
     const plant = document.getElementById('flower-plant');
     plant.style.transform = 'scale(0.9)';
     setTimeout(() => plant.style.transform = 'scale(1)', 200);
     return;
   }
   
-  // 물방울 3개 사용해서 레벨업
   const newDrops = drops - 3;
   const newLevel = level + 1;
   saveDrops(newDrops);
   saveFlowerLevel(newLevel);
   
-  // MAX 달성 시 도감 등록
   if (newLevel >= 3) {
     checkAndAddToGarden();
   }
-  
   updateFlower();
   updateWaterBtn();
 }
@@ -2813,7 +2801,6 @@ function waterPlant() {
 function updateWaterBtn() {
   const btn = document.getElementById('water-btn');
   if (!btn) return;
-  
   const drops = loadDrops();
   const level = loadFlowerLevel();
   
@@ -2821,9 +2808,10 @@ function updateWaterBtn() {
     btn.style.display = 'none';
     return;
   }
-  
   if (drops >= 3) {
     btn.style.display = 'block';
+    btn.style.background = '#60A5FA';
+    btn.style.cursor = 'pointer';
     btn.textContent = `💧 물 주기 (${drops}개 보유)`;
   } else {
     btn.style.display = 'block';
@@ -2832,23 +2820,6 @@ function updateWaterBtn() {
     btn.style.cursor = 'default';
   }
 }
-  
 </script>
-
-  <div id="focus-widget" class="focus-widget collapsed">
-    <div class="focus-widget-header" onclick="toggleFocusWidget()">
-      <div class="focus-widget-title">
-        <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-          </svg>
-        </div>
-        <span id="focus-text-label" style="display:none;">오늘의 핵심 집중</span>
-      </div>
-      <div class="focus-widget-toggle" id="focus-toggle-icon">▲</div>
-    </div>
-    <div class="focus-widget-content" id="focus-widget-list"></div>
-  </div>
-
 </body>
 </html>
