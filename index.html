@@ -1714,6 +1714,7 @@ function showApp() {
   
   render();
   updateFlower();
+  updateWaterBtn(); // ← 추가
   requestNotificationPermission();
 
   const notifSetting = localStorage.getItem('priorify_notification');
