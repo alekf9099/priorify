@@ -1204,6 +1204,22 @@ body.dark .focus-widget {
 .focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); font-weight: 500; }
 .focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: var(--text-tertiary); line-height: 1.6; }
 
+
+.focus-widget {
+  cursor: default;
+  user-select: none;
+  touch-action: none; /* Prevent scrolling while dragging */
+}
+.focus-widget-header {
+  cursor: move; /* Indicate it can be moved */
+}
+.focus-widget.dragging {
+  opacity: 0.8;
+  transform: scale(1.02);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  transition: none; /* No transition while dragging for responsiveness */
+}
+
 </style>
 </head>
 <body>
@@ -2745,6 +2761,104 @@ window.render = function() {
   if (originalRender) originalRender();
   updateFocusWidget();
 };
+
+
+// ───────── DRAGGABLE WIDGET LOGIC (Super Planner) ─────────
+let isDragging = false;
+let currentX;
+let currentY;
+let initialX;
+let initialY;
+let xOffset = 0;
+let yOffset = 0;
+
+const widget = document.getElementById('focus-widget');
+const widgetHeader = widget.querySelector('.focus-widget-header');
+
+// Load saved position
+const savedPos = localStorage.getItem('priorify_widget_pos');
+if (savedPos) {
+  const pos = JSON.parse(savedPos);
+  widget.style.bottom = 'auto';
+  widget.style.right = 'auto';
+  widget.style.left = pos.x + 'px';
+  widget.style.top = pos.y + 'px';
+  // Initialize offsets
+  xOffset = pos.x - (window.innerWidth - 280 - 24); // Adjust based on initial fixed pos if needed
+  // For simplicity, we'll use direct coordinates
+  widget.style.transform = 'none'; 
+}
+
+widgetHeader.addEventListener('mousedown', dragStart);
+window.addEventListener('mousemove', drag);
+window.addEventListener('mouseup', dragEnd);
+
+widgetHeader.addEventListener('touchstart', dragStart, {passive: false});
+window.addEventListener('touchmove', drag, {passive: false});
+window.addEventListener('touchend', dragEnd);
+
+function dragStart(e) {
+  if (e.type === 'touchstart') {
+    initialX = e.touches[0].clientX - xOffset;
+    initialY = e.touches[0].clientY - yOffset;
+  } else {
+    initialX = e.clientX - xOffset;
+    initialY = e.clientY - yOffset;
+  }
+  
+  if (e.target === widgetHeader || widgetHeader.contains(e.target)) {
+    isDragging = true;
+    widget.classList.add('dragging');
+  }
+}
+
+function drag(e) {
+  if (isDragging) {
+    e.preventDefault();
+    
+    if (e.type === 'touchmove') {
+      currentX = e.touches[0].clientX - initialX;
+      currentY = e.touches[0].clientY - initialY;
+    } else {
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+    }
+
+    xOffset = currentX;
+    yOffset = currentY;
+
+    setTranslate(currentX, currentY, widget);
+  }
+}
+
+function setTranslate(xPos, yPos, el) {
+  // Use translate3d for hardware acceleration
+  el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+}
+
+function dragEnd(e) {
+  if (!isDragging) return;
+  
+  initialX = currentX;
+  initialY = currentY;
+  isDragging = false;
+  widget.classList.remove('dragging');
+  
+  // Save position
+  const rect = widget.getBoundingClientRect();
+  localStorage.setItem('priorify_widget_pos_offset', JSON.stringify({x: xOffset, y: yOffset}));
+}
+
+// Override saved position loading to be more robust
+window.addEventListener('load', () => {
+  const offset = localStorage.getItem('priorify_widget_pos_offset');
+  if (offset) {
+    const pos = JSON.parse(offset);
+    xOffset = pos.x;
+    yOffset = pos.y;
+    setTranslate(xOffset, yOffset, widget);
+  }
+});
 
 </script>
 
