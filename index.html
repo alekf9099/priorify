@@ -1559,6 +1559,22 @@ body.dark .focus-widget {
 <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
 
 <script>
+
+// ───────── FAIL-SAFE LOADING (Added by Super Planner) ─────────
+// Any reason, if loading screen stays more than 1.5s, force hide it.
+setTimeout(() => {
+  const loader = document.getElementById('loading-screen');
+  if (loader && !loader.classList.contains('hidden')) {
+    console.warn("Loading took too long, forcing app start...");
+    loader.classList.add('hidden');
+    // If user not loaded, at least show login
+    const loginScreen = document.getElementById('login-screen');
+    if (loginScreen && loginScreen.classList.contains('hidden') && !currentUser) {
+      loginScreen.classList.remove('hidden');
+    }
+  }
+}, 1500);
+
 const GOOGLE_CLIENT_ID = "997028387588-3feum6na7ce0kbsa34iu4s99sqqffhr3.apps.googleusercontent.com"; 
 
 let columns = [];
@@ -1665,14 +1681,36 @@ function esc(s) {
 }
 
 
+
 function initGoogleAuth() {
+  console.log("Initializing Auth...");
   try {
-    if (window.google && window.google.accounts) {
+    if (window.google && window.google.accounts && window.google.accounts.id) {
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
         auto_select: false,
       });
+      console.log("Google Auth initialized.");
+    }
+  } catch (e) {
+    console.error("Auth init error:", e);
+  }
+  
+  // Always proceed to check local user regardless of Google library status
+  const savedUser = localStorage.getItem('priorify_user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      showApp();
+      return;
+    } catch(e) {
+      localStorage.removeItem('priorify_user');
+    }
+  }
+  showLogin();
+}
+);
     } else {
       console.warn("Google Auth library not loaded, enabling guest mode.");
     }
@@ -1717,7 +1755,7 @@ function initGoogleAuth() {
 }
 
 function showLogin() {
-  document.getElementById('loading-screen').classList.add('hidden');
+  const ls = document.getElementById('loading-screen'); if(ls) ls.classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
 }
 
@@ -1750,7 +1788,7 @@ function showApp() {
   calendarCurrentYear = now.getFullYear();
   calendarCurrentMonth = now.getMonth();
 
-  document.getElementById('loading-screen').classList.add('hidden');
+  const ls = document.getElementById('loading-screen'); if(ls) ls.classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-container').style.display = 'flex';
   
