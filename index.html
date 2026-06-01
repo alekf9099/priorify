@@ -2559,14 +2559,6 @@ function updateFlower() {
     }
   }
 
-  plant.className = 'flower-plant ' + stageClass;
-  plant.textContent = emoji;
-  levelEl.textContent = text;
-
-  plant.style.transform = 'scale(1.2)';
-  setTimeout(() => plant.style.transform = 'scale(1)', 200);
-}
-
 function showConfirm(title, desc, callback) {
   confirmCallback = callback;
   document.getElementById('confirm-modal-title').textContent = title;
