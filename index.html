@@ -2595,8 +2595,6 @@ function closeConfirmModalDirect() {
 
 history.pushState(null, '', location.href);
 window.addEventListener('popstate', function() {
-  history.pushState(null, '', location.href);
-  
   if (document.getElementById('modal-overlay').classList.contains('open')) {
     closeModalDirect(); return;
   }
@@ -2609,19 +2607,10 @@ window.addEventListener('popstate', function() {
   if (document.getElementById('confirm-modal-overlay').classList.contains('open')) {
     closeConfirmModalDirect(); return;
   }
-  
-  showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
-    try {
-      window.close();
-    } catch(e) {}
-    try {
-      navigator.app.exitApp();
-    } catch(e) {}
-    try {
-      Android.exitApp();
-    } catch(e) {}
-    history.go(-history.length);
-  });
+  if (document.getElementById('quad-modal-overlay').classList.contains('open')) {
+    closeQuadModalDirect(); return;
+  }
+  history.go(-history.length);
 });
 
 function requestNotificationPermission() {
