@@ -417,15 +417,16 @@ header {
 /* ── BOARD PAGE ── */
 #board-wrap {
   flex: 1;
-  overflow: hidden;
+  overflow-x: auto; 
+  overflow-y: hidden;
   padding: 24px 28px 28px;
 }
 #board {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
-  height: 100%;
+  display: flex;
+  flex-direction: row; 
+  gap: 16px;
+  min-height: 100%;
+  align-items: flex-start;
 }
 
 .col-toggle-arrow {
@@ -1048,60 +1049,52 @@ body.dark .card-actions-group {
   }
 
   #board {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 8px;
-    height: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-height: auto;
+    padding-bottom: 100px;
   }
 
   .column {
-  width: auto !important;
-  max-width: none !important;
-  max-height: calc(50vh - 70px) !important;
-  min-height: 0 !important;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden !important;
-}
-.col-header {
-  padding: 10px 12px !important;
-  flex-shrink: 0 !important;
-  overflow: hidden;
-}
-.col-title-input {
-  font-size: 12px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 80px !important;
-}
-.col-dropdown-toggle-btn {
-  font-size: 10px !important;
-  padding: 2px 7px !important;
-  flex-shrink: 0 !important;
-}
-.cards-list {
-  flex: 1 !important;
-  overflow-y: auto !important;
-  max-height: none !important;
-  padding: 8px !important;
-}
-.card {
-  padding: 10px !important;
-  min-height: 0 !important;
-}
-.card-actions-group {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  transform: translateY(0) !important;
-  bottom: 8px;
-  right: 8px;
-}
-.add-card-area {
-  flex-shrink: 0;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-}
+    width: 100% !important;
+    max-width: none !important;
+    max-height: 480px !important; 
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-header {
+    padding: 14px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .cards-list {
+    flex: 1;
+    overflow-y: auto !important;
+    max-height: 260px; 
+    padding: 8px !important;
+  }
+
+  .card {
+    padding: 12px 12px 46px 12px !important; 
+    min-height: 96px !important; 
+  }
+  .card-actions-group {
+    opacity: 1 !important; 
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .add-card-area {
+    flex-shrink: 0; 
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
 
   .column.collapsed-col {
     max-height: 48px !important; 
@@ -1211,68 +1204,6 @@ body.dark .focus-widget {
 .focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); font-weight: 500; }
 .focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: var(--text-tertiary); line-height: 1.6; }
 
-/* ── QUADRANT MODAL ── */
-.quad-modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  display: flex; align-items: flex-end; justify-content: center;
-  z-index: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s;
-  backdrop-filter: blur(4px);
-}
-.quad-modal-overlay.open { opacity: 1; pointer-events: auto; }
-.quad-modal {
-  background: var(--surface); width: 100%; max-width: 600px;
-  border-radius: 20px 20px 0 0; padding: 20px;
-  max-height: 85vh; overflow-y: auto;
-  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
-}
-.quad-modal-overlay.open .quad-modal { transform: translateY(0); }
-.quad-modal-handle {
-  width: 36px; height: 4px; background: var(--border-strong);
-  border-radius: 99px; margin: 0 auto 16px;
-}
-.quad-modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px; padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-.quad-modal-title {
-  font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;
-}
-.quad-modal-close {
-  background: var(--bg); border: none; color: var(--text-secondary);
-  width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 14px;
-}
-.quad-modal-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-.quad-modal-card {
-  background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 14px;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-}
-.quad-modal-card-text { font-size: 13.5px; flex: 1; line-height: 1.4; }
-.quad-modal-card-date { font-size: 10px; color: var(--text-tertiary); font-family: 'DM Mono', monospace; }
-.quad-modal-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
-.quad-modal-add {
-  display: flex; gap: 8px; margin-top: 8px;
-}
-.quad-modal-input {
-  flex: 1; font-family: 'DM Sans', sans-serif; font-size: 13px;
-  padding: 9px 12px; border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm); background: var(--bg);
-  color: var(--text-primary); outline: none;
-}
-.quad-modal-input:focus { border-color: var(--accent); }
-.quad-modal-save {
-  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-  padding: 9px 16px; background: var(--accent); color: white;
-  border: none; border-radius: var(--radius-sm); cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .add-card-area { display: none !important; }
-  .col-desc-input { display: none !important; }
-}
-  
 </style>
 </head>
 <body>
@@ -1795,7 +1726,7 @@ function showApp() {
   const isMobile = window.innerWidth <= 768;
   columns.forEach((col) => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = false; 
+      colCollapseStatus[col.id] = isMobile; 
     }
   });
   
@@ -1945,7 +1876,7 @@ function render() {
 
   columns.forEach(col => {
     if (colCollapseStatus[col.id] === undefined) {
-      colCollapseStatus[col.id] = false; 
+      colCollapseStatus[col.id] = isMobile; 
     }
     const color = COLORS[col.colorIdx];
     const colEl = document.createElement('div');
@@ -1955,7 +1886,7 @@ function render() {
     colEl.style.borderColor = color.colBorder;
 
     colEl.innerHTML = `
-      <div class="col-header" style="background:${color.colBg}" onclick="openQuadModal('${col.id}')"
+      <div class="col-header" style="background:${color.colBg}" onclick="toggleMobileCol('${col.id}', event)">
         <div class="col-header-top">
           <div class="col-header-left">
             <div class="col-dot" style="background:${color.dot}"></div>
@@ -3015,104 +2946,7 @@ function selectGardenCell(index) {
   saveMyGardenLayout(layout);
   renderMyGarden();
 }
-
-let quadModalColId = null;
-
-function openQuadModal(colId) {
-  quadModalColId = colId;
-  renderQuadModal();
-  document.getElementById('quad-modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('quad-modal-input').focus(), 300);
-}
-
-function renderQuadModal() {
-  const col = columns.find(c => c.id === quadModalColId);
-  if (!col) return;
-  const color = COLORS[col.colorIdx];
-
-  document.getElementById('quad-modal-title').innerHTML = `
-    <div style="width:10px;height:10px;border-radius:50%;background:${color.dot};flex-shrink:0;"></div>
-    ${esc(col.name)}
-    <span style="font-size:12px;color:var(--text-tertiary);font-weight:400;">${col.cards.length}개</span>
-  `;
-
-  const cardsEl = document.getElementById('quad-modal-cards');
-  if (col.cards.length === 0) {
-    cardsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">◦</div>할 일 없음</div>';
-    return;
-  }
-  cardsEl.innerHTML = col.cards.map(card => `
-    <div class="quad-modal-card">
-      <div style="flex:1;">
-        <div class="quad-modal-card-text">${esc(card.text)}</div>
-        <div class="quad-modal-card-date">${card.date}</div>
-      </div>
-      <div class="quad-modal-card-actions">
-        <button class="card-btn done-btn" title="완료" onmousedown="markDoneFromQuad(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
-        </button>
-        <button class="card-btn danger" title="삭제" onmousedown="deleteCardFromQuad(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function addCardFromQuadModal() {
-  const input = document.getElementById('quad-modal-input');
-  const text = input.value.trim();
-  if (!text) return;
-  const col = columns.find(c => c.id === quadModalColId);
-  if (!col) return;
-  col.cards.push({ id: genId(), text, date: today() });
-  input.value = '';
-  saveData();
-  render();
-  renderQuadModal();
-}
-
-function markDoneFromQuad(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
-  markDone(e, cardId);
-  renderQuadModal();
-}
-
-function deleteCardFromQuad(e, cardId) {
-  e.preventDefault(); e.stopPropagation();
-  columns.forEach(col => { col.cards = col.cards.filter(c => c.id !== cardId); });
-  saveData(); render();
-  renderQuadModal();
-}
-
-function closeQuadModal(e) {
-  if (e.target === document.getElementById('quad-modal-overlay')) closeQuadModalDirect();
-}
-function closeQuadModalDirect() {
-  document.getElementById('quad-modal-overlay').classList.remove('open');
-  quadModalColId = null;
-}
   
 </script>
-<div class="quad-modal-overlay" id="quad-modal-overlay" onclick="closeQuadModal(event)">
-  <div class="quad-modal">
-    <div class="quad-modal-handle"></div>
-    <div class="quad-modal-header">
-      <div class="quad-modal-title" id="quad-modal-title"></div>
-      <button class="quad-modal-close" onclick="closeQuadModalDirect()">✕</button>
-    </div>
-    <div class="quad-modal-cards" id="quad-modal-cards"></div>
-    <div class="quad-modal-add">
-      <input class="quad-modal-input" id="quad-modal-input" placeholder="새 할 일 추가..." 
-        onkeydown="if(event.key==='Enter') addCardFromQuadModal()">
-      <button class="quad-modal-save" onclick="addCardFromQuadModal()">추가</button>
-    </div>
-  </div>
-</div>
-  
 </body>
 </html>
