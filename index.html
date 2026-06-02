@@ -1250,7 +1250,7 @@ body.dark .focus-widget {
           <line x1="4" y1="19" x2="20" y2="19"></line>
         </svg>
       </button>
-      <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
+      <a href="#" class="logo" onclick="event.preventDefault(); ('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
     </div>
     <div class="header-right">
       <div class="user-profile" id="user-profile">
@@ -1842,6 +1842,12 @@ function switchPage(page, btn) {
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
   if (page === 'myGarden') renderMyGarden();
+  
+    const calBtn = document.getElementById('cal-floating-container'); // <=----- 추가
+    const focusWidget = document.getElementById('focus-widget'); // <=----- 추가
+    if (calBtn) calBtn.style.display = page === 'board' ? 'flex' : 'none'; // <=----- 추가
+    if (focusWidget) focusWidget.style.display = page === 'board' ? 'flex' : 'none'; // <=----- 추가
+  
   updateFocusWidget();
 }
 
