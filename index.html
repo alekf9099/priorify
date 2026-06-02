@@ -1843,12 +1843,22 @@ function switchPage(page, btn) {
     if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
-  if (page === 'myGarden') renderMyGarden();
+  if (page === 'myGarden') {
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
+} else {
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+}
+
+if (page === 'myGarden') renderMyGarden();
   
-    const calBtn = document.getElementById('cal-floating-container'); 
-    const focusWidget = document.getElementById('focus-widget'); 
-    if (calBtn) calBtn.style.display = page === 'board' ? 'flex' : 'none'; 
-    if (focusWidget) focusWidget.style.display = page === 'board' ? 'flex' : 'none'; 
+  const calBtn = document.getElementById('cal-floating-container'); 
+  const focusWidget = document.getElementById('focus-widget'); 
+  if (calBtn) calBtn.style.display = page === 'board' ? 'flex' : 'none'; 
+  if (focusWidget) focusWidget.style.display = page === 'board' ? 'flex' : 'none'; 
   
   updateFocusWidget();
 }
