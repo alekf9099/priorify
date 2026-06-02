@@ -1843,10 +1843,10 @@ function switchPage(page, btn) {
   }
   if (page === 'myGarden') renderMyGarden();
   
-    const calBtn = document.getElementById('cal-floating-container'); // <=----- 추가
-    const focusWidget = document.getElementById('focus-widget'); // <=----- 추가
-    if (calBtn) calBtn.style.display = page === 'board' ? 'flex' : 'none'; // <=----- 추가
-    if (focusWidget) focusWidget.style.display = page === 'board' ? 'flex' : 'none'; // <=----- 추가
+    const calBtn = document.getElementById('cal-floating-container'); 
+    const focusWidget = document.getElementById('focus-widget'); 
+    if (calBtn) calBtn.style.display = page === 'board' ? 'flex' : 'none'; 
+    if (focusWidget) focusWidget.style.display = page === 'board' ? 'flex' : 'none'; 
   
   updateFocusWidget();
 }
@@ -2885,7 +2885,7 @@ function renderMyGarden() {
       <div id="garden-drop-zone" style="position:absolute; inset:0; cursor:${selectedGardenFlower ? 'crosshair' : 'default'};"
         onclick="placeFlowerOnGarden(event)"
         ontouchend="placeFlowerOnGarden(event)">
-        ${Object.entries(placements).filter(([key, val]) => val && val.x && val.y && val.emoji).map(([key, val]) => ` // <=----- 추가
+        ${Object.entries(placements).filter(([key, val]) => val && val.x && val.y && val.emoji).map(([key, val]) => `
           <div style="position:absolute; left:${val.x}%; top:${val.y}%; font-size:36px; cursor:pointer; transform:translate(-50%,-50%); filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));"
             onclick="removePlacedFlower('${key}'); event.stopPropagation();">
             ${val.emoji}
@@ -2900,7 +2900,7 @@ function renderMyGarden() {
           ? '<div style="font-size:13px; color:var(--text-tertiary);">아직 수집한 식물이 없어요 🌱</div>'
           : FLOWER_COLLECTION.filter(f => collected.includes(f.id)).map(flower => `
             <div class="garden-palette-btn"
-              onclick="selectGardenFlower('${flower.emoji}', this)" // <=----- 수정
+              onclick="selectGardenFlower('${flower.emoji}', this)" 
               style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 12px;
                 background:white; border:1.5px solid rgba(0,0,0,0.1); border-radius:12px; cursor:pointer;">
               <span style="font-size:28px;">${flower.emoji}</span>
