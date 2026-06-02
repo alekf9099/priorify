@@ -417,16 +417,15 @@ header {
 /* ── BOARD PAGE ── */
 #board-wrap {
   flex: 1;
-  overflow-x: auto; 
-  overflow-y: hidden;
+  overflow: hidden;
   padding: 24px 28px 28px;
 }
 #board {
-  display: flex;
-  flex-direction: row; 
-  gap: 16px;
-  min-height: 100%;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
 }
 
 .col-toggle-arrow {
@@ -1049,17 +1048,16 @@ body.dark .card-actions-group {
   }
 
   #board {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    min-height: auto;
-    padding-bottom: 100px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    height: 100%;
   }
 
   .column {
-    width: 100% !important;
+    width: auto !important;
     max-width: none !important;
-    max-height: 480px !important; 
+    max-height: calc(50vh - 80px) !important;
     min-height: 0 !important;
     display: flex;
     flex-direction: column;
