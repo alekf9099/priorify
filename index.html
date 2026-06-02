@@ -1832,7 +1832,7 @@ function switchPage(page, btn) {
   if (page === 'done') renderDone();
   if (page === 'settings') initNotificationToggle(); 
   if (page === 'garden') renderGarden();
-  if (page === 'myGarden') renderMyGarden();
+ 
 
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
@@ -1841,6 +1841,7 @@ function switchPage(page, btn) {
     if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
+  if (page === 'myGarden') renderMyGarden();
   updateFocusWidget();
 }
 
