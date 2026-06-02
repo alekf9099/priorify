@@ -2804,14 +2804,13 @@ function removePlant(idx) {
     renderGarden();
   }
 }
-
+  
 // Override switchPage
 const originalSwitchPage = switchPage;
 window.switchPage = function(page) {
   originalSwitchPage(page);
   if (page === 'garden') renderGarden();
 };
-;
 
 function updateFocusWidget() {
   const list = document.getElementById('focus-widget-list');
