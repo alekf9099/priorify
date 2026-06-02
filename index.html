@@ -2865,7 +2865,8 @@ function saveMyGardenLayout(layout) {
     localStorage.setItem(getStorageKey('priorify_my_garden'), JSON.stringify(layout));
   } catch(e) {}
 }
-
+let selectedGardenFlower = null;
+  
 function renderMyGarden() {
   const wrap = document.getElementById('my-garden-wrap');
   if (!wrap) return;
@@ -3002,7 +3003,7 @@ function selectGardenCell(index) {
   renderMyGarden();
 }
 
-let selectedGardenFlower = null;
+
 
 function selectGardenFlower(emoji, el) {
   selectedGardenFlower = emoji;
