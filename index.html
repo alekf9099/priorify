@@ -415,6 +415,22 @@ header {
 }
 
 /* ── BOARD PAGE ── */
+<div id="focus-section" style="
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  border-radius: 16px;
+  padding: 16px;
+  color: white;
+  display: none;
+">
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+    <span style="font-size:18px;">⭐</span>
+    <span style="font-size:14px; font-weight:700; letter-spacing:0.3px;">오늘의 핵심 집중</span>
+    <span style="margin-left:auto; font-size:11px; opacity:0.8;" id="focus-count"></span>
+  </div>
+  <div id="focus-cards-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+</div>
+  
 #board-wrap {
   flex: 1;
   overflow-x: auto; 
@@ -1546,7 +1562,7 @@ body.dark .focus-widget {
   </div>
 </div>
 
-<div id="focus-widget" class="focus-widget collapsed">
+ <div id="focus-widget" class="focus-widget collapsed" style="display:none;">
   <div class="focus-widget-header" onclick="toggleFocusWidget()">
     <div class="focus-widget-title">
       <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
@@ -2750,16 +2766,43 @@ function toggleFocusWidget() {
 }
 
 function updateFocusWidget() {
-  const list = document.getElementById('focus-widget-list');
-  if (!list || typeof columns === 'undefined' || columns.length === 0) return;
+  const section = document.getElementById('focus-section');
+  const list = document.getElementById('focus-cards-list');
+  const countEl = document.getElementById('focus-count');
+  if (!section || !list) return;
+
   const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
+  
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
-    list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
+    section.style.display = 'none';
     return;
   }
-  list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
-    <div class="focus-item">
-      <div class="focus-item-text">${esc(card.text)}</div>
+
+  section.style.display = 'block';
+  const cards = criticalCol.cards.slice(0, 3);
+  if (countEl) countEl.textContent = `${criticalCol.cards.length}개`;
+
+  list.innerHTML = cards.map(card => `
+    <div style="
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(4px);
+    ">
+      <span style="font-size:13px; flex:1; color:white; font-weight:500;">${esc(card.text)}</span>
+      <button onmousedown="markDone(event,'${card.id}')" style="
+        background: rgba(255,255,255,0.2);
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-size:11px;
+        padding: 4px 10px;
+        cursor:pointer;
+        font-weight:600;
+      ">완료</button>
     </div>
   `).join('');
 }
