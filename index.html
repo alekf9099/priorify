@@ -2812,28 +2812,6 @@ window.switchPage = function(page) {
   if (page === 'garden') renderGarden();
 };
 ;
-      border-radius: var(--radius);
-      padding: 20px 12px;
-      text-align: center;
-      transition: all 0.2s;
-      opacity: ${isCollected ? "1" : "0.4"};
-    ">
-      <div style="font-size: 40px; margin-bottom: 10px; filter: ${isCollected ? 'none' : 'grayscale(1)'};">
-        ${isCollected ? flower.emoji : '🌫️'}
-      </div>
-      <div style="font-size: 13px; font-weight: 500; margin-bottom: 4px;">
-        ${isCollected ? flower.name : '???'}
-      </div>
-      <div style="font-size: 11px; color: var(--text-tertiary);">
-        ${isCollected ? flower.desc : '아직 수집하지 못했어요'}
-      </div>
-      ${isCollected ? `<div style="font-size: 10px; color: var(--accent); margin-top: 6px; font-family: 'DM Mono', monospace;">획득 완료 ✓</div>` : ''}
-    </div>`;
-  }).join('');
-}
-  
-
-}
 
 function updateFocusWidget() {
   const list = document.getElementById('focus-widget-list');
