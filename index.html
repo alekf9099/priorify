@@ -415,21 +415,6 @@ header {
 }
 
 /* ── BOARD PAGE ── */
-<div id="focus-section" style="
-  margin: 16px 16px 0;
-  background: linear-gradient(135deg, #6366F1, #8B5CF6);
-  border-radius: 16px;
-  padding: 16px;
-  color: white;
-  display: none;
-">
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-    <span style="font-size:18px;">⭐</span>
-    <span style="font-size:14px; font-weight:700; letter-spacing:0.3px;">오늘의 핵심 집중</span>
-    <span style="margin-left:auto; font-size:11px; opacity:0.8;" id="focus-count"></span>
-  </div>
-  <div id="focus-cards-list" style="display:flex; flex-direction:column; gap:8px;"></div>
-</div>
   
 #board-wrap {
   flex: 1;
@@ -1354,6 +1339,21 @@ body.dark .focus-widget {
       <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
 
         <div id="page-board" class="page active">
+          <div id="focus-section" style="
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  border-radius: 16px;
+  padding: 16px;
+  color: white;
+  display: none;
+">
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+    <span style="font-size:18px;">⭐</span>
+    <span style="font-size:14px; font-weight:700; letter-spacing:0.3px;">오늘의 핵심 집중</span>
+    <span style="margin-left:auto; font-size:11px; opacity:0.8;" id="focus-count"></span>
+  </div>
+  <div id="focus-cards-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+</div>
           <div id="board-wrap">
             <div id="board"></div>
           </div>
