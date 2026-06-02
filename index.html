@@ -1844,14 +1844,16 @@ function switchPage(page, btn) {
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
   if (page === 'myGarden') {
-  document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.width = '100%';
-} else {
-  document.body.style.overflow = '';
-  document.body.style.position = '';
-  document.body.style.width = '';
-}
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+  } else {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.removeEventListener('touchmove', preventScroll);
+  }
 
 if (page === 'myGarden') renderMyGarden();
   
@@ -1890,7 +1892,7 @@ function renderLnbCols() {
 }
 
 function scrollToCol(colId) {
-  switchPage('board', document.querySelector('.lnb-item[data-page="board"]'));
+  ('board', document.querySelector('.lnb-item[data-page="board"]'));
   setTimeout(() => {
     const el = document.querySelector(`[data-col-id="${colId}"]`);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -3045,6 +3047,10 @@ function placeFlowerOnGarden(event) {
   saveMyGardenLayout(layout);
   selectedGardenFlower = null;
   renderMyGarden();
+}
+
+function preventScroll(e) {
+  e.preventDefault();
 }
   
 </script>
