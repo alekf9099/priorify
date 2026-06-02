@@ -2881,9 +2881,9 @@ function renderMyGarden() {
     html += `
       <div class="garden-cell" data-index="${i}" onclick="selectGardenCell(${i})" style="
         aspect-ratio: 1;
-        background: ${flower ? 'rgba(99,102,241,0.05)' : 'var(--bg)'};
-        border: 1.5px ${flower ? 'solid var(--accent)' : 'dashed var(--border-strong)'};
-        border-radius: var(--radius);
+        background: ${flower ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.1)"};
+        border: 1.5px ${flower ? "solid rgba(255,255,255,0.8)" : "dashed rgba(255,255,255,0.4)"};
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
