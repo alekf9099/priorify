@@ -1142,7 +1142,13 @@ body.dark .card-actions-group {
     flex-shrink: 0;
   }
 
-  #page-dashboard, #page-done, #page-settings, #page-garden, #page-myGarden { padding: 0 !important; }
+  #page-dashboard, #page-done, #page-settings, #page-garden { padding: 16px !important; }
+  #page-myGarden { 
+    padding: 0 !important;
+    background-image: url('/garden-bg.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    }
   .dash-card { padding: 12px 14px; }
   .dash-card-num { font-size: 24px; }
   .dash-col-card { padding: 12px 14px; }
@@ -1151,7 +1157,7 @@ body.dark .card-actions-group {
   #page-myGarden > div {
     min-height: 100%;
     border-radius: 12px;
-  }
+    }
 
   .settings-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .theme-btns { align-self: flex-end; }
