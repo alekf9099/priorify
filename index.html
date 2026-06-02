@@ -2580,11 +2580,16 @@ window.addEventListener('popstate', function() {
   }
   
   showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
-    window.close();
-    if (navigator.app) {
+    try {
+      window.close();
+    } catch(e) {}
+    try {
       navigator.app.exitApp();
-    }
-    history.go(-(history.length));
+    } catch(e) {}
+    try {
+      Android.exitApp();
+    } catch(e) {}
+    history.go(-history.length);
   });
 });
 
