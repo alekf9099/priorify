@@ -2584,6 +2584,7 @@ window.addEventListener('popstate', function() {
     if (navigator.app) {
       navigator.app.exitApp();
     }
+    history.go(-(history.length));
   });
 });
 
