@@ -2941,11 +2941,17 @@ function selectPaletteFlower(flowerId) {
 function selectGardenCell(index) {
   const layout = loadMyGardenLayout();
   
-  if (layout[index] && !selectedFlowerId) {
-    // 꽃 제거 (선택된 꽃 없을 때 배치된 꽃 클릭)
+  if (layout[index]) {
+    // 이미 꽃이 있으면 무조건 제거
     delete layout[index];
+    selectedFlowerId = null;
+    // 팔레트 선택 해제
+    document.querySelectorAll('.garden-palette-item').forEach(el => {
+      el.style.borderColor = 'var(--border)';
+      el.style.background = 'var(--surface)';
+    });
   } else if (selectedFlowerId) {
-    // 선택된 꽃 배치
+    // 빈 칸이고 선택된 꽃 있으면 배치
     layout[index] = selectedFlowerId;
   }
   
