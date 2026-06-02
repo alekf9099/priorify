@@ -2874,12 +2874,12 @@ function renderMyGarden() {
   
   wrap.innerHTML = `
     <div style="position:relative; width:100%; height:calc(100vh - 56px); overflow:hidden;">
-      <div id="garden-drop-zone" style="position:absolute; inset:0;"
-        ondragover="event.preventDefault()"
-        ondrop="dropFlowerOnGarden(event)">
+      <div id="garden-drop-zone" style="position:absolute; inset:0; cursor:${selectedGardenFlower ? 'crosshair' : 'default'};"
+        onclick="placeFlowerOnGarden(event)"
+        ontouchend="placeFlowerOnGarden(event)">
         ${Object.entries(placements).map(([key, val]) => `
           <div style="position:absolute; left:${val.x}%; top:${val.y}%; font-size:36px; cursor:pointer; transform:translate(-50%,-50%); filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));"
-            onclick="removePlacedFlower('${key}')">
+            onclick="removePlacedFlower('${key}'); event.stopPropagation();">
             ${val.emoji}
           </div>
         `).join('')}
@@ -2998,6 +2998,34 @@ function selectGardenCell(index) {
   }
   
   saveMyGardenLayout(layout);
+  renderMyGarden();
+}
+
+let selectedGardenFlower = null;
+
+function selectGardenFlower(emoji, el) {
+  selectedGardenFlower = emoji;
+  document.querySelectorAll('.garden-palette-btn').forEach(b => {
+    b.style.border = '1.5px solid rgba(0,0,0,0.1)';
+    b.style.background = 'white';
+  });
+  el.style.border = '2px solid #6366F1';
+  el.style.background = 'rgba(99,102,241,0.1)';
+}
+
+function placeFlowerOnGarden(event) {
+  if (!selectedGardenFlower) return;
+  const zone = document.getElementById('garden-drop-zone');
+  const rect = zone.getBoundingClientRect();
+  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+  const x = ((clientX - rect.left) / rect.width * 100).toFixed(1);
+  const y = ((clientY - rect.top) / rect.height * 100).toFixed(1);
+  
+  const layout = loadMyGardenLayout();
+  layout[Date.now()] = { x, y, emoji: selectedGardenFlower };
+  saveMyGardenLayout(layout);
+  selectedGardenFlower = null;
   renderMyGarden();
 }
   
