@@ -1267,7 +1267,7 @@ body.dark .focus-widget {
     <div class="layout" style="display: flex; flex: 1; overflow: hidden; width: 100%;">
       <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
       
-      <nav class="lnb" style="flex:1; overflow-y:auto;"> <!-- <=----- 추가 -->
+      <nav class="lnb">
         <span class="lnb-section-label">메인</span>
         <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
           <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1323,7 +1323,6 @@ body.dark .focus-widget {
 
         <div id="lnb-col-list"></div>
 
-      </nav>
         <div class="lnb-divider" style="margin-top:auto"></div>
 
         <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
@@ -1333,6 +1332,7 @@ body.dark .focus-widget {
           </svg>
           설정
         </button>
+      </nav>
 
       <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
 
@@ -2595,8 +2595,6 @@ function closeConfirmModalDirect() {
 
 history.pushState(null, '', location.href);
 window.addEventListener('popstate', function() {
-  history.pushState(null, '', location.href);
-  
   if (document.getElementById('modal-overlay').classList.contains('open')) {
     closeModalDirect(); return;
   }
@@ -2609,19 +2607,10 @@ window.addEventListener('popstate', function() {
   if (document.getElementById('confirm-modal-overlay').classList.contains('open')) {
     closeConfirmModalDirect(); return;
   }
-  
-  showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
-    try {
-      window.close();
-    } catch(e) {}
-    try {
-      navigator.app.exitApp();
-    } catch(e) {}
-    try {
-      Android.exitApp();
-    } catch(e) {}
-    history.go(-history.length);
-  });
+  if (document.getElementById('quad-modal-overlay').classList.contains('open')) {
+    closeQuadModalDirect(); return;
+  }
+  history.go(-history.length);
 });
 
 function requestNotificationPermission() {
