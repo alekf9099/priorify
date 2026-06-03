@@ -1267,7 +1267,7 @@ body.dark .focus-widget {
     <div class="layout" style="display: flex; flex: 1; overflow: hidden; width: 100%;">
       <div id="lnb-backdrop" class="lnb-backdrop" onclick="toggleLnb()"></div>
       
-      <nav class="lnb">
+      <nav class="lnb" style="flex:1; overflow-y:auto;"> <!-- <=----- 추가 -->
         <span class="lnb-section-label">메인</span>
         <button class="lnb-item active" data-page="board" onclick="switchPage('board', this)">
           <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1323,6 +1323,7 @@ body.dark .focus-widget {
 
         <div id="lnb-col-list"></div>
 
+      </nav>
         <div class="lnb-divider" style="margin-top:auto"></div>
 
         <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
@@ -1332,7 +1333,6 @@ body.dark .focus-widget {
           </svg>
           설정
         </button>
-      </nav>
 
       <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
 
