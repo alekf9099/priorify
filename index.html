@@ -415,7 +415,6 @@ header {
 }
 
 /* ── BOARD PAGE ── */
-  
 #board-wrap {
   flex: 1;
   overflow-x: auto; 
@@ -1177,7 +1176,7 @@ body.dark .card-actions-group {
 
 /* ───────── PREMIUM FOCUS WIDGET (Super Planner) ───────── */
 .focus-widget {
-  position: fixed; bottom: 80px; right: 24px; z-index: 850;
+  position: fixed; bottom: 85px; right: 24px; z-index: 850;
   width: 280px; background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
@@ -1192,7 +1191,6 @@ body.dark .focus-widget {
 }
 .focus-widget.collapsed { 
   width: 56px; height: 56px; border-radius: 28px; 
-  bottom: 80px; right: 24px;
   transform: scale(0.95); opacity: 0.95;
 }
 .focus-widget-header {
@@ -1339,21 +1337,6 @@ body.dark .focus-widget {
       <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
 
         <div id="page-board" class="page active">
-          <div id="focus-section" style="
-  margin: 16px 16px 0;
-  background: linear-gradient(135deg, #6366F1, #8B5CF6);
-  border-radius: 16px;
-  padding: 16px;
-  color: white;
-  display: none;
-">
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-    <span style="font-size:18px;">⭐</span>
-    <span style="font-size:14px; font-weight:700; letter-spacing:0.3px;">오늘의 핵심 집중</span>
-    <span style="margin-left:auto; font-size:11px; opacity:0.8;" id="focus-count"></span>
-  </div>
-  <div id="focus-cards-list" style="display:flex; flex-direction:column; gap:8px;"></div>
-</div>
           <div id="board-wrap">
             <div id="board"></div>
           </div>
@@ -1562,7 +1545,7 @@ body.dark .focus-widget {
   </div>
 </div>
 
- <div id="focus-widget" class="focus-widget collapsed" style="display:none;">
+<div id="focus-widget" class="focus-widget collapsed">
   <div class="focus-widget-header" onclick="toggleFocusWidget()">
     <div class="focus-widget-title">
       <div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
@@ -2612,6 +2595,8 @@ function closeConfirmModalDirect() {
 
 history.pushState(null, '', location.href);
 window.addEventListener('popstate', function() {
+  history.pushState(null, '', location.href);
+  
   if (document.getElementById('modal-overlay').classList.contains('open')) {
     closeModalDirect(); return;
   }
@@ -2624,10 +2609,19 @@ window.addEventListener('popstate', function() {
   if (document.getElementById('confirm-modal-overlay').classList.contains('open')) {
     closeConfirmModalDirect(); return;
   }
-  if (document.getElementById('quad-modal-overlay').classList.contains('open')) {
-    closeQuadModalDirect(); return;
-  }
-  history.go(-history.length);
+  
+  showConfirm('앱 종료', '앱을 종료하시겠어요?', () => {
+    try {
+      window.close();
+    } catch(e) {}
+    try {
+      navigator.app.exitApp();
+    } catch(e) {}
+    try {
+      Android.exitApp();
+    } catch(e) {}
+    history.go(-history.length);
+  });
 });
 
 function requestNotificationPermission() {
@@ -2766,43 +2760,16 @@ function toggleFocusWidget() {
 }
 
 function updateFocusWidget() {
-  const section = document.getElementById('focus-section');
-  const list = document.getElementById('focus-cards-list');
-  const countEl = document.getElementById('focus-count');
-  if (!section || !list) return;
-
+  const list = document.getElementById('focus-widget-list');
+  if (!list || typeof columns === 'undefined' || columns.length === 0) return;
   const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
-  
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
-    section.style.display = 'none';
+    list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
     return;
   }
-
-  section.style.display = 'block';
-  const cards = criticalCol.cards.slice(0, 3);
-  if (countEl) countEl.textContent = `${criticalCol.cards.length}개`;
-
-  list.innerHTML = cards.map(card => `
-    <div style="
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      backdrop-filter: blur(4px);
-    ">
-      <span style="font-size:13px; flex:1; color:white; font-weight:500;">${esc(card.text)}</span>
-      <button onmousedown="markDone(event,'${card.id}')" style="
-        background: rgba(255,255,255,0.2);
-        border: none;
-        border-radius: 6px;
-        color: white;
-        font-size:11px;
-        padding: 4px 10px;
-        cursor:pointer;
-        font-weight:600;
-      ">완료</button>
+  list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
+    <div class="focus-item">
+      <div class="focus-item-text">${esc(card.text)}</div>
     </div>
   `).join('');
 }
