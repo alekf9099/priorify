@@ -1297,8 +1297,16 @@ body.dark .focus-widget {
           <line x1="4" y1="19" x2="20" y2="19"></line>
         </svg>
       </button>
-      <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
-    </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M3 17 Q7 3 17 3 Q17 13 3 17Z" fill="#2D5A27" opacity="0.7"/>
+          <path d="M3 17 Q10 10 17 3" stroke="#2D5A27" stroke-width="0.8" fill="none" opacity="0.5"/>
+        </svg>
+        <div>
+          <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
+          <div style="font-size:10px; color:#8A9E86; letter-spacing:0.08em; font-style:italic;">grow your tasks</div>
+        </div>
+     </div>
     <div class="header-right">
       <div id="growth-badge" style="
         background: #E8F0E7;
