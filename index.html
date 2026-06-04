@@ -2053,11 +2053,11 @@ function render() {
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
-            <div class="col-header-actions">
-              <button class="col-icon-btn" title="크게 보기" onclick="openColModal('${col.id}')">⛶</button>
-              <button class="col-icon-btn" onclick="openEditColModal('${col.id}')">✎</button>
-              <button class="col-icon-btn danger" onclick="deleteCol('${col.id}')">✕</button>
-            </div>
+            <div class="col-header-actions" style="opacity: 1 !important; pointer-events: auto !important; display: flex !important; gap: 4px;">
+            <button class="col-icon-btn" title="크게 보기" onclick="openColModal('${col.id}')" style="opacity: 1 !important; pointer-events: auto !important; color: var(--text-primary) !important;">⛶</button>
+            <button class="col-icon-btn" onclick="openEditColModal('${col.id}')" style="opacity: 1 !important; pointer-events: auto !important;">✎</button>
+            <button class="col-icon-btn danger" onclick="deleteCol('${col.id}')" style="opacity: 1 !important; pointer-events: auto !important;">✕</button>
+          </div>
             </div>
             <div class="col-dropdown-toggle-btn" onclick="clickColDropdownBtn('${col.id}', event)">
               <span>${col.cards.length}</span>
