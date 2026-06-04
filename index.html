@@ -1307,17 +1307,6 @@ body.dark .focus-widget {
           <div style="font-size:10px; color:#8A9E86; letter-spacing:0.08em; font-style:italic;">grow your tasks</div>
         </div>
      </div>
-    <div class="header-right">
-      <div id="growth-badge" style="
-        background: #E8F0E7;
-        border: 1.5px solid #C5D9C3;
-        border-radius: 20px;
-        padding: 4px 12px;
-        font-size: 12px;
-        color: #2D5A27;
-        font-weight: 600;
-        display: none;
-      ">🌰 씨앗</div>
       <div class="user-profile" id="user-profile">
         <img class="user-avatar" id="user-avatar" src="" alt="프로필">
         <span class="user-name" id="user-name"></span>
@@ -2911,15 +2900,6 @@ function updateFocusWidget() {
   if (pctEl) pctEl.textContent = pct + '%';
   if (bar) bar.style.width = pct + '%';
   if (circle) circle.style.strokeDashoffset = 138.2 * (1 - pct / 100);
-
-  // 성장 배지 업데이트 // <=----- 추가
-  const badge = document.getElementById('growth-badge');
-  if (badge) {
-    const growthStage = pct < 25 ? '🌰 씨앗' : pct < 50 ? '🌱 새싹' : pct < 75 ? '🌿 성장중' : pct < 100 ? '🌳 무성함' : '🌻 만개!';
-    badge.textContent = growthStage;
-    badge.style.display = 'block';
-  }
-}
 
 setTimeout(() => {
   const loader = document.getElementById('loading-screen');
