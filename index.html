@@ -2109,21 +2109,21 @@ function render() {
 function renderCard(card, color, colId) {
   const isMobile = window.innerWidth <= 768;
   return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}"
-    style="border-left: 3px solid ${color.dot}; border-radius: 10px; padding: 10px 12px;">
+    style="border-left: 3px solid ${color.dot}; border-radius: 10px; padding: 10px 12px; opacity:${card.checked ? '0.6' : '1'};">
     <div style="display:flex; align-items:flex-start; gap:10px;">
-      <div onmousedown="markDone(event,'${card.id}')" style="
+      <div onmousedown="toggleCardCheck(event,'${card.id}','${colId}')" style="
         width:20px; height:20px; border-radius:6px; flex-shrink:0; margin-top:1px;
         border: 2px solid ${color.dot};
-        background: transparent;
+        background: ${card.checked ? color.dot : 'transparent'};
         display:flex; align-items:center; justify-content:center;
         cursor:pointer; transition:all 0.2s;
-      "></div>
+      ">${card.checked ? '<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}</div>
       <div style="flex:1; min-width:0;">
-      <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
+        <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45; text-decoration:${card.checked ? 'line-through' : 'none'}; color:${card.checked ? '#B8AFA5' : '#2A2A2A'};">${esc(card.text)}</div>
         ${card.tag ? `<div style="display:inline-block; margin-top:4px; background:${color.tag}; color:${color.tagText}; border:1px solid ${color.colBorder}; border-radius:20px; padding:1px 8px; font-size:10px;">#${esc(card.tag)}</div>` : ''}
-      <div class="card-meta" style="margin-top:4px;">
-      <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
-      </div>
+        <div class="card-meta" style="margin-top:4px;">
+          <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
+        </div>
       </div>
       <div class="card-actions-group" draggable="false" 
            onmousedown="event.stopPropagation();" 
@@ -3191,6 +3191,18 @@ function selectCardTag(e, colId, tag) {
     btn.style.fontWeight = btn.textContent === '#' + tag ? '700' : '400';
     btn.style.opacity = btn.textContent === '#' + tag ? '1' : '0.6';
   });
+}
+
+function toggleCardCheck(e, cardId, colId) {
+  e.preventDefault(); e.stopPropagation();
+  const col = columns.find(c => c.id === colId);
+  if (!col) return;
+  const card = col.cards.find(c => c.id === cardId);
+  if (!card) return;
+  card.checked = !card.checked;
+  saveData();
+  render();
+  updateFocusWidget();
 }
   
 </script>
