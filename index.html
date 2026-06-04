@@ -1328,7 +1328,7 @@ body.dark .focus-widget {
         <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
           <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="9" r="2.5"/>
-            <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
+            <path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.93 3.93l1.06 1.06M13.01 13.01l1.06 1.06M14.07 3.93l-1.06 1.06M4.99 13.01l-1.06 1.06"/>
           </svg>
           설정
         </button>
@@ -3014,37 +3014,6 @@ function removePlacedFlower(key) {
 }
   
   // 수집한 꽃 팔레트
-  html += `
-    <div style="margin-top:8px;">
-      <div style="font-size:12px; font-weight:500; color:var(--text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.6px;">보유 식물</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-  `;
-  
-  if (collected.length === 0) {
-    html += `<div style="font-size:13px; color:var(--text-tertiary);">아직 수집한 식물이 없어요 🌱</div>`;
-  } else {
-    FLOWER_COLLECTION.forEach(flower => {
-      if (collected.includes(flower.id)) {
-        html += `
-          <div class="garden-palette-item" data-flower-id="${flower.id}" onclick="selectPaletteFlower('${flower.id}')" style="
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            gap:4px;
-            padding:10px 14px;
-            background:var(--surface);
-            border:1.5px solid var(--border);
-            border-radius:var(--radius);
-            cursor:pointer;
-            transition:all 0.15s;
-          ">
-            <span style="font-size:28px;">${flower.emoji}</span>
-            <span style="font-size:11px; color:var(--text-secondary);">${flower.name}</span>
-          </div>
-        `;
-      }
-    });
-  }
 
 let selectedFlowerId = null;
 
