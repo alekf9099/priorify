@@ -2932,7 +2932,7 @@ function updateFocusWidget() {
   const circle = document.getElementById('progress-circle');
   const legend = document.getElementById('progress-legend');
   if (doneEl) doneEl.textContent = done;
-  if (totalEl) totalEl.textContent = total + done;
+  if (totalEl) totalEl.textContent = total + doneItems.length; // ✅ 완료 탭으로 완전히 넘어간 항목만 더함
   if (pctEl) pctEl.textContent = pct + '%';
   if (bar) bar.style.width = pct + '%';
   if (circle) circle.style.strokeDashoffset = 138.2 * (1 - pct / 100);
