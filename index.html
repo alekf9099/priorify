@@ -2810,7 +2810,7 @@ function updateFocusWidget() {
       <div class="focus-item-text">${esc(card.text)}</div>
     </div>
   `).join('');
-}
+  
   // 진행률 카드 업데이트 // <=----- 추가
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const done = doneItems.length;
