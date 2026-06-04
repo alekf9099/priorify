@@ -1236,6 +1236,9 @@ body.dark .focus-widget {
   padding: 9px 16px; background: #2D5A27; color: white;
   border: none; border-radius: 10px; cursor: pointer;
 }
+  
+.add-card-area.focused-area .add-card-tag-wrap { display: flex !important; }
+
 </style>
 </head>
 <body>
@@ -2050,18 +2053,30 @@ function render() {
         ${col.cards.length === 0 ? `<div class="empty-state"><div style="font-size:26px; margin-bottom:6px;">🌱</div><div style="font-style:italic; color:#B8AFA5; font-size:13px;">이 정원은 아직 비어있어요</div></div>` : ''}
         ${col.cards.map(c => renderCard(c, color, col.id)).join('')}
       </div>
+      
       <div class="add-card-area">
         <textarea class="add-card-input" placeholder="🌱 씨앗 심기…" rows="1"
-          onkeydown="handleCardInput(event,'${col.id}',this)"
-          onfocus="focusCardInput(this)"
-          onblur="blurCardInput(event,this)"
-          style="border: 1.5px dashed ${color.dot}; border-radius:10px;"></textarea>
-      <div class="add-card-date-picker-wrap">
-         <span class="add-card-date-label">시작</span>
-        <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
-        <span class="add-card-date-label">종료</span>
-        <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
-      </div>
+        onkeydown="handleCardInput(event,'${col.id}',this)"
+        onfocus="focusCardInput(this)"
+        onblur="blurCardInput(event,this)"
+        style="border: 1.5px dashed ${color.dot}; border-radius:10px; background:${color.colBg};"></textarea>
+  <div class="add-card-date-picker-wrap">
+    <span class="add-card-date-label">시작</span>
+    <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
+    <span class="add-card-date-label">종료</span>
+    <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
+  </div>
+  <div class="add-card-tag-wrap" style="display:none; flex-wrap:wrap; gap:6px; margin-top:8px; padding:2px 4px;">
+    ${['관리','점검','쇼핑','계획','공부','기타'].map(tag => `
+      <button onmousedown="selectCardTag(event,'${col.id}','${tag}')" style="
+        background: ${color.tag}; color: ${color.tagText};
+        border: 1px solid ${color.colBorder};
+        border-radius: 20px; padding: 3px 10px;
+        font-size: 11px; cursor: pointer;
+        font-family: 'DM Sans', sans-serif;
+      ">#${tag}</button>
+    `).join('')}
+  </div>
   <div class="add-card-footer">
     <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
     <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')" style="background:${color.dot};">🌱 심기</button>
@@ -3161,6 +3176,18 @@ function placeFlowerOnGarden(event) {
 
 function preventScroll(e) {
   e.preventDefault();
+}
+
+let selectedCardTag = {};
+function selectCardTag(e, colId, tag) {
+  e.preventDefault();
+  e.stopPropagation();
+  selectedCardTag[colId] = tag;
+  const area = e.target.closest('.add-card-area');
+  area.querySelectorAll('.add-card-tag-wrap button').forEach(btn => {
+    btn.style.fontWeight = btn.textContent === '#' + tag ? '700' : '400';
+    btn.style.opacity = btn.textContent === '#' + tag ? '1' : '0.6';
+  });
 }
   
 </script>
