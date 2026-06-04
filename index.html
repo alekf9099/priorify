@@ -3356,17 +3356,6 @@ function deleteCardInModal(e, cardId) {
 }
 
 const GEMINI_API_KEY = '';
-  
-async function analyzeWithAI() {
-  if (doneItems.length === 0) {
-    alert('완료된 항목이 없어요! 먼저 할 일을 완료해보세요 🌱');
-    return;
-  }
-
-  const btn = document.getElementById('ai-analyze-btn');
-  btn.innerHTML = `<span style="font-size:18px;">⏳</span> <span>분석 중...</span>`;
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
 
 let GEMINI_API_KEY = localStorage.getItem('gemini_api_key') || '';
 
