@@ -653,7 +653,7 @@ input:checked + .toggle-slider::before {
 .card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: #B8AFA5; font-style: italic; } /* <=----- 변경 */
 
 /* 플로팅 액션 그룹 */
-.card-actions-group {
+ {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -1049,15 +1049,20 @@ body.dark .card-actions-group {
   }
 
   .card {
-    padding: 12px 12px 46px 12px !important; 
-    min-height: 96px !important; 
+    padding: 12px !important; 
+    min-height: auto !important; /* 강제 높이 제거로 공란 없애기 */
   }
-  .card-actions-group {
+  .card-actions-group { /* ✅ 누락되었던 클래스 이름 추가 */
     opacity: 1 !important; 
     pointer-events: auto !important;
-    transform: translateY(0) !important;
-    bottom: 8px;
-    right: 8px;
+    transform: none !important;
+    
+    /* 억지로 바닥에 고정하던 것을 풀고 텍스트 바로 밑에 자연스럽게 붙도록 수정 */
+    position: relative !important; 
+    bottom: auto !important; 
+    right: auto !important; 
+    align-self: flex-end; 
+    margin-top: 4px; 
   }
 
   .add-card-area {
