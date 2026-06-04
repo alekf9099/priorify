@@ -1144,14 +1144,16 @@ body.dark .card-actions-group {
 }
 
 /* ✅ 자바스크립트 수량 계산은 살려두고, 화면에서 위젯만 완벽히 지우기 */
-#focus-widget {
-  display: none !important;
-}
 
 @media (max-width: 480px) {
   .dash-grid { grid-template-columns: 1fr; }
-}
+} /* 👈 480px 미디어 쿼리가 끝나는 중괄호 */
 
+/* ✅ 미디어 쿼리 바깥에 배치하여 PC와 모바일 전체에서 위젯을 완벽히 숨깁니다 */
+#focus-widget {
+  display: none !important;
+}
+  
 /* ───────── PREMIUM FOCUS WIDGET (Super Planner) ───────── */
 .focus-widget {
   position: fixed; bottom: 85px; right: 24px; z-index: 850;
