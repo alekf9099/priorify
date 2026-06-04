@@ -993,15 +993,20 @@ body.dark .card-actions-group {
 
   .lnb {
     position: fixed;
-    top: 0; left: 0; height: 100vh;
+    top: 0;
+    left: 0;
+    height: 100%; /* 구형 브라우저를 위한 Fallback */
+    height: 100dvh; /* 브라우저 UI를 제외한 실제 보이는 영역의 높이로 계산 */
     width: 280px !important;
     max-width: 85vw;
     z-index: 3000;
     box-shadow: 4px 0 20px rgba(0,0,0,0.25);
     padding: 20px 12px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom)); /* (선택사항) 노치 디자인 기기를 위한 안전 여백 추가 */
     opacity: 1 !important;
     pointer-events: auto !important;
-  }
+    }
+}
   .lnb.collapsed { transform: translateX(-100%); }
 
   #board-wrap { 
