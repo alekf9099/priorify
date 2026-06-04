@@ -182,27 +182,26 @@ header {
   justify-content: space-between;
   padding: 0 28px;
   height: 56px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: rgba(247,244,238,0.95); /* <=----- 변경 */
+  border-bottom: 1.5px solid #DDD5C8; /* <=----- 변경 */
   position: relative;
   z-index: 200;
   flex-shrink: 0;
+  backdrop-filter: blur(8px); /* <=----- 추가 */
 }
-
 .header-left { display: flex; align-items: center; gap: 14px; }
 .header-right { display: flex; align-items: center; gap: 12px; }
-
 .logo {
   font-family: 'DM Mono', monospace;
   font-size: 17px;
   font-weight: 500;
   letter-spacing: -0.5px;
-  color: var(--text-primary);
+  color: #1E3A1A; /* <=----- 변경 */
   text-decoration: none;
   transition: opacity 0.15s;
 }
 .logo:hover { opacity: 0.6; }
-.logo span { color: var(--text-tertiary); }
+.logo span { color: #8A9E86; } /* <=----- 변경 */
 
 .user-profile {
   display: none;
@@ -306,8 +305,8 @@ header {
 .lnb {
   width: var(--lnb-w);
   flex-shrink: 0;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  background: #F7F4EE; /* <=----- 변경 */
+  border-right: 1.5px solid #DDD5C8; /* <=----- 변경 */
   display: flex;
   flex-direction: column;
   padding: 20px 12px;
@@ -316,7 +315,6 @@ header {
   overflow-x: hidden;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s, padding 0.3s, opacity 0.3s;
 }
-
 .lnb.collapsed {
   width: 0;
   padding-left: 0;
@@ -325,18 +323,16 @@ header {
   pointer-events: none;
   border-right-color: transparent;
 }
-
 .lnb-section-label {
   font-size: 10px;
   font-weight: 500;
-  color: var(--text-tertiary);
+  color: #8A9E86; /* <=----- 변경 */
   letter-spacing: 0.8px;
   text-transform: uppercase;
   padding: 0 8px;
   margin: 12px 0 4px;
 }
 .lnb-section-label:first-child { margin-top: 0; }
-
 .lnb-item {
   display: flex;
   align-items: center;
@@ -344,7 +340,7 @@ header {
   padding: 8px 10px;
   border-radius: var(--radius-sm);
   font-size: 13.5px;
-  color: var(--text-secondary);
+  color: #4A7C3F; /* <=----- 변경 */
   cursor: pointer;
   border: none;
   background: none;
@@ -353,9 +349,8 @@ header {
   transition: background 0.12s, color 0.12s;
   font-family: 'DM Sans', sans-serif;
 }
-.lnb-item:hover { background: var(--bg); color: var(--text-primary); }
-.lnb-item.active { background: var(--bg); color: var(--text-primary); font-weight: 500; }
-
+.lnb-item:hover { background: #E8F0E7; color: #1E3A1A; } /* <=----- 변경 */
+.lnb-item.active { background: #E8F0E7; color: #1E3A1A; font-weight: 500; } /* <=----- 변경 */
 .lnb-icon {
   width: 18px;
   height: 18px;
@@ -364,13 +359,11 @@ header {
 }
 .lnb-item.active .lnb-icon,
 .lnb-item:hover .lnb-icon { opacity: 1; }
-
 .lnb-divider {
   height: 1px;
-  background: var(--border);
+  background: #DDD5C8; /* <=----- 변경 */
   margin: 8px 0;
 }
-
 .lnb-new-col {
   display: flex;
   align-items: center;
@@ -378,9 +371,9 @@ header {
   padding: 8px 10px;
   border-radius: var(--radius-sm);
   font-size: 13.5px;
-  color: var(--text-secondary);
+  color: #4A7C3F; /* <=----- 변경 */
   cursor: pointer;
-  border: 1px dashed var(--border-strong);
+  border: 1px dashed #C5D9C3; /* <=----- 변경 */
   background: none;
   width: 100%;
   text-align: left;
@@ -388,7 +381,7 @@ header {
   font-family: 'DM Sans', sans-serif;
   margin-top: 4px;
 }
-.lnb-new-col:hover { background: var(--bg); color: var(--text-primary); border-color: var(--text-primary); }
+.lnb-new-col:hover { background: #E8F0E7; color: #1E3A1A; border-color: #2D5A27; } /* <=----- 변경 */
 
 /* ───────── MAIN CONTENT ───────── */
 .main {
