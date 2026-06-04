@@ -2905,10 +2905,10 @@ function updateFocusWidget() {
   }
 
   // 진행률 카드 업데이트
-  const checked = columns.reduce((s, c) => s + c.cards.filter(card => card.checked).length, 0); // <=----- 추가
+  const checked = columns.reduce((s, c) => s + c.cards.filter(card => card.checked).length, 0);
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
-  const done = doneItems.length + checked; // <=----- 변경
-  const pct = total + done === 0 ? 0 : Math.round(done / (total + done) * 100);
+  const done = doneItems.length + checked;
+  const pct = (total + doneItems.length) === 0 ? 0 : Math.round(done / (total + doneItems.length) * 100);
   const doneEl = document.getElementById('progress-done');
   const totalEl = document.getElementById('progress-total');
   const pctEl = document.getElementById('progress-pct');
