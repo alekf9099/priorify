@@ -1382,49 +1382,56 @@ body.dark .focus-widget {
       <main class="main" style="display: flex; flex: 1; flex-direction: column; overflow: hidden; position: relative;">
 
         <div id="page-board" class="page active">
-          <div id="progress-card" style="
-            margin: 16px 16px 0;
-            background: white;
-            border-radius: 20px;
-            padding: 18px 20px;
-            border: 1.5px solid #DDD5C8;
-            box-shadow: 0 4px 20px rgba(45,90,39,0.07);
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-          ">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
-              <div>
-                <div style="font-size:11px; color:#8A9E86; font-style:italic; margin-bottom:4px;">오늘의 정원 현황</div>
-                <div style="font-size:26px; font-weight:700; color:#1E3A1A; letter-spacing:-1px;">
-                  <span id="progress-done">0</span>
-                  <span style="font-size:14px; font-weight:400; color:#8A9E86;">/<span id="progress-total">0</span> 완료</span>
-                </div>
-              </div>
-              <div style="position:relative; width:56px; height:56px;">
-                <svg width="56" height="56" style="transform:rotate(-90deg);">
-                  <circle cx="28" cy="28" r="22" fill="none" stroke="#E8F0E7" stroke-width="5"/>
-                  <circle id="progress-circle" cx="28" cy="28" r="22" fill="none" stroke="#2D5A27"
-                    stroke-width="5" stroke-linecap="round"
-                    stroke-dasharray="138.2"
-                    stroke-dashoffset="138.2"/>
-                </svg>
-                <div id="progress-pct" style="
-                  position:absolute; top:50%; left:50%;
-                  transform:translate(-50%,-50%);
-                  font-size:12px; font-weight:700; color:#2D5A27;
-                ">0%</div>
-              </div>
-            </div>
-            <div style="height:8px; background:#EEE8DF; border-radius:99px; overflow:hidden;">
-              <div id="progress-bar" style="
-                height:100%; width:0%;
-                background:linear-gradient(90deg, #2D5A27 0%, #6AAB5A 100%);
-                border-radius:99px;
-                transition:width 0.6s ease;
-              "></div>
-            </div>
-          </div>
+  <div id="progress-card" style="
+    margin: 16px 16px 0;
+    background: white;
+    border-radius: 20px;
+    padding: 18px 20px;
+    border: 1.5px solid #DDD5C8;
+    box-shadow: 0 4px 20px rgba(45,90,39,0.07);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  ">
+    <svg width="100" height="100" viewBox="0 0 60 60" fill="none" style="position:absolute; right:-15px; top:-15px; opacity:0.06; pointer-events:none;">
+      <path d="M10 50 Q20 10 50 10 Q50 40 10 50Z" fill="#2D5A27"/>
+      <path d="M10 50 Q30 30 50 10" stroke="#2D5A27" stroke-width="1.5" fill="none" opacity="0.6"/>
+    </svg>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+      <div>
+        <div style="font-size:11px; color:#8A9E86; font-style:italic; margin-bottom:4px;">오늘의 정원 현황</div>
+        <div style="font-size:26px; font-weight:700; color:#1E3A1A; letter-spacing:-1px;">
+          <span id="progress-done">0</span>
+          <span style="font-size:14px; font-weight:400; color:#8A9E86;">/<span id="progress-total">0</span> 완료</span>
+        </div>
+      </div>
+      <div style="position:relative; width:56px; height:56px;">
+        <svg width="56" height="56" style="transform:rotate(-90deg);">
+          <circle cx="28" cy="28" r="22" fill="none" stroke="#E8F0E7" stroke-width="5"/>
+          <circle id="progress-circle" cx="28" cy="28" r="22" fill="none" stroke="#2D5A27"
+            stroke-width="5" stroke-linecap="round"
+            stroke-dasharray="138.2"
+            stroke-dashoffset="138.2"/>
+        </svg>
+        <div id="progress-pct" style="
+          position:absolute; top:50%; left:50%;
+          transform:translate(-50%,-50%);
+          font-size:12px; font-weight:700; color:#2D5A27;
+        ">0%</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:0; margin-bottom:10px;">
+      <div id="progress-legend" style="display:flex; align-items:center;"></div>
+    </div>
+    <div style="height:8px; background:#EEE8DF; border-radius:99px; overflow:hidden;">
+      <div id="progress-bar" style="
+        height:100%; width:0%;
+        background:linear-gradient(90deg, #2D5A27 0%, #6AAB5A 100%);
+        border-radius:99px;
+        transition:width 0.6s ease;
+      "></div>
+    </div>
+  </div>
 
           <div id="board-wrap">
             <div id="board"></div>
@@ -2878,24 +2885,35 @@ function updateFocusWidget() {
       </div>
     `).join('');
   }
-}
 
   // 진행률 카드 업데이트
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const done = doneItems.length;
   const pct = total + done === 0 ? 0 : Math.round(done / (total + done) * 100);
-
   const doneEl = document.getElementById('progress-done');
   const totalEl = document.getElementById('progress-total');
   const pctEl = document.getElementById('progress-pct');
   const bar = document.getElementById('progress-bar');
   const circle = document.getElementById('progress-circle');
-
+  const legend = document.getElementById('progress-legend');
   if (doneEl) doneEl.textContent = done;
   if (totalEl) totalEl.textContent = total + done;
   if (pctEl) pctEl.textContent = pct + '%';
   if (bar) bar.style.width = pct + '%';
   if (circle) circle.style.strokeDashoffset = 138.2 * (1 - pct / 100);
+  if (legend) {
+    legend.innerHTML = columns.map((col, i) => {
+      const color = COLORS[col.colorIdx];
+      return `
+        <div style="display:flex; align-items:center; gap:4px;">
+          <div style="width:8px; height:8px; border-radius:50%; background:${color.dot};"></div>
+          <span style="font-size:10px; color:${color.dot};">${col.cards.length}</span>
+        </div>
+        ${i < columns.length - 1 ? '<div style="width:12px; height:1px; background:#DDD5C8; margin:0 6px;"></div>' : ''}
+      `;
+    }).join('');
+  }
+}
 
 setTimeout(() => {
   const loader = document.getElementById('loading-screen');
