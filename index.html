@@ -1139,11 +1139,11 @@ body.dark .card-actions-group {
 /* ───────── PREMIUM FOCUS WIDGET (Super Planner) ───────── */
 .focus-widget {
   position: fixed; bottom: 85px; right: 24px; z-index: 850;
-  width: 280px; background: rgba(255, 255, 255, 0.85);
+  width: 280px; background: rgba(247,244,238,0.92); /* <=----- 변경 */
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
+  border-radius: 20px; box-shadow: 0 16px 40px rgba(45,90,39,0.12); /* <=----- 변경 */
   overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex; flex-direction: column;
 }
@@ -1153,10 +1153,11 @@ body.dark .focus-widget {
 }
 .focus-widget.collapsed { 
   width: 56px; height: 56px; border-radius: 28px; 
+  bottom: 80px; right: 24px; /* <=----- 추가 */
   transform: scale(0.95); opacity: 0.95;
 }
 .focus-widget-header {
-  padding: 0 20px; background: var(--accent); color: white; display: flex;
+  padding: 0 20px; background: #2D5A27; color: white; display: flex; /* <=----- 변경 */
   align-items: center; justify-content: space-between; cursor: pointer;
   flex-shrink: 0; height: 56px;
 }
@@ -1171,12 +1172,12 @@ body.dark .focus-widget {
   max-height: 400px; padding: 14px;
 }
 .focus-item {
-  padding: 12px 14px; background: var(--surface); border-radius: 12px; font-size: 13.5px;
-  border-left: 4px solid var(--accent); display: flex; align-items: flex-start; gap: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 8px;
+  padding: 12px 14px; background: white; border-radius: 12px; font-size: 13.5px; /* <=----- 변경 */
+  border-left: 4px solid #2D5A27; display: flex; align-items: flex-start; gap: 10px; /* <=----- 변경 */
+  box-shadow: 0 4px 12px rgba(45,90,39,0.05); margin-bottom: 8px; /* <=----- 변경 */
 }
-.focus-item-text { flex: 1; line-height: 1.5; color: var(--text-primary); font-weight: 500; }
-.focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: var(--text-tertiary); line-height: 1.6; }
+.focus-item-text { flex: 1; line-height: 1.5; color: #2A2A2A; font-weight: 500; } /* <=----- 변경 */
+.focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: #B8AFA5; line-height: 1.6; font-style: italic; } /* <=----- 변경 */
 
 </style>
 </head>
