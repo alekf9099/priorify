@@ -1178,7 +1178,64 @@ body.dark .focus-widget {
 }
 .focus-item-text { flex: 1; line-height: 1.5; color: #2A2A2A; font-weight: 500; } /* <=----- 변경 */
 .focus-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: #B8AFA5; line-height: 1.6; font-style: italic; } /* <=----- 변경 */
-
+  
+/* ── QUADRANT MODAL ── */
+.quad-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  backdrop-filter: blur(4px);
+}
+.quad-modal-overlay.open { opacity: 1; pointer-events: auto; }
+.quad-modal {
+  background: #F7F4EE; width: 100%; max-width: 600px;
+  border-radius: 20px 20px 0 0; padding: 20px;
+  max-height: 85vh; overflow-y: auto;
+  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 -8px 40px rgba(45,90,39,0.12);
+  border-top: 3px solid #2D5A27;
+}
+.quad-modal-overlay.open .quad-modal { transform: translateY(0); }
+.quad-modal-handle {
+  width: 36px; height: 4px; background: #C5D9C3;
+  border-radius: 99px; margin: 0 auto 16px;
+}
+.quad-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 1.5px solid #DDD5C8;
+}
+.quad-modal-title {
+  font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #1E3A1A;
+}
+.quad-modal-close {
+  background: #E8F0E7; border: none; color: #4A7C3F;
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 14px;
+}
+.quad-modal-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.quad-modal-card {
+  background: white; border: 1.5px solid #DDD5C8;
+  border-radius: 12px; padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.quad-modal-card-text { font-size: 13.5px; flex: 1; color: #2A2A2A; line-height: 1.4; }
+.quad-modal-card-date { font-size: 10px; color: #B8AFA5; font-style: italic; }
+.quad-modal-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.quad-modal-add {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+.quad-modal-input {
+  flex: 1; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  padding: 9px 12px; border: 1.5px solid #C5D9C3;
+  border-radius: 10px; background: white;
+  color: #2A2A2A; outline: none;
+}
+.quad-modal-input:focus { border-color: #2D5A27; }
+.quad-modal-save {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  padding: 9px 16px; background: #2D5A27; color: white;
+  border: none; border-radius: 10px; cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -3105,5 +3162,20 @@ function preventScroll(e) {
 }
   
 </script>
+  <div class="quad-modal-overlay" id="quad-modal-overlay" onclick="closeQuadModal(event)">
+  <div class="quad-modal">
+    <div class="quad-modal-handle"></div>
+    <div class="quad-modal-header">
+      <div class="quad-modal-title" id="quad-modal-title"></div>
+      <button class="quad-modal-close" onclick="closeQuadModalDirect()">✕</button>
+    </div>
+    <div class="quad-modal-cards" id="quad-modal-cards"></div>
+    <div class="quad-modal-add">
+      <input class="quad-modal-input" id="quad-modal-input" placeholder="🌱 씨앗 심기..." 
+        onkeydown="if(event.key==='Enter') addCardFromQuadModal()">
+      <button class="quad-modal-save" onclick="addCardFromQuadModal()">심기</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
