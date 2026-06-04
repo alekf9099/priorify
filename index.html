@@ -2079,9 +2079,20 @@ function renderCard(card, color, colId) {
   const isMobile = window.innerWidth <= 768;
   return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}"
     style="border-left: 3px solid ${color.dot}; border-radius: 10px; padding: 10px 12px;">
-    <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
-    <div class="card-meta" style="margin-top:6px;">
-      <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
+    <div style="display:flex; align-items:flex-start; gap:10px;">
+      <div onmousedown="markDone(event,'${card.id}')" style="
+        width:20px; height:20px; border-radius:6px; flex-shrink:0; margin-top:1px;
+        border: 2px solid ${color.dot};
+        background: transparent;
+        display:flex; align-items:center; justify-content:center;
+        cursor:pointer; transition:all 0.2s;
+      "></div>
+      <div style="flex:1; min-width:0;">
+        <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
+        <div class="card-meta" style="margin-top:4px;">
+          <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
+        </div>
+      </div>
       <div class="card-actions-group" draggable="false" 
            onmousedown="event.stopPropagation();" 
            ontouchstart="event.stopPropagation();">
@@ -2094,6 +2105,16 @@ function renderCard(card, color, colId) {
           <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
           </svg>
+        </button>
+        <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">
+          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
         </button>
         <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">
           <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
