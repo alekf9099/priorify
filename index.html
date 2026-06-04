@@ -502,7 +502,10 @@ header {
   cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--text-secondary); transition: background 0.1s, color 0.1s;
 }
 .theme-btn.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
-
+body.dark .theme-btn.active {
+    color: #121212; /* 다크 모드일 때 텍스트를 어둡게 변경하여 가독성 확보 */
+}
+  
 .danger-btn {
   padding: 6px 16px; border-radius: 6px; font-size: 12px; border: 1px solid #FECACA; background: #FFF8F7;
   color: #B91C1C; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s;
