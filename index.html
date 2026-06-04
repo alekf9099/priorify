@@ -544,9 +544,8 @@ header {
 }
 
 input:checked + .toggle-slider {
-  background: var(--accent);
+  background: #2D5A27; /* <=----- 변경 */
 }
-
 input:checked + .toggle-slider::before {
   transform: translateX(20px);
 }
@@ -745,8 +744,8 @@ body.dark .card-actions-group {
 
 .add-card-footer { display: none; justify-content: flex-end; gap: 6px; margin-top: 8px; }
 .add-card-area.focused-area .add-card-footer { display: flex; }
-.btn-cancel { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: var(--text-secondary); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
-.btn-save { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500; color: var(--surface); background: var(--text-primary); border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: opacity 0.15s; }
+.btn-cancel { font-family: 'DM Sans', sans-serif; font-size: 11.5px; color: #4A7C3F; background: none; border: 1px solid #C5D9C3; border-radius: 6px; padding: 4px 10px; cursor: pointer; } /* <=----- 변경 */
+.btn-save { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; color: white; background: #2D5A27; border: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: opacity 0.15s; } /* <=----- 변경 */
 .btn-save:hover { opacity: 0.8; }
 
 /* ── ADD COL GHOST ── */
