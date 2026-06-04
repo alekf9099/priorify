@@ -428,9 +428,8 @@ header {
 
 /* ── DASHBOARD PAGE ── */
 #page-dashboard { padding: 28px 32px; overflow-y: auto; }
-.dash-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.dash-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
-
+.dash-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #1E3A1A; } /* <=----- 변경 */
+.dash-sub { font-size: 13px; color: #8A9E86; margin-bottom: 28px; font-style: italic; } /* <=----- 변경 */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -438,25 +437,26 @@ header {
   margin-bottom: 28px;
 }
 .dash-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: white; /* <=----- 변경 */
+  border: 1.5px solid #DDD5C8; /* <=----- 변경 */
+  border-radius: 16px; /* <=----- 변경 */
   padding: 18px 20px;
+  box-shadow: 0 2px 12px rgba(45,90,39,0.05); /* <=----- 추가 */
 }
-.dash-card-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
-.dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; }
-
+.dash-card-label { font-size: 11px; color: #8A9E86; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; font-style: italic; } /* <=----- 변경 */
+.dash-card-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 700; color: #1E3A1A; } /* <=----- 변경 */
 .dash-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .dash-col-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: white; /* <=----- 변경 */
+  border: 1.5px solid #DDD5C8; /* <=----- 변경 */
+  border-radius: 16px; /* <=----- 변경 */
   padding: 16px 18px;
+  box-shadow: 0 2px 12px rgba(45,90,39,0.05); /* <=----- 추가 */
 }
-.dash-col-name { font-size: 13px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
-.dash-col-bar-wrap { background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
+.dash-col-name { font-size: 13px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; color: #1E3A1A; } /* <=----- 변경 */
+.dash-col-bar-wrap { background: #EEE8DF; border-radius: 4px; height: 6px; overflow: hidden; } /* <=----- 변경 */
 .dash-col-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
-.dash-col-count { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+.dash-col-count { font-size: 12px; color: #8A9E86; margin-top: 6px; } /* <=----- 변경 */
 
 /* ── DONE PAGE ── */
 #page-done { padding: 28px 32px; overflow-y: auto; }
