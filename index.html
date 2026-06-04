@@ -552,17 +552,31 @@ input:checked + .toggle-slider::before {
 
 /* ── COLUMNS ── */
 .column {
-  width: 280px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--surface); min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeUp 0.25s ease both;
+  width: 280px; flex-shrink: 0; display: flex; flex-direction: column; 
+  border-radius: 18px; /* <=----- 변경 */
+  border: 1.5px solid #DDD5C8; /* <=----- 변경 */
+  background: white; /* <=----- 변경 */
+  min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; 
+  transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); 
+  animation: fadeUp 0.25s ease both;
+  box-shadow: 0 2px 12px rgba(45,90,39,0.05); /* <=----- 추가 */
 }
-.column.drag-target { border-color: #1A1A1A; box-shadow: 0 0 0 3px rgba(26,26,26,0.08); }
-
-.col-header { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: 24px; }
-.col-header-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.column.drag-target { border-color: #2D5A27; box-shadow: 0 0 0 3px rgba(45,90,39,0.1); } /* <=----- 변경 */
+.col-header { 
+  padding: 13px 15px; /* <=----- 변경 */
+  border-bottom: 1px solid #EDE7DE; /* <=----- 변경 */
+  flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; 
+}
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: auto; } /* <=----- 변경 */
+.col-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; } /* <=----- 변경 */
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.col-title-input { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text-primary); background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; }
-.col-title-input:focus { background: var(--bg); border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
+.col-title-input { 
+  font-family: 'DM Sans', sans-serif; font-size: 15px; /* <=----- 변경 */
+  font-weight: 700; /* <=----- 변경 */
+  color: #1E3A1A; /* <=----- 변경 */
+  background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; 
+}
+.col-title-input:focus { background: #E8F0E7; border-radius: 4px; padding: 1px 4px; margin: -1px -4px; } /* <=----- 변경 */
 
 .col-dropdown-toggle-btn {
   display: flex;
@@ -599,41 +613,41 @@ input:checked + .toggle-slider::before {
 .cards-list { 
   flex: 1; 
   overflow-y: auto; 
-  padding: 8px; 
+  padding: 10px 15px; /* <=----- 변경 */
   display: flex; 
   flex-direction: column; 
-  gap: 7px; 
+  gap: 0; /* <=----- 변경 */
   min-height: 60px; 
   touch-action: pan-y; 
   transition: max-height 0.22s ease-out, padding 0.22s, opacity 0.15s; 
-  background: var(--surface) !important; 
+  background: white !important; /* <=----- 변경 */
 }
 .cards-list::-webkit-scrollbar { width: 3px; }
-.cards-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
-
+.cards-list::-webkit-scrollbar-thumb { background: #DDD5C8; border-radius: 2px; } /* <=----- 변경 */
 .card {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;
+  background: transparent; /* <=----- 변경 */
+  border: none; /* <=----- 변경 */
+  border-bottom: 1px dashed #EDE7DE; /* <=----- 변경 */
+  border-radius: 0; /* <=----- 변경 */
+  padding: 9px 0; /* <=----- 변경 */
   cursor: grab; user-select: none; transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s; position: relative; animation: cardIn 0.18s ease both;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px; /* <=----- 변경 */
 }
 @keyframes cardIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
-.card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-color: var(--border-strong); }
+.card:hover { box-shadow: none; border-color: #C5D9C3; } /* <=----- 변경 */
 .card.dragging { opacity: 0.28; transform: scale(0.97); cursor: grabbing; }
-
 .card-tag { display: inline-block; font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
 .card-text { 
-  font-size: 13px; 
-  line-height: 1.5; 
-  color: var(--text-primary); 
+  font-size: 14px; /* <=----- 변경 */
+  line-height: 1.45; /* <=----- 변경 */
+  color: #2A2A2A; /* <=----- 변경 */
   word-break: break-word; 
   padding-right: 4px; 
 }
-
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; pointer-events: none;}
-.card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); }
+.card-date { font-family: 'DM Mono', monospace; font-size: 10px; color: #B8AFA5; font-style: italic; } /* <=----- 변경 */
 
 /* 플로팅 액션 그룹 */
 .card-actions-group {
@@ -1251,9 +1265,19 @@ body.dark .focus-widget {
           <line x1="4" y1="19" x2="20" y2="19"></line>
         </svg>
       </button>
-      <a href="#" class="logo" onclick="event.preventDefault(); ('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
+      <a href="#" class="logo" onclick="event.preventDefault(); switchPage('board', document.querySelector('.lnb-item[data-page=\'board\']'))">Priorify<span>.</span></a>
     </div>
     <div class="header-right">
+      <div id="growth-badge" style="
+        background: #E8F0E7;
+        border: 1.5px solid #C5D9C3;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        color: #2D5A27;
+        font-weight: 600;
+        display: none;
+      ">🌰 씨앗</div>
       <div class="user-profile" id="user-profile">
         <img class="user-avatar" id="user-avatar" src="" alt="프로필">
         <span class="user-name" id="user-name"></span>
