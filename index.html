@@ -2119,10 +2119,11 @@ function renderCard(card, color, colId) {
         cursor:pointer; transition:all 0.2s;
       "></div>
       <div style="flex:1; min-width:0;">
-        <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
-        <div class="card-meta" style="margin-top:4px;">
-          <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
-        </div>
+      <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
+        ${card.tag ? `<div style="display:inline-block; margin-top:4px; background:${color.tag}; color:${color.tagText}; border:1px solid ${color.colBorder}; border-radius:20px; padding:1px 8px; font-size:10px;">#${esc(card.tag)}</div>` : ''}
+      <div class="card-meta" style="margin-top:4px;">
+      <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
+      </div>
       </div>
       <div class="card-actions-group" draggable="false" 
            onmousedown="event.stopPropagation();" 
@@ -2332,7 +2333,9 @@ function addCardFromInput(colId, textarea) {
     finalDateStr = (startVal === endVal) ? sStr : `${sStr} ~ ${eStr}`;
   }
 
-  col.cards.push({ id: genId(), text, date: finalDateStr });
+  const tag = selectedCardTag[colId] || ''; // <=----- 추가
+  col.cards.push({ id: genId(), text, date: finalDateStr, tag }); // <=----- 변경
+  delete selectedCardTag[colId]; // <=----- 추가
   textarea.value = ''; textarea.style.height = 'auto';
   textarea.parentElement.classList.remove('focused-area');
   saveData(); render();
