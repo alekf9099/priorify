@@ -1139,8 +1139,11 @@ body.dark .card-actions-group {
   .danger-btn { align-self: flex-end; }
   .modal { padding: 20px 16px; width: 92%; }
   
-  #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); } /* [cite: 231] */
-  .cal-floating-container { bottom: 16px; right: 16px; } /* [cite: 232] */
+  #flower-pot { bottom: 16px; transform: translateX(-50%) scale(0.85); }
+  .cal-floating-container { bottom: 16px; right: 16px; }
+  
+  /* ✅ 모바일 화면에서 명언 문구 숨기기 코드 추가 */
+  .board-quote { display: none !important; }
 }
 
 /* ✅ 자바스크립트 수량 계산은 살려두고, 화면에서 위젯만 완벽히 지우기 */
@@ -1458,8 +1461,8 @@ body.dark .focus-widget {
             <div id="board"></div>
           </div>
 
-          <div style="text-align:center; margin:24px 16px 8px; color:#A09589; font-size:12px; font-style:italic; font-family:Georgia, serif; line-height:1.7;">
-              "The glory of gardening: hands in the dirt,<br>head in the sun, heart with nature."
+          <div class="board-quote" style="text-align:center; margin:24px 16px 8px; color:#A09589; ...">
+            "The glory of gardening: hands in the dirt,..."
           </div>
           
           <div id="flower-pot">
