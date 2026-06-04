@@ -853,7 +853,7 @@ body.dark .card-actions-group {
 }
 .cal-nav-btn {
   background: transparent;
-  border: 1px solid var(--border-strong);
+  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
   width: 28px;
   height: 28px;
   border-radius: 6px;
@@ -862,40 +862,38 @@ body.dark .card-actions-group {
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  color: var(--text-secondary);
+  color: #4A7C3F; /* <=----- 변경 */
   transition: all 0.1s;
 }
 .cal-nav-btn:hover {
-  background: var(--bg);
-  color: var(--text-primary);
-  border-color: var(--text-primary);
+  background: #E8F0E7; /* <=----- 변경 */
+  color: #1E3A1A; /* <=----- 변경 */
+  border-color: #2D5A27; /* <=----- 변경 */
 }
-
 .cal-today-return-btn {
   font-family: inherit;
   font-size: 11px;
   font-weight: 500;
   padding: 4px 10px;
-  background: var(--bg);
-  border: 1px solid var(--border-strong);
+  background: #E8F0E7; /* <=----- 변경 */
+  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
   border-radius: 20px;
-  color: var(--text-secondary);
+  color: #2D5A27; /* <=----- 변경 */
   cursor: pointer;
   transition: all 0.15s;
 }
 .cal-today-return-btn:hover {
-  background: var(--text-primary);
+  background: #2D5A27; /* <=----- 변경 */
   color: #FFFFFF;
-  border-color: var(--text-primary);
+  border-color: #2D5A27; /* <=----- 변경 */
 }
-
 .cal-grid-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-tertiary);
+  color: #8A9E86; /* <=----- 변경 */
   margin-bottom: 8px;
 }
 .cal-grid-body {
@@ -912,7 +910,7 @@ body.dark .card-actions-group {
   font-size: 13px;
   border-radius: 8px;
   position: relative;
-  color: var(--text-primary);
+  color: #2A2A2A; /* <=----- 변경 */
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.15s ease;
@@ -920,39 +918,35 @@ body.dark .card-actions-group {
 .cal-day-cell.empty { pointer-events: none; }
 .cal-day-cell.empty:hover { background: transparent !important; }
 .cal-day-cell:not(.empty):not(.today-cell):hover {
-  background: var(--bg);
+  background: #E8F0E7; /* <=----- 변경 */
 }
-
 .cal-day-cell.today-cell {
-  background: var(--accent) !important;
+  background: #2D5A27 !important; /* <=----- 변경 */
   color: #FFFFFF !important;
   font-weight: 600;
 }
-
 .cal-day-cell.selected-day-cell {
-  border-color: var(--accent);
-  background: rgba(99, 102, 241, 0.06);
+  border-color: #2D5A27; /* <=----- 변경 */
+  background: rgba(45,90,39,0.06); /* <=----- 변경 */
   font-weight: 500;
 }
 .cal-day-cell.today-cell.selected-day-cell {
-  border-color: var(--text-primary);
+  border-color: #1E3A1A; /* <=----- 변경 */
 }
-
 .cal-day-dot {
   position: absolute;
   bottom: 4px;
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--text-tertiary);
+  background: #8A9E86; /* <=----- 변경 */
 }
 .cal-day-cell.today-cell .cal-day-dot {
   background: #FFFFFF;
 }
-
 .cal-agenda-wrap {
   margin-top: 18px;
-  border-top: 1px solid var(--border);
+  border-top: 1.5px solid #DDD5C8; /* <=----- 변경 */
   padding-top: 14px;
   max-height: 160px;
   overflow-y: auto;
@@ -960,57 +954,22 @@ body.dark .card-actions-group {
 .cal-agenda-title {
   font-size: 12px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #4A7C3F; /* <=----- 변경 */
   margin-bottom: 8px;
 }
 .cal-agenda-item {
   font-size: 12.5px;
   padding: 6px 10px;
-  background: var(--bg);
+  background: #E8F0E7; /* <=----- 변경 */
   border-radius: 6px;
   margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .done-particle {
-  position: fixed; width: 14px; height: 14px; background: #10B981; border-radius: 50%;
-  box-shadow: 0 0 15px #10B981, 0 0 30px #34D399; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.column.collapsed-col {
-  max-height: 48px !important; 
-}
-.column.collapsed-col .col-header {
-  border-bottom: 1px solid transparent; 
-  padding: 12px 14px; 
-}
-.column.collapsed-col .col-desc-input {
-  opacity: 0 !important;
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  pointer-events: none;
-}
-.column.collapsed-col .cards-list {
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .add-card-area {
-  max-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.column.collapsed-col .col-toggle-arrow {
-  transform: rotate(-90deg);
+  position: fixed; width: 14px; height: 14px; background: #2D5A27; border-radius: 50%; /* <=----- 변경 */
+  box-shadow: 0 0 15px #2D5A27, 0 0 30px #4A7C3F; pointer-events: none; z-index: 1000; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* <=----- 변경 */
 }
 
 /* ───────── MOBILE RESPONSIVE ───────── */
