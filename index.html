@@ -1983,11 +1983,9 @@ function render() {
             <span class="col-toggle-arrow">▼</span>
           </div>
         </div>
-        <input class="col-desc-input" value="${esc(col.desc)}" placeholder="짧은 설명…"
-          onchange="editColDesc('${col.id}',this.value)" onclick="event.stopPropagation()">
       </div>
       <div class="cards-list" data-col-id="${col.id}">
-        ${col.cards.length === 0 ? '<div class="empty-state"><div class="empty-icon">◦</div>할 일 없음</div>' : ''}
+        ${col.cards.length === 0 ? `<div class="empty-state"><div style="font-size:26px; margin-bottom:6px;">🌱</div><div style="font-style:italic; color:#B8AFA5; font-size:13px;">이 정원은 아직 비어있어요</div></div>` : ''}
         ${col.cards.map(c => renderCard(c, color, col.id)).join('')}
       </div>
       <div class="add-card-area">
