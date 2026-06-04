@@ -1910,10 +1910,18 @@ function toggleLnb() {
 }
 
 function setTheme(t) {
-  document.body.classList.toggle('dark', t === 'dark');
-  document.getElementById('btn-light').classList.toggle('active', t === 'light');
-  document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
-  localStorage.setItem('priorify_theme', t);
+    // 테마 적용 (body)
+    if (t === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('btn-dark').classList.add('active');
+        document.getElementById('btn-light').classList.remove('active');
+    } else {
+        document.body.classList.remove('dark');
+        document.getElementById('btn-light').classList.add('active');
+        document.getElementById('btn-dark').classList.remove('active');
+    }
+    
+    localStorage.setItem('priorify_theme', t);
 }
 const savedTheme = localStorage.getItem('priorify_theme');
 if (savedTheme) setTheme(savedTheme);
