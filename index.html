@@ -460,28 +460,28 @@ header {
 
 /* ── DONE PAGE ── */
 #page-done { padding: 28px 32px; overflow-y: auto; }
-.done-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-.done-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
-.done-empty { text-align: center; padding: 60px 20px; color: var(--text-tertiary); font-size: 13px; }
+.done-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #1E3A1A; } /* <=----- 변경 */
+.done-sub { font-size: 13px; color: #8A9E86; margin-bottom: 24px; font-style: italic; } /* <=----- 변경 */
+.done-empty { text-align: center; padding: 60px 20px; color: #B8AFA5; font-size: 13px; font-style: italic; } /* <=----- 변경 */
 .done-list { display: flex; flex-direction: column; gap: 8px; }
 .done-item {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  background: white; /* <=----- 변경 */
+  border: 1.5px solid #DDD5C8; /* <=----- 변경 */
+  border-radius: 12px; /* <=----- 변경 */
   padding: 12px 16px;
 }
 .done-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.done-item-text { flex: 1; font-size: 13.5px; }
-.done-item-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); }
-.done-item-col { font-size: 11px; color: var(--text-secondary); background: var(--bg); border-radius: 20px; padding: 2px 10px; white-space: nowrap;}
+.done-item-text { flex: 1; font-size: 13.5px; color: #2A2A2A; } /* <=----- 변경 */
+.done-item-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: #B8AFA5; font-style: italic; } /* <=----- 변경 */
+.done-item-col { font-size: 11px; color: #4A7C3F; background: #E8F0E7; border-radius: 20px; padding: 2px 10px; white-space: nowrap; } /* <=----- 변경 */
 .done-restore {
-  background: none; border: 1px solid var(--border-strong); border-radius: 6px; padding: 4px 10px; font-size: 11px; flex-shrink: 0;
-  color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s;
+  background: none; border: 1px solid #C5D9C3; border-radius: 6px; padding: 4px 10px; font-size: 11px; flex-shrink: 0; /* <=----- 변경 */
+  color: #4A7C3F; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.1s; /* <=----- 변경 */
 }
-.done-restore:hover { background: var(--bg); color: var(--text-primary); }
+.done-restore:hover { background: #E8F0E7; color: #2D5A27; } /* <=----- 변경 */
 
 /* ── SETTINGS PAGE ── */
 #page-settings { padding: 28px 32px; overflow-y: auto; }
