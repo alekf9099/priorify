@@ -2031,10 +2031,11 @@ function render() {
 
 function renderCard(card, color, colId) {
   const isMobile = window.innerWidth <= 768;
-  return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}">
-    <div class="card-text">${esc(card.text)}</div>
-    <div class="card-meta">
-      <span class="card-date">${card.date}</span>
+  return `<div class="card" ${isMobile ? '' : 'draggable="true"'} data-card-id="${card.id}"
+    style="border-left: 3px solid ${color.dot}; border-radius: 10px; padding: 10px 12px;">
+    <div class="card-text" style="font-size:14px; color:#2A2A2A; line-height:1.45;">${esc(card.text)}</div>
+    <div class="card-meta" style="margin-top:6px;">
+      <span class="card-date" style="font-size:10px; color:#B8AFA5; font-style:italic;">${card.date}</span>
       <div class="card-actions-group" draggable="false" 
            onmousedown="event.stopPropagation();" 
            ontouchstart="event.stopPropagation();">
