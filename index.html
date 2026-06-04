@@ -772,22 +772,19 @@ body.dark .card-actions-group {
   z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s; backdrop-filter: blur(2px);
 }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal { background: var(--surface); width: 100%; max-width: 380px; border-radius: var(--radius); padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transform: scale(0.95); transition: transform 0.2s; max-height: 80vh; overflow-y: auto; }
+.modal { background: #F7F4EE; width: 100%; max-width: 380px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(45,90,39,0.15); border: 1.5px solid #DDD5C8; transform: scale(0.95); transition: transform 0.2s; max-height: 80vh; overflow-y: auto; } /* <=----- 변경 */
 .modal-overlay.open .modal { transform: scale(1); }
-
-.modal-title { font-size: 17px; font-weight: 500; margin-bottom: 20px; }
+.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; color: #1E3A1A; } /* <=----- 변경 */
 .modal-field { margin-bottom: 16px; }
-.modal-label { display: block; font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-.modal-input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg); color: var(--text-primary); outline: none; transition: border-color 0.15s; }
-.modal-input:focus { border-color: var(--text-primary); }
-.modal-textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg); color: var(--text-primary); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 80px; }
-.modal-textarea:focus { border-color: var(--text-primary); }
-
+.modal-label { display: block; font-size: 11px; font-weight: 500; color: #8A9E86; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; } /* <=----- 변경 */
+.modal-input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1.5px solid #DDD5C8; border-radius: 10px; background: white; color: #1E3A1A; outline: none; transition: border-color 0.15s; } /* <=----- 변경 */
+.modal-input:focus { border-color: #2D5A27; } /* <=----- 변경 */
+.modal-textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1.5px solid #DDD5C8; border-radius: 10px; background: white; color: #1E3A1A; outline: none; transition: border-color 0.15s; resize: vertical; min-height: 80px; } /* <=----- 변경 */
+.modal-textarea:focus { border-color: #2D5A27; } /* <=----- 변경 */
 .color-picker { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 8px; }
 .color-swatch { width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s, border-color 0.1s; }
 .color-swatch:hover { transform: scale(1.1); }
-.color-swatch.selected { border-color: var(--text-primary); transform: scale(1.1); }
-
+.color-swatch.selected { border-color: #2D5A27; transform: scale(1.1); } /* <=----- 변경 */
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
 
 /* ── FLOWER ANIMATION ── */
@@ -1312,8 +1309,6 @@ body.dark .focus-widget {
           정원 꾸미기
         </button>
 
-        <div class="lnb-divider"></div>
-        <span class="lnb-section-label">컬럼</span>
         <div class="lnb-divider"></div>
         <span class="lnb-section-label">컬럼</span>
 
