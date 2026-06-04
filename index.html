@@ -2827,15 +2827,15 @@ function updateFocusWidget() {
   const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
     list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
-    return;
+  } else {
+    list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
+      <div class="focus-item">
+        <div class="focus-item-text">${esc(card.text)}</div>
+      </div>
+    `).join('');
   }
-  list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
-    <div class="focus-item">
-      <div class="focus-item-text">${esc(card.text)}</div>
-    </div>
-  `).join('');
-  
-  // 진행률 카드 업데이트 // <=----- 추가
+
+  // 진행률 카드 업데이트
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
   const done = doneItems.length;
   const pct = total + done === 0 ? 0 : Math.round(done / (total + done) * 100);
@@ -2851,6 +2851,14 @@ function updateFocusWidget() {
   if (pctEl) pctEl.textContent = pct + '%';
   if (bar) bar.style.width = pct + '%';
   if (circle) circle.style.strokeDashoffset = 138.2 * (1 - pct / 100);
+
+  // 성장 배지 업데이트 // <=----- 추가
+  const badge = document.getElementById('growth-badge');
+  if (badge) {
+    const growthStage = pct < 25 ? '🌰 씨앗' : pct < 50 ? '🌱 새싹' : pct < 75 ? '🌿 성장중' : pct < 100 ? '🌳 무성함' : '🌻 만개!';
+    badge.textContent = growthStage;
+    badge.style.display = 'block';
+  }
 }
 
 setTimeout(() => {
