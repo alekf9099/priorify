@@ -1992,7 +1992,7 @@ function render() {
               <input class="col-title-input" value="${esc(col.name)}" placeholder="컬럼 이름"
                 onchange="renameCol('${col.id}',this.value)" onclick="event.stopPropagation()"
                 style="font-size:15px; font-weight:700; color:#1E3A1A; width:100%;">
-              <div style="font-size:11px; color:${color.dot}; font-style:italic; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(col.desc)}</div>
+              <div style="font-size:11px; color:${color.dot}; font-style:italic; margin-top:1px;">${esc(col.desc)}</div>
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
