@@ -3410,38 +3410,18 @@ async function analyzeWithAI() {
 
 function showAnalysisModal(text) {
   const overlay = document.createElement('div');
-  overlay.style.cssText = `
-    position:fixed; inset:0; background:rgba(0,0,0,0.5);
-    display:flex; align-items:flex-end; justify-content:center;
-    z-index:700; backdrop-filter:blur(4px);
-  `;
-  overlay.innerHTML = `
-    <div style="
-      background:#F7F4EE; width:100%; max-width:600px;
-      border-radius:20px 20px 0 0; padding:24px;
-      max-height:80vh; overflow-y:auto;
-      box-shadow:0 -8px 40px rgba(45,90,39,0.15);
-      border-top:3px solid #2D5A27;
-    ">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
-        <span style="font-size:24px;">🌻</span>
-        <div>
-          <div style="font-size:17px; font-weight:700; color:#1E3A1A;">나의 정원 분석 결과</div>
-          <div style="font-size:11px; color:#8A9E86; font-style:italic;">완료한 ${doneItems.length}개 항목 기반</div>
-        </div>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="
-          margin-left:auto; background:#E8F0E7; border:none;
-          width:30px; height:30px; border-radius:8px;
-          cursor:pointer; font-size:14px; color:#4A7C3F;
-        ">✕</button>
-      </div>
-      <div style="
-        background:white; border-radius:14px; padding:18px;
-        border:1.5px solid #DDD5C8; line-height:1.8;
-        font-size:14px; color:#2A2A2A; white-space:pre-wrap;
-      ">${esc(text)}</div>
-    </div>
-  `;
+  overlay.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:flex-end; justify-content:center; z-index:700; backdrop-filter:blur(4px);';
+  const count = doneItems.length;
+  const safeText = esc(text);
+  overlay.innerHTML = '<div style="background:#F7F4EE; width:100%; max-width:600px; border-radius:20px 20px 0 0; padding:24px; max-height:80vh; overflow-y:auto; box-shadow:0 -8px 40px rgba(45,90,39,0.15); border-top:3px solid #2D5A27;">'
+    + '<div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">'
+    + '<span style="font-size:24px;">🌻</span>'
+    + '<div><div style="font-size:17px; font-weight:700; color:#1E3A1A;">나의 정원 분석 결과</div>'
+    + '<div style="font-size:11px; color:#8A9E86; font-style:italic;">완료한 ' + count + '개 항목 기반</div></div>'
+    + '<button onclick="this.closest(\'div\').parentElement.parentElement.remove()" style="margin-left:auto; background:#E8F0E7; border:none; width:30px; height:30px; border-radius:8px; cursor:pointer; font-size:14px; color:#4A7C3F;">✕</button>'
+    + '</div>'
+    + '<div style="background:white; border-radius:14px; padding:18px; border:1.5px solid #DDD5C8; line-height:1.8; font-size:14px; color:#2A2A2A; white-space:pre-wrap;">' + safeText + '</div>'
+    + '</div>';
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
   document.body.appendChild(overlay);
 }
