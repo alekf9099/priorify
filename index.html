@@ -2115,16 +2115,7 @@ function renderCard(card, color, colId) {
     </div>
   </div>`;
 }
-        </button>
-        <button class="card-btn danger" title="삭제" onmousedown="deleteCard(event,'${card.id}')">
-          <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
+
   
 function renderDashboard() {
   const total = columns.reduce((s, c) => s + c.cards.length, 0);
