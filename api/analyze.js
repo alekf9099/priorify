@@ -4,11 +4,14 @@ export default async function handler(req, res) {
   }
 
   const { summary } = req.body;
+  console.log('summary:', summary); // <=----- 추가
+  
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  console.log('API KEY exists:', !!GEMINI_API_KEY); // <=----- 추가
+
   if (!summary) {
     return res.status(400).json({ error: 'No summary provided' });
   }
-
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -24,10 +27,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log('Gemini response:', JSON.stringify(data)); // <=----- 추가
     const result = data.candidates[0].content.parts[0].text;
     res.status(200).json({ result });
 
   } catch(err) {
+    console.log('Error:', err.message); // <=----- 추가
     res.status(500).json({ error: '분석 중 오류가 발생했어요.' });
   }
 }
