@@ -1989,21 +1989,22 @@ function render() {
         ${col.cards.map(c => renderCard(c, color, col.id)).join('')}
       </div>
       <div class="add-card-area">
-        <textarea class="add-card-input" placeholder="+ 할 일 추가…" rows="1"
+        <textarea class="add-card-input" placeholder="🌱 씨앗 심기…" rows="1"
           onkeydown="handleCardInput(event,'${col.id}',this)"
           onfocus="focusCardInput(this)"
-          onblur="blurCardInput(event,this)"></textarea>
-        <div class="add-card-date-picker-wrap">
-          <span class="add-card-date-label">시작</span>
-          <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
-          <span class="add-card-date-label">종료</span>
-          <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
-        </div>
-        <div class="add-card-footer">
-          <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
-          <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')">저장</button>
-        </div>
-      </div>`;
+          onblur="blurCardInput(event,this)"
+          style="border: 1.5px dashed ${color.dot}; border-radius:10px;"></textarea>
+      <div class="add-card-date-picker-wrap">
+         <span class="add-card-date-label">시작</span>
+        <input type="date" class="add-card-date-input start-date" value="${getTodayYMD()}">
+        <span class="add-card-date-label">종료</span>
+        <input type="date" class="add-card-date-input end-date" value="${getTodayYMD()}">
+      </div>
+  <div class="add-card-footer">
+    <button class="btn-cancel" onmousedown="cancelCardInput(event)">취소</button>
+    <button class="btn-save" onmousedown="saveCardInput(event,'${col.id}')" style="background:${color.dot};">🌱 심기</button>
+  </div>
+</div>`;
 
     board.appendChild(colEl);
 
