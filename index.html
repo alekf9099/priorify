@@ -3646,10 +3646,10 @@ function showAnalysisModal(text) {
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
     document.body.appendChild(overlay);
   }
-
-  // 🌧️ 백색소음 플레이어 로직 및 음원 세팅
+  
+  // 🌧️ 백색소음 플레이어 로직 및 음원 세팅 완벽 보정
   let ambientAudio = null;
-  const AMBIENT_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2433/2433-84.wav"; // 라이선스 프리 고품질 숲속 빗소리
+  const AMBIENT_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2433/2433-84.wav"; 
 
   function toggleAmbientSound() {
     const btnText = document.getElementById('ambient-text');
@@ -3659,21 +3659,34 @@ function showAnalysisModal(text) {
     if (!ambientAudio) {
       ambientAudio = new Audio(AMBIENT_SOUND_URL);
       ambientAudio.loop = true;
-      ambientAudio.volume = 0.25; // 집중에 최적화된 잔잔한 데시벨
+      ambientAudio.volume = 0.25; 
     }
 
     if (ambientAudio.paused) {
       ambientAudio.play().then(() => {
+        // 1. 상태 즉시 변경 (켜짐 상태 시각화)
         if (btnIcon) btnIcon.textContent = "🌧️";
         if (btnText) btnText.textContent = "빗소리 끄기";
         if (btnEl) {
           btnEl.style.color = "#2D5A27";
           btnEl.style.fontWeight = "600";
         }
+
+        // 2. 💥 모바일 환경에서 빗소리를 켜면 사이드바를 자동으로 접어주기
+        if (window.innerWidth <= 768) {
+          const lnb = document.querySelector('.lnb');
+          const backdrop = document.getElementById('lnb-backdrop');
+          if (lnb && !lnb.classList.contains('collapsed')) {
+            lnb.classList.add('collapsed');
+            if (backdrop) backdrop.classList.remove('show');
+            localStorage.setItem('priorify_lnb_collapsed', 'true');
+          }
+        }
       }).catch(err => {
         alert("브라우저 보안 정책으로 인해 화면을 아무 곳이나 한 번 클릭한 뒤 다시 켜주세요! 🍃");
       });
     } else {
+      // 3. 정지 상태 처리 (꺼짐 상태 시각화)
       ambientAudio.pause();
       if (btnIcon) btnIcon.textContent = "🔇";
       if (btnText) btnText.textContent = "빗소리 켜기";
