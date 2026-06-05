@@ -4,17 +4,18 @@ export default async function handler(req, res) {
   }
 
   const { summary } = req.body;
-  console.log('summary:', summary); // <=----- 추가
+  console.log('summary:', summary);
   
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  console.log('API KEY exists:', !!GEMINI_API_KEY); // <=----- 추가
+  console.log('API KEY exists:', !!GEMINI_API_KEY);
 
   if (!summary) {
     return res.status(400).json({ error: 'No summary provided' });
   }
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+    // 1. 모델명을 최신 안정화 버전인 gemini-2.5-flash 로 변경했습니다.
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -27,16 +28,23 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    console.log('Gemini response:', JSON.stringify(data)); // <=----- 추가
-    console.log('full response:', JSON.stringify(data));
-      if (!data.candidates || !data.candidates[0]) {
-      return res.status(500).json({ error: 'AI 응답 오류', detail: JSON.stringify(data) });
+    console.log('Gemini full response:', JSON.stringify(data));
+
+    // 2. 에러 응답(400, 404, 500 등)이 왔을 때를 위한 안전장치 추가
+    if (data.error) {
+      console.error('Gemini API Error:', data.error);
+      return res.status(response.status).json({ error: 'AI API 오류', detail: data.error.message });
     }
+
+    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts) {
+      return res.status(500).json({ error: 'AI 응답 구조 오류', detail: JSON.stringify(data) });
+    }
+
     const result = data.candidates[0].content.parts[0].text;
     res.status(200).json({ result });
 
   } catch(err) {
-    console.log('Error:', err.message); // <=----- 추가
-    res.status(500).json({ error: '분석 중 오류가 발생했어요.' });
+    console.error('Catch Error:', err.message);
+    res.status(500).json({ error: '분석 중 오류가 발생했어요.', message: err.message });
   }
 }
