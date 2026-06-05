@@ -28,6 +28,10 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     console.log('Gemini response:', JSON.stringify(data)); // <=----- 추가
+    console.log('full response:', JSON.stringify(data));
+      if (!data.candidates || !data.candidates[0]) {
+      return res.status(500).json({ error: 'AI 응답 오류', detail: JSON.stringify(data) });
+    }
     const result = data.candidates[0].content.parts[0].text;
     res.status(200).json({ result });
 
