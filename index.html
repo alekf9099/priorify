@@ -557,20 +557,37 @@ input:checked + .toggle-slider::before {
 
 /* ── COLUMNS ── */
 .column {
-  width: 280px; flex-shrink: 0; display: flex; flex-direction: column; 
-  border-radius: 18px; /* <=----- 변경 */
-  border: 1.5px solid #DDD5C8; /* <=----- 변경 */
-  background: white; /* <=----- 변경 */
-  min-height: 200px; max-height: calc(100vh - 100px); overflow: hidden; 
-  transition: border-color 0.2s, box-shadow 0.2s, max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1); 
+  width: 290px; /* 카드가 박스형으로 넓어진 만큼 컬럼폭도 10px 넓혀 여유를 줍니다 */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px; /* 조금 더 둥글고 친근하게 변경 */
+  border: 1px solid #E6E1D8; 
+  background: #FFFFFF; 
+  min-height: 200px;
+  max-height: calc(100vh - 100px);
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   animation: fadeUp 0.25s ease both;
-  box-shadow: 0 2px 12px rgba(45,90,39,0.05); /* <=----- 추가 */
+  box-shadow: 0 4px 16px rgba(45, 90, 39, 0.03); /* 부드러운 내추럴 그림자 */
 }
-.column.drag-target { border-color: #2D5A27; box-shadow: 0 0 0 3px rgba(45,90,39,0.1); } /* <=----- 변경 */
-.col-header { 
-  padding: 13px 15px; /* <=----- 변경 */
-  border-bottom: 1px solid #EDE7DE; /* <=----- 변경 */
-  flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; height: auto !important; overflow: hidden; 
+
+/* 카드를 들고 컬럼 위에 올렸을 때 감성적이고 확실한 피드백 제공 */
+.column.drag-target {
+  border-color: #2D5A27;
+  background: #FAF9F6;
+  box-shadow: 0 8px 24px rgba(45, 90, 39, 0.08), 0 0 0 2px rgba(45, 90, 39, 0.15);
+}
+
+.col-header {
+  padding: 16px 16px 14px; /* 타이포 요소들이 답답하지 않게 숨구멍 확보 */
+  border-bottom: 1px solid #EDE7DE; 
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: auto !important;
+  overflow: hidden;
 }
 .col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: auto; } /* <=----- 변경 */
 .col-header-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; } /* <=----- 변경 */
@@ -732,29 +749,62 @@ body.dark .card-actions-group {
 }
 
 /* ── ADD CARD AREA ── */
-.add-card-area { padding: 7px 8px 9px; flex-shrink: 0; border-top: 1px solid var(--border); background: var(--surface); transition: max-height 0.22s, opacity 0.22s, padding 0.22s; }
-.add-card-input {
-  width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text-primary); background: transparent;
-  border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 7px 10px; outline: none; resize: none; height: 34px; overflow: hidden;
-  transition: border-color 0.15s, height 0.15s, background 0.15s;
+.add-card-area { 
+  padding: 10px 12px 12px; 
+  flex-shrink: 0; 
+  border-top: 1px solid #EDE7DE; 
+  background: var(--surface); 
+  transition: max-height 0.22s, opacity 0.22s, padding 0.22s; 
 }
-.add-card-input::placeholder { color: var(--text-tertiary); }
-.add-card-input:focus { border-style: solid; background: var(--bg); height: 66px; }
+
+.add-card-input {
+  width: 100%; 
+  font-family: 'DM Sans', 'Noto Sans KR', sans-serif; 
+  font-size: 13px; 
+  font-weight: 500;
+  color: var(--text-primary); 
+  background: transparent;
+  border: 1px dashed #DDD5C8; 
+  border-radius: 10px; /* 살짝 더 동글게 마감 */
+  padding: 8px 12px; 
+  outline: none; 
+  resize: none; 
+  height: 36px; 
+  overflow: hidden;
+  letter-spacing: -0.3px;
+  transition: border-color 0.15s, height 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.add-card-input::placeholder { 
+  color: #B8AFA5; 
+  font-style: italic; 
+}
+
+/* 입력 창을 클릭해 포커싱 되었을 때의 입체감과 색상 변화 */
+.add-card-input:focus { 
+  border-style: solid; 
+  border-color: #2D5A27; /* 식물 대표 테마 컬러 */
+  background: #FAF9F6;  /* 은은한 크림색 종이 질감 */
+  height: 66px; 
+  box-shadow: inset 0 1px 3px rgba(45, 90, 39, 0.04);
+}
 
 .add-card-date-picker-wrap {
   display: none;
   align-items: center;
   flex-direction: row; 
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 10px;
   padding: 2px 4px;
 }
+
 .add-card-area.focused-area .add-card-date-picker-wrap {
   display: flex;
 }
+
 .add-card-date-label {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
 }
 
@@ -783,20 +833,55 @@ body.dark .card-actions-group {
 
 /* ── ADD COL GHOST ── */
 .add-col-ghost {
-  width: 240px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #C5D9C3; /* <=----- 변경 */
-  border-radius: 18px; min-height: 100px; cursor: pointer; transition: background 0.15s, border-color 0.15s; color: #8A9E86; font-size: 13px; gap: 7px; /* <=----- 변경 */
+  width: 290px; /* 정식 컬럼폭과 동일하게 290px로 매칭하여 레이아웃 균형을 맞춥니다 */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed #DDD5C8; /* 조금 더 은은하고 차분한 브라운 톤 점선 */
+  border-radius: 20px;
+  min-height: 120px; /* 높이를 살짝 키워 시원하게 변경 */
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #8A9E86;
+  font-size: 13.5px;
+  font-weight: 500;
+  gap: 8px;
+  background: transparent;
 }
-.add-col-ghost:hover { background: #E8F0E7; border-color: #2D5A27; color: #2D5A27; } /* <=----- 변경 */
 
-/* ── EMPTY STATE ── */
-.empty-state { text-align: center; padding: 30px 10px; color: var(--text-tertiary); font-size: 12px; }
-.empty-icon { font-size: 20px; margin-bottom: 4px; opacity: 0.5; }
+/* 마우스를 올렸을 때 정원 확장을 유도하는 부드러운 보태니컬 피드백 */
+.add-col-ghost:hover {
+  background: #FAF9F6;
+  border-color: #2D5A27;
+  color: #2D5A27;
+  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.02);
+}
 
 /* ── TOAST ── */
 #save-toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #2D5A27; color: #fff; padding: 8px 16px; border-radius: 30px; font-size: 12px; opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; pointer-events: none; /* <=----- 변경 */
+  position: fixed;
+  bottom: 32px; /* 살짝 위로 올려 모바일 브라우저 하단 바와의 간섭 최소화 */
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: #1E3A1A; /* 깊이감 있는 딥 보태니컬 그린 */
+  color: #FFFFFF;
+  padding: 10px 22px; /* 텍스트 숨구멍을 위한 여백 확장 */
+  border-radius: 50px; /* 완전한 라운딩 */
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  opacity: 0;
+  box-shadow: 0 8px 24px rgba(30, 58, 26, 0.25); /* 묵직하고 고급스러운 그림자 */
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); /* 띠용- 하고 올라오는 탄성 효과 */
+  z-index: 10000; /* 모달 레이어 위에서도 보일 수 있도록 레이어 순위 격상 */
+  pointer-events: none;
 }
-#save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+#save-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -804,15 +889,85 @@ body.dark .card-actions-group {
   z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s; backdrop-filter: blur(2px);
 }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal { background: #F7F4EE; width: 100%; max-width: 380px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(45,90,39,0.15); border: 1.5px solid #DDD5C8; transform: scale(0.95); transition: transform 0.2s; max-height: 80vh; overflow-y: auto; } /* <=----- 변경 */
+.modal {
+  background: #F7F4EE; 
+  width: 100%; 
+  max-width: 400px; /* 약간 가로폭을 넓혀 텍스트 입력의 답답함을 해소 */
+  border-radius: 20px; 
+  padding: 26px 24px; 
+  box-shadow: 0 24px 48px rgba(30, 58, 26, 0.12); 
+  border: none;
+  border-left: 5px solid #2D5A27; /* 얇은 사방 테두리 대신 왼쪽 도감 포인트 선 배치 */
+  transform: scale(0.96); 
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); 
+  max-height: 80vh; 
+  overflow-y: auto;
+}
+
 .modal-overlay.open .modal { transform: scale(1); }
-.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; color: #1E3A1A; } /* <=----- 변경 */
-.modal-field { margin-bottom: 16px; }
-.modal-label { display: block; font-size: 11px; font-weight: 500; color: #8A9E86; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; } /* <=----- 변경 */
-.modal-input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1.5px solid #DDD5C8; border-radius: 10px; background: white; color: #1E3A1A; outline: none; transition: border-color 0.15s; } /* <=----- 변경 */
-.modal-input:focus { border-color: #2D5A27; } /* <=----- 변경 */
-.modal-textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 12px; border: 1.5px solid #DDD5C8; border-radius: 10px; background: white; color: #1E3A1A; outline: none; transition: border-color 0.15s; resize: vertical; min-height: 80px; } /* <=----- 변경 */
-.modal-textarea:focus { border-color: #2D5A27; } /* <=----- 변경 */
+
+.modal-title { 
+  font-size: 18px; 
+  font-weight: 700; 
+  margin-bottom: 22px; 
+  color: #1E3A1A; 
+  letter-spacing: -0.3px;
+}
+
+.modal-field { margin-bottom: 18px; }
+
+.modal-label { 
+  display: block; 
+  font-size: 11px; 
+  font-weight: 600; 
+  color: #8A9E86; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  margin-bottom: 8px; 
+}
+
+.modal-input { 
+  width: 100%; 
+  font-family: 'DM Sans', 'Noto Sans KR', sans-serif; 
+  font-size: 13.5px; 
+  font-weight: 500;
+  padding: 11px 14px; 
+  border: 1px solid #DDD5C8; 
+  border-radius: 10px; 
+  background: #FFFFFF; 
+  color: #1E3A1A; 
+  outline: none; 
+  transition: all 0.2s ease; 
+}
+
+.modal-input:focus { 
+  border-color: #2D5A27; 
+  background: #FAF9F6; /* 입력 중일 땐 종이 질감으로 시각 피드백 유도 */
+  box-shadow: inset 0 1px 3px rgba(45, 90, 39, 0.04);
+}
+
+.modal-textarea { 
+  width: 100%; 
+  font-family: 'DM Sans', 'Noto Sans KR', sans-serif; 
+  font-size: 13.5px; 
+  font-weight: 500;
+  padding: 11px 14px; 
+  border: 1px solid #DDD5C8; 
+  border-radius: 10px; 
+  background: #FFFFFF; 
+  color: #1E3A1A; 
+  outline: none; 
+  transition: all 0.2s ease; 
+  resize: vertical; 
+  min-height: 90px; 
+  line-height: 1.5;
+}
+
+.modal-textarea:focus { 
+  border-color: #2D5A27; 
+  background: #FAF9F6;
+  box-shadow: inset 0 1px 3px rgba(45, 90, 39, 0.04);
+}
 .color-picker { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 8px; }
 .color-swatch { width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s, border-color 0.1s; }
 .color-swatch:hover { transform: scale(1.1); }
@@ -831,35 +986,39 @@ body.dark .card-actions-group {
 
 /* ── FLOATING CALENDAR BUTTON ── */
 .cal-floating-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 900;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: fixed; 
+  bottom: 28px; /* 아래 여백을 미세하게 넓혀 화면 균형 확보 */
+  right: 24px; 
+  z-index: 900; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
 }
+
 .cal-btn-trigger {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: white; /* <=----- 변경 */
-  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
-  box-shadow: 0 4px 16px rgba(45,90,39,0.12); /* <=----- 변경 */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s, background-color 0.2s;
+  width: 52px; /* 크기를 살짝 키워 모바일 터치 가시성 확장 */
+  height: 52px; 
+  border-radius: 50%; 
+  background: linear-gradient(135deg, #2D5A27 0%, #1E3A1A 100%); /* 묵직하고 고급스러운 딥그린 그라데이션 */
+  border: none; /* 답답한 테두리선 제거 */
+  box-shadow: 0 8px 24px rgba(30, 58, 26, 0.25); /* 공중에 붕 뜬 듯한 입체적인 그림자 */
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; 
 }
+
+/* 플로팅 버튼에 마우스를 올렸을 때 튕기듯 커지는 인터랙션 효과 */
 .cal-btn-trigger:hover {
-  transform: scale(1.05);
-  background: #E8F0E7; /* <=----- 변경 */
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 10px 28px rgba(30, 58, 26, 0.35);
 }
+
 .cal-btn-icon {
-  width: 20px;
-  height: 20px;
-  color: #2D5A27; /* <=----- 변경 */
+  width: 22px; 
+  height: 22px; 
+  color: #FFFFFF; /* 어두운 배경에 맞춰 아이콘 색상을 화이트로 반전 */
 }
 
 /* ── PRIORIFY CUSTOM CALENDAR MODAL ── */
@@ -871,49 +1030,59 @@ body.dark .card-actions-group {
   gap: 8px;
 }
 .cal-nav-btn {
-  background: transparent;
-  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #4A7C3F; /* <=----- 변경 */
-  transition: all 0.1s;
-}
+  background: transparent; 
+  border: 1px solid #DDD5C8; /* 다른 UI 요소들과 일치하도록 브라운 톤의 은은한 테두리로 변경 */
+  width: 30px; /* 터치 영역 확보를 위해 미세하게 확장 */
+  height: 30px; 
+  border-radius: 8px; /* 조금 더 둥글고 부드러운 느낌으로 마감 */
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 11px; 
+  color: #2D5A27; /* 조금 더 명확하고 딴딴한 시그니처 딥그린 컬러 매칭 */
+  transition: all 0.2s ease; 
+} 
+
+/* 네비게이션 버튼에 마우스를 올렸을 때 은은하게 차오르는 보태니컬 피드백 */
 .cal-nav-btn:hover {
-  background: #E8F0E7; /* <=----- 변경 */
-  color: #1E3A1A; /* <=----- 변경 */
-  border-color: #2D5A27; /* <=----- 변경 */
+  background: #E8F0E7;
+  border-color: #C5D9C3;
+  color: #2D5A27;
+  transform: translateY(-0.5px);
 }
 .cal-today-return-btn {
   font-family: inherit;
   font-size: 11px;
-  font-weight: 500;
-  padding: 4px 10px;
-  background: #E8F0E7; /* <=----- 변경 */
-  border: 1.5px solid #C5D9C3; /* <=----- 변경 */
+  font-weight: 600; /* 조금 더 선명하게 눈에 띄도록 수정 */
+  padding: 5px 12px; /* 안정적인 터치를 위해 여백 확장 */
+  background: #E8F0E7; 
+  border: 1px solid #C5D9C3; /* 1px 실선으로 바꾸어 깔끔하게 다듬음 */
   border-radius: 20px;
-  color: #2D5A27; /* <=----- 변경 */
+  color: #2D5A27; 
   cursor: pointer;
-  transition: all 0.15s;
+  letter-spacing: -0.3px;
+  transition: all 0.2s ease;
 }
+
+/* 오늘 돌아오기 버튼 마우스 호버 효과 업그레이드 */
 .cal-today-return-btn:hover {
-  background: #2D5A27; /* <=----- 변경 */
+  background: #2D5A27; 
   color: #FFFFFF;
-  border-color: #2D5A27; /* <=----- 변경 */
+  border-color: #2D5A27;
+  transform: translateY(-0.5px);
+  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.15); /* 부드럽게 강조되는 섀도우 효과 */
 }
+
 .cal-grid-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-size: 11px;
-  font-weight: 500;
-  color: #8A9E86; /* <=----- 변경 */
-  margin-bottom: 8px;
+  font-weight: 600; /* 요일이 눈에 더 잘 띄도록 굵기 조정 */
+  color: #8A9E86; 
+  margin-bottom: 10px; /* 아래 날짜판과의 숨구멍을 위해 여백 미세 확장 */
+  letter-spacing: 0.5px;
 }
 .cal-grid-body {
   display: grid;
