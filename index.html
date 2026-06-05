@@ -1864,11 +1864,11 @@ body.dark .focus-widget {
     <div class="modal-title" id="modal-title">새 컬럼 추가</div>
     <div class="modal-field">
       <label class="modal-label">컬럼 이름</label>
-      <input class="modal-input" id="modal-col-name" placeholder="예: 중요 & 급함" maxlength="30">
+      <input class="modal-input" id="modal-col-name" placeholder="예: 지금 당장, 잠깐 손보기" maxlength="30">
     </div>
     <div class="modal-field">
       <label class="modal-label">설명 (선택)</label>
-      <input class="modal-input" id="modal-col-desc" placeholder="짧은 설명" maxlength="50">
+      <input class="modal-input" id="modal-col-desc" placeholder="예: 망설이지 말고 바로 시작하기 🌱" maxlength="50">
     </div>
     <div class="modal-field">
       <label class="modal-label">색상</label>
@@ -2010,10 +2010,10 @@ const COLORS = [
 ];
 
 const DEFAULT_COLUMNS = [
-  { id:'critical', name:'중요 & 급함', desc:'즉시 처리 필요', colorIdx:0, cards:[]},
-  { id:'important', name:'중요 & 안급함', desc:'계획 세워서 처리', colorIdx:3, cards:[]},
-  { id:'urgent', name:'안중요 & 급함', desc:'빠르게 처리하거나 위임', colorIdx:1, cards:[]},
-  { id:'low', name:'안중요 & 안급함', desc:'여유 있을 때', colorIdx:7, cards:[]},
+  { id:'critical', name:'지금 당장', desc:'가장 먼저 해결해야 할 일들 🌱', colorIdx:0, cards:[]},
+  { id:'important', name:'차분히 계획', desc:'중요하지만 호흡이 필요한 작업 🌿', colorIdx:3, cards:[]},
+  { id:'urgent', name:'잠깐 손보기', desc:'5분 내외로 끝낼 수 있는 간단한 일 🍂', colorIdx:1, cards:[]},
+  { id:'low', name:'나중에 생각', desc:'언젠가 하면 좋은 아이디어들 🌻', colorIdx:7, cards:[]},
 ];
 
 let currentUser = null;
@@ -3197,7 +3197,7 @@ function toggleFocusWidget() {
 function updateFocusWidget() {
   const list = document.getElementById('focus-widget-list');
   if (!list || typeof columns === 'undefined' || columns.length === 0) return;
-  const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('중요') && c.name.includes('급함')));
+  const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('지금 당장')));
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
     list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
   } else {
