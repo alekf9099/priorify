@@ -3207,7 +3207,8 @@ function updateFocusWidget() {
   if (!list || typeof columns === 'undefined' || columns.length === 0) return;
   const criticalCol = columns.find(c => c.id === 'critical' || (c.name && c.name.includes('지금 당장')));
   if (!criticalCol || !criticalCol.cards || criticalCol.cards.length === 0) {
-    list.innerHTML = '<div class="focus-empty">✨<br>지금은 급한 일이 없네요!<br>꽃에 물을 주러 가볼까요?</div>';
+    /* 💥 문구를 정원 컨셉에 맞춰 완벽하게 동기화 */
+    list.innerHTML = '<div class="focus-empty">✨<br>지금 당장 돌볼 새싹이 없네요!<br>정원에 평온한 바람이 붑니다 ☕</div>';
   } else {
     list.innerHTML = criticalCol.cards.slice(0, 5).map(card => `
       <div class="focus-item">
