@@ -3644,9 +3644,45 @@ function showAnalysisModal(text) {
     + '<div style="background:white; border-radius:14px; padding:18px; border:1.5px solid #DDD5C8; line-height:1.8; font-size:14px; color:#2A2A2A; white-space:pre-wrap;">' + safeText + '</div>'
     + '</div>';
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-  document.body.appendChild(overlay);
-}
-  
+    document.body.appendChild(overlay);
+  }
+
+  // 🌧️ 백색소음 플레이어 로직 및 음원 세팅
+  let ambientAudio = null;
+  const AMBIENT_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2433/2433-84.wav"; // 라이선스 프리 고품질 숲속 빗소리
+
+  function toggleAmbientSound() {
+    const btnText = document.getElementById('ambient-text');
+    const btnIcon = document.getElementById('ambient-icon');
+    const btnEl = document.getElementById('ambient-sound-btn');
+    
+    if (!ambientAudio) {
+      ambientAudio = new Audio(AMBIENT_SOUND_URL);
+      ambientAudio.loop = true;
+      ambientAudio.volume = 0.25; // 집중에 최적화된 잔잔한 데시벨
+    }
+
+    if (ambientAudio.paused) {
+      ambientAudio.play().then(() => {
+        if (btnIcon) btnIcon.textContent = "🌧️";
+        if (btnText) btnText.textContent = "빗소리 끄기";
+        if (btnEl) {
+          btnEl.style.color = "#2D5A27";
+          btnEl.style.fontWeight = "600";
+        }
+      }).catch(err => {
+        alert("브라우저 보안 정책으로 인해 화면을 아무 곳이나 한 번 클릭한 뒤 다시 켜주세요! 🍃");
+      });
+    } else {
+      ambientAudio.pause();
+      if (btnIcon) btnIcon.textContent = "🔇";
+      if (btnText) btnText.textContent = "빗소리 켜기";
+      if (btnEl) {
+        btnEl.style.color = "#6E8A6B";
+        btnEl.style.fontWeight = "400";
+      }
+    }
+  }
 </script>
   <div class="quad-modal-overlay" id="quad-modal-overlay" onclick="closeQuadModal(event)">
   <div class="quad-modal">
