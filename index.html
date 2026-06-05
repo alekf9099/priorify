@@ -1634,14 +1634,6 @@ body.dark .focus-widget {
           식물 도감
         </button>
         
-        <button class="lnb-item" data-page="myGarden" onclick="switchPage('myGarden', this)">
-          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="2" width="14" height="14" rx="2"/>
-            <path d="M2 7h14M7 2v14"/>
-          </svg>
-          정원 꾸미기
-        </button>
-
         <div class="lnb-divider"></div>
         <span class="lnb-section-label">컬럼</span>
 
@@ -1841,14 +1833,6 @@ body.dark .focus-widget {
             <div id="garden-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:8px;"></div>
           </div>
         </div>
-
-        <div id="page-myGarden" class="page">
-          <div style="padding:28px 32px;overflow-y:auto;flex:1">
-            <div class="done-title">정원 꾸미기</div>
-            <div class="done-sub">수집한 식물로 나만의 정원을 꾸며보세요 🌿</div>
-            <div id="my-garden-wrap"></div>
-        </div>
-      </div>
 
       </main>
     </div>
@@ -2247,7 +2231,6 @@ function switchPage(page, btn) {
   if (page === 'done') renderDone();
   if (page === 'settings') initNotificationToggle(); 
   if (page === 'garden') renderGarden();
- 
 
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
@@ -2256,19 +2239,6 @@ function switchPage(page, btn) {
     if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
-  if (page === 'myGarden') {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.addEventListener('touchmove', preventScroll, { passive: false });
-  } else {
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.removeEventListener('touchmove', preventScroll);
-  }
-
-if (page === 'myGarden') renderMyGarden();
   
   const calBtn = document.getElementById('cal-floating-container'); 
   const focusWidget = document.getElementById('focus-widget'); 
