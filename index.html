@@ -580,25 +580,25 @@ input:checked + .toggle-slider::before {
 }
 
 .col-header {
-  padding: 16px 16px 14px; /* 타이포 요소들이 답답하지 않게 숨구멍 확보 */
+  padding: 16px 16px 18px; /* 아래쪽 숨구멍을 위해 여백을 18px로 확장 */
   border-bottom: 1px solid #EDE7DE; 
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px; /* 제목과 설명 사이의 간격 균형 조정 */
   height: auto !important;
-  overflow: hidden;
+  overflow: visible !important; /* 설명글이 길어져도 아랫부분이 절대 잘리지 않도록 변경 */
 }
-.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: auto; } /* <=----- 변경 */
-.col-header-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; } /* <=----- 변경 */
+.col-header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; height: auto; } 
+.col-header-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; } 
 .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .col-title-input { 
-  font-family: 'DM Sans', sans-serif; font-size: 15px; /* <=----- 변경 */
-  font-weight: 700; /* <=----- 변경 */
-  color: #1E3A1A; /* <=----- 변경 */
+  font-family: 'DM Sans', sans-serif; font-size: 15px; 
+  font-weight: 700; 
+  color: #1E3A1A; 
   background: transparent; border: none; outline: none; flex: 1; cursor: text; min-width: 0; 
 }
-.col-title-input:focus { background: #E8F0E7; border-radius: 4px; padding: 1px 4px; margin: -1px -4px; } /* <=----- 변경 */
+.col-title-input:focus { background: #E8F0E7; border-radius: 4px; padding: 1px 4px; margin: -1px -4px; }
 
 .col-dropdown-toggle-btn {
   display: flex;
