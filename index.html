@@ -1096,27 +1096,42 @@ body.dark .card-actions-group {
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  border-radius: 8px;
+  font-weight: 500;
+  border-radius: 50%; /* 날짜 칸 호버 및 선택 시 부드러운 원형 피드백을 위해 50% 지정 */
   position: relative;
-  color: #2A2A2A; /* <=----- 변경 */
+  color: #2A2A2A; 
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
+
 .cal-day-cell.empty { pointer-events: none; }
 .cal-day-cell.empty:hover { background: transparent !important; }
+
+/* 평범한 날짜에 마우스를 올렸을 때 은은한 새싹 초록빛 링 효과 */
 .cal-day-cell:not(.empty):not(.today-cell):hover {
-  background: #E8F0E7; /* <=----- 변경 */
+  background: #E8F0E7;
+  color: #2D5A27;
 }
+
+/* ★ 오늘 날짜: 완벽한 보태니컬 그린 원형 포인트로 변경 */
 .cal-day-cell.today-cell {
-  background: #2D5A27 !important; /* <=----- 변경 */
+  background: #2D5A27 !important; 
   color: #FFFFFF !important;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(45, 90, 39, 0.25);
+}
+
+/* 특정 날짜를 클릭해 선택했을 때의 디자인 감성 보정 */
+.cal-day-cell.selected-day-cell {
+  border-color: #2D5A27; 
+  background: rgba(45, 90, 39, 0.06); 
   font-weight: 600;
 }
-.cal-day-cell.selected-day-cell {
-  border-color: #2D5A27; /* <=----- 변경 */
-  background: rgba(45,90,39,0.06); /* <=----- 변경 */
-  font-weight: 500;
+
+.cal-day-cell.today-cell.selected-day-cell {
+  border-color: #1E3A1A;
+  box-shadow: 0 4px 12px rgba(30, 58, 26, 0.35);
 }
 .cal-day-cell.today-cell.selected-day-cell {
   border-color: #1E3A1A; /* <=----- 변경 */
@@ -1237,17 +1252,30 @@ body.dark .card-actions-group {
     padding: 12px !important; 
     min-height: auto !important; /* 강제 높이 제거로 공란 없애기 */
   }
-  .card-actions-group { /* ✅ 누락되었던 클래스 이름 추가 */
+  .card-actions-group { 
     opacity: 1 !important; 
     pointer-events: auto !important;
     transform: none !important;
-    
-    /* 억지로 바닥에 고정하던 것을 풀고 텍스트 바로 밑에 자연스럽게 붙도록 수정 */
     position: relative !important; 
     bottom: auto !important; 
     right: auto !important; 
     align-self: flex-end; 
-    margin-top: 4px; 
+    margin-top: 8px; /* 텍스트와 겹치지 않게 여백을 살짝 더 확보 */
+    background: #FAF8F5 !important; /* 모바일 전용 옅은 크림 브라운 배경 */
+    border: 1px solid #DDD5C8 !important; /* 미세한 테두리 추가 */
+    padding: 4px 6px !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    gap: 6px !important; /* 버튼끼리 손가락이 씹히지 않도록 간격 확장 */
+    box-shadow: 0 2px 6px rgba(45, 90, 39, 0.02) !important;
+  }
+
+  /* 모바일 액션 툴바 내부 버튼들 터치 가시성 보정 */
+  .card-actions-group .card-btn {
+    padding: 6px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #EDE7DE !important;
+    border-radius: 50% !important;
   }
 
   .add-card-area {
