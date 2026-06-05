@@ -1634,6 +1634,14 @@ body.dark .focus-widget {
           식물 도감
         </button>
         
+        <button class="lnb-item" data-page="myGarden" onclick="switchPage('myGarden', this)">
+          <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="14" height="14" rx="2"/>
+            <path d="M2 7h14M7 2v14"/>
+          </svg>
+          정원 꾸미기
+        </button>
+
         <div class="lnb-divider"></div>
         <span class="lnb-section-label">컬럼</span>
 
@@ -1646,14 +1654,7 @@ body.dark .focus-widget {
 
         <div id="lnb-col-list"></div>
 
-        <div id="lnb-col-list"></div>
-
         <div class="lnb-divider" style="margin-top:auto"></div>
-
-        <button class="lnb-item" id="ambient-sound-btn" onclick="toggleAmbientSound()" style="color: #6E8A6B; display: flex; align-items: center; gap: 8px;">
-          <span id="ambient-icon" style="font-size: 14px;">🔇</span>
-          <span id="ambient-text" style="font-size: 13px;">빗소리 켜기</span>
-        </button>
 
         <button class="lnb-item" data-page="settings" onclick="switchPage('settings', this)">
           <svg class="lnb-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1840,6 +1841,14 @@ body.dark .focus-widget {
             <div id="garden-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:8px;"></div>
           </div>
         </div>
+
+        <div id="page-myGarden" class="page">
+          <div style="padding:28px 32px;overflow-y:auto;flex:1">
+            <div class="done-title">정원 꾸미기</div>
+            <div class="done-sub">수집한 식물로 나만의 정원을 꾸며보세요 🌿</div>
+            <div id="my-garden-wrap"></div>
+        </div>
+      </div>
 
       </main>
     </div>
@@ -2238,6 +2247,7 @@ function switchPage(page, btn) {
   if (page === 'done') renderDone();
   if (page === 'settings') initNotificationToggle(); 
   if (page === 'garden') renderGarden();
+ 
 
   if (window.innerWidth <= 768) {
     const lnb = document.querySelector('.lnb');
@@ -2246,6 +2256,19 @@ function switchPage(page, btn) {
     if (backdrop) backdrop.classList.remove('show');
     localStorage.setItem('priorify_lnb_collapsed', 'true');
   }
+  if (page === 'myGarden') {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+  } else {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.removeEventListener('touchmove', preventScroll);
+  }
+
+if (page === 'myGarden') renderMyGarden();
   
   const calBtn = document.getElementById('cal-floating-container'); 
   const focusWidget = document.getElementById('focus-widget'); 
@@ -3644,56 +3667,9 @@ function showAnalysisModal(text) {
     + '<div style="background:white; border-radius:14px; padding:18px; border:1.5px solid #DDD5C8; line-height:1.8; font-size:14px; color:#2A2A2A; white-space:pre-wrap;">' + safeText + '</div>'
     + '</div>';
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-    document.body.appendChild(overlay);
-  }
-  
-  // 🌧️ 백색소음 플레이어 로직 및 음원 세팅 완벽 보정
-let ambientAudio = null;
-const AMBIENT_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2433/2433-84.wav";
-
-function toggleAmbientSound() {
-  const btnText = document.getElementById('ambient-text');
-  const btnIcon = document.getElementById('ambient-icon');
-  const btnEl = document.getElementById('ambient-sound-btn');
-  
-  if (!ambientAudio) {
-    ambientAudio = new Audio(AMBIENT_SOUND_URL);
-    ambientAudio.loop = true;
-    ambientAudio.volume = 0.25;
-  }
-
-  if (ambientAudio.paused) {
-    ambientAudio.play().then(() => {
-      // 1. 켜짐 상태 즉시 시각화 (텍스트와 아이콘 변경)
-      if (btnIcon) btnIcon.textContent = "🌧️";
-      if (btnText) btnText.textContent = "빗소리 끄기";
-      if (btnEl) {
-        btnEl.style.color = "#2D5A27";
-        btnEl.style.fontWeight = "600";
-      }
-
-      // 2. LNB 사이드바 강제 닫기 로직 작동
-      const lnb = document.querySelector('.lnb');
-      const backdrop = document.getElementById('lnb-backdrop');
-      if (lnb) {
-        lnb.classList.add('collapsed'); // 사이드바 접기
-        if (backdrop) backdrop.classList.remove('show'); // 배경 딤드 제거
-        localStorage.setItem('priorify_lnb_collapsed', 'true');
-      }
-    }).catch(err => {
-      alert("브라우저 보안 정책으로 인해 화면을 아무 곳이나 한 번 클릭한 뒤 다시 켜주세요! 🍃");
-    });
-  } else {
-    // 3. 꺼짐 상태 즉시 시각화
-    ambientAudio.pause();
-    if (btnIcon) btnIcon.textContent = "🔇";
-    if (btnText) btnText.textContent = "빗소리 켜기";
-    if (btnEl) {
-      btnEl.style.color = "#6E8A6B";
-      btnEl.style.fontWeight = "400";
-    }
-  }
+  document.body.appendChild(overlay);
 }
+  
 </script>
   <div class="quad-modal-overlay" id="quad-modal-overlay" onclick="closeQuadModal(event)">
   <div class="quad-modal">
