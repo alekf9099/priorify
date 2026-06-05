@@ -32,11 +32,13 @@
 html, body { height: 100%; overflow: hidden; touch-action: manipulation; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
+  letter-spacing: -0.4px; /* 한글 자간을 미세하게 줄여 폰트를 딴딴하고 예쁘게 만듭니다 */
+  line-height: 1.5;      /* 줄간격을 확보해 텍스트가 덜 답답해 보입니다 */
 }
 
 body.dark {
@@ -628,18 +630,34 @@ input:checked + .toggle-slider::before {
 .cards-list::-webkit-scrollbar { width: 3px; }
 .cards-list::-webkit-scrollbar-thumb { background: #DDD5C8; border-radius: 2px; } /* <=----- 변경 */
 .card {
-  background: transparent; /* <=----- 변경 */
-  border: none; /* <=----- 변경 */
-  border-bottom: 1px dashed #EDE7DE; /* <=----- 변경 */
-  border-radius: 0; /* <=----- 변경 */
-  padding: 9px 0; /* <=----- 변경 */
-  cursor: grab; user-select: none; transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s; position: relative; animation: cardIn 0.18s ease both;
+  background: var(--surface) !important;
+  border: 1px solid #DDD5C8 !important;
+  border-left: 4px solid var(--col-dot-color) !important; /* JS에서 컬럼별 색상을 동적으로 매칭 */
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
   display: flex;
   flex-direction: column;
-  gap: 6px; /* <=----- 변경 */
+  gap: 6px;
+  cursor: grab;
+  user-select: none;
+  position: relative;
+  animation: cardIn 0.18s ease both;
 }
-@keyframes cardIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
-.card:hover { box-shadow: none; border-color: #C5D9C3; } /* <=----- 변경 */
+
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 카드에 마우스를 올렸을 때 부드럽게 떠오르는 모던한 효과 */
+.card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(45, 90, 39, 0.07) !important;
+  border-color: #C5D9C3 !important;
+}
 .card.dragging { opacity: 0.28; transform: scale(0.97); cursor: grabbing; }
 .card-tag { display: inline-block; font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-text { 
@@ -1202,7 +1220,7 @@ body.dark .focus-widget {
   
 /* ── QUADRANT MODAL ── */
 .quad-modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  position: fixed; inset: 0; background: rgba(45, 90, 39, 0.2); /* 식물 테마에 맞춰 미세한 초록빛 딤드 적용 */
   display: flex; align-items: flex-end; justify-content: center;
   z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.25s;
   backdrop-filter: blur(4px);
@@ -1212,11 +1230,35 @@ body.dark .focus-widget {
   background: #F7F4EE; width: 100%; max-width: 600px;
   border-radius: 20px 20px 0 0; padding: 20px;
   max-height: 85vh; overflow-y: auto;
-  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 -8px 40px rgba(45,90,39,0.12);
   border-top: 3px solid #2D5A27;
 }
 .quad-modal-overlay.open .quad-modal { transform: translateY(0); }
+
+/* ── ✨ PC 화면용 스타일 분기 추가 (769px 이상) ── */
+@media (min-width: 769px) {
+  .quad-modal-overlay {
+    align-items: center; /* 바닥이 아니라 화면 정중앙에 정렬 */
+  }
+  .quad-modal {
+    width: 90%;
+    max-width: 640px; /* PC 해상도에서 답답하지 않게 가로폭 소폭 확장 */
+    border: 1px solid #DDD5C8;
+    border-radius: 20px; /* 사방을 모두 둥글게 만들어 팝업 형태로 전환 */
+    border-top: none;
+    border-left: 4px solid #2D5A27; /* 세로형 보드들과 통일감을 주는 왼쪽 포인트 선 */
+    transform: scale(0.95) translateY(0); /* 아래서 위로 올라오는 대신 부드럽게 팝업되는 효과 */
+    box-shadow: 0 12px 40px rgba(45, 90, 39, 0.15);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); /* 팝업될 때 살짝 튕기는 고급 애니메이션 */
+  }
+  .quad-modal-overlay.open .quad-modal {
+    transform: scale(1) translateY(0);
+  }
+  .quad-modal-handle {
+    display: none; /* PC 팝업창에서는 모바일용 스와이프 핸들바 숨김 */
+  }
+}
 .quad-modal-handle {
   width: 36px; height: 4px; background: #C5D9C3;
   border-radius: 99px; margin: 0 auto 16px;
@@ -1235,9 +1277,24 @@ body.dark .focus-widget {
 }
 .quad-modal-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
 .quad-modal-card {
-  background: white; border: 1.5px solid #DDD5C8;
-  border-radius: 12px; padding: 12px 14px;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: white; 
+  border: 1px solid #DDD5C8; 
+  border-left: 4px solid #2D5A27; /* 모달 내 카드도 왼쪽 포인트 선을 주어 통일감 형성 */
+  border-radius: 12px; 
+  padding: 14px 16px; /* 여백을 살짝 넓혀 더 시원하게 보이도록 수정 */
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 10px; 
+  box-shadow: 0 2px 8px rgba(45, 90, 39, 0.02);
+  transition: all 0.2s ease;
+}
+
+/* 모달 내부 카드 호버 효과 추가 */
+.quad-modal-card:hover {
+  border-color: #C5D9C3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.05);
 }
 .quad-modal-card-text { font-size: 13.5px; flex: 1; color: #2A2A2A; line-height: 1.4; }
 .quad-modal-card-date { font-size: 10px; color: #B8AFA5; font-style: italic; }
@@ -1408,15 +1465,17 @@ body.dark .focus-widget {
         <div id="page-board" class="page active">
   <div id="progress-card" style="
     margin: 16px 16px 0;
-    background: white;
+    background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F5 100%);
     border-radius: 20px;
-    padding: 18px 20px;
-    border: 1.5px solid #DDD5C8;
-    box-shadow: 0 4px 20px rgba(45,90,39,0.07);
+    padding: 20px 22px;
+    border: 1px solid #DDD5C8;
+    box-shadow: 0 8px 24px rgba(45, 90, 39, 0.04), inset 0 2px 0 rgba(255, 255, 255, 0.6);
     position: relative;
     overflow: hidden;
     flex-shrink: 0;
-  ">
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  " onmouseenter="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 10px 28px rgba(45, 90, 39, 0.06)';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(45, 90, 39, 0.04), inset 0 2px 0 rgba(255, 255, 255, 0.6)';">
+    
     <svg width="100" height="100" viewBox="0 0 60 60" fill="none" style="position:absolute; right:-15px; top:-15px; opacity:0.06; pointer-events:none;">
       <path d="M10 50 Q20 10 50 10 Q50 40 10 50Z" fill="#2D5A27"/>
       <path d="M10 50 Q30 30 50 10" stroke="#2D5A27" stroke-width="1.5" fill="none" opacity="0.6"/>
@@ -3236,9 +3295,15 @@ function selectCardTag(e, colId, tag) {
   e.stopPropagation();
   selectedCardTag[colId] = tag;
   const area = e.target.closest('.add-card-area');
+  
   area.querySelectorAll('.add-card-tag-wrap button').forEach(btn => {
-    btn.style.fontWeight = btn.textContent === '#' + tag ? '700' : '400';
-    btn.style.opacity = btn.textContent === '#' + tag ? '1' : '0.6';
+    const isSelected = (btn.textContent === '#' + tag);
+    // 활성화된 태그는 딥그린(#2D5A27) 배경에 하얀 글씨로 채워 명확하게 보여줍니다.
+    btn.style.background = isSelected ? '#2D5A27' : 'var(--surface)';
+    btn.style.color = isSelected ? '#FFFFFF' : 'var(--text-secondary)';
+    btn.style.borderColor = isSelected ? '#2D5A27' : '#DDD5C8';
+    btn.style.fontWeight = isSelected ? '600' : '500';
+    btn.style.opacity = '1'; /* 투명도 대신 색상 반전으로 구분하므로 1로 고정합니다 */
   });
 }
 
